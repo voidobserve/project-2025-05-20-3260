@@ -1,0 +1,139 @@
+C51 COMPILER V9.60.7.0   ENGINE_SPEED_SCAN                                                 05/20/2025 17:55:59 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE ENGINE_SPEED_SCAN
+OBJECT MODULE PLACED IN .\Release\Objects\engine_speed_scan.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\User\engine_speed_scan.c LARGE OPTIMIZE(8,SIZE) BROWSE INTVECTOR(0
+                    -X000C) INCDIR(..\..\Libraries\Include;..\..\User;..\..\User\lib;..\..\Hardware) INTERVAL(3) DEBUG OBJECTEXTEND PRINT(.\R
+                    -elease\Listings\engine_speed_scan.lst) OBJECT(.\Release\Objects\engine_speed_scan.obj)
+
+line level    source
+
+   1          #include "engine_speed_scan.h"
+   2          
+   3          // 发动机每转一圈，能检测到的脉冲个数
+   4          #ifndef ENGINE_SPEED_SCAN_PULSE_PER_TURN
+              #define ENGINE_SPEED_SCAN_PULSE_PER_TURN (16)
+              #endif
+   7          
+   8          volatile u16 engine_scan_time_cnt = 0;        // 发动机转速扫描时，用到的时间计数值，会
+             -在定时器中断中累加
+   9          volatile u16 engine_actual_scan_time_cnt = 0; // 存放实际的发动机转速扫描用时
+  10          
+  11          // 标志位，是否有更新脉冲计数,由定时器来置位
+  12          // 0--未更新脉冲计数，1--有新的脉冲计数
+  13          volatile bit flag_is_update_engine_pulse_cnt = 0;
+  14          /*
+  15              存放 检测到的发送机转速的脉冲计数值，会在中断内累加
+  16              使用了双缓冲，[0]用在定时器中断中，[1]用在发动机转速处理函数中
+  17              当 flag_is_update_engine_pulse_cnt == 1时，说明已经有数据更新
+  18          */
+  19          volatile u32 detect_engine_pulse_cnt[2] = {0};
+  20          
+  21          // 发动机转速的相关配置
+  22          void engine_speed_scan_config(void)
+  23          {
+  24   1      #if 1 // 使用定时器扫描IO电平的方式
+  25   1      
+  26   1          P0_MD0 &= ~GPIO_P02_MODE_SEL(0x3); // 输入模式
+  27   1      
+  28   1      #endif // 使用定时器扫描IO电平的方式
+  29   1      }
+  30          
+  31          // 发动机转速扫描
+  32          void engine_speed_scan(void)
+  33          {
+  34   1      #define CONVER_ONE_MINUTE_TO_MS (60000) // 将1min转换成以ms为单位的数据
+  35   1          volatile u32 rpm = 0;
+  36   1          static volatile u8 engine_speed_scan_cnt = 0; // 重复扫描的检测次数(用于滤波)
+  37   1          static volatile u32 cur_rpm_average = 0;      // 存放发动机转速的平均值
+  38   1      
+  39   1          if (flag_is_update_engine_pulse_cnt)
+  40   1          {
+  41   2              // 如果有数据更新
+  42   2              flag_is_update_engine_pulse_cnt = 0; // 清除标志位
+  43   2      
+  44   2              /*
+  45   2                  (1min / 1min转过的圈数) == (扫描时间 / 扫描时间内的转过的圈数)
+  46   2                  1min转过的圈数 == 1min * 扫描时间内转过的圈数 / 扫描时间
+  47   2                  1min转过的圈数 == 1min * (扫描时间内采集到的脉冲个数 / 发动机转过一圈
+             -对应的脉冲个数) / 扫描时间
+  48   2                  转换成单片机能计算的形式：
+  49   2                  1min转过的圈数 == 扫描时间内采集到的脉冲个数 * 1min / 发动机转过一圈�
+             -��应的脉冲个数 / 扫描时间
+  50   2                  1min转过的圈数 == 扫描时间内采集到的脉冲个数 * 1min / 扫描时间 / 发动�
+C51 COMPILER V9.60.7.0   ENGINE_SPEED_SCAN                                                 05/20/2025 17:55:59 PAGE 2   
+
+             -��转过一圈对应的脉冲个数
+  51   2              */
+  52   2      
+  53   2      #if USE_MY_DEBUG
+              
+                      // if (detect_engine_pulse_cnt[1])
+                      // {
+                      //     printf("pulse_cnt %lu \n", detect_engine_pulse_cnt[1]);
+                      //     printf("engine actual scan time %u\n",engine_actual_scan_time_cnt);
+                      // }
+              
+              #endif // #if USE_MY_DEBUG
+  62   2      
+  63   2              rpm = detect_engine_pulse_cnt[1] * (CONVER_ONE_MINUTE_TO_MS / ENGINE_SPEED_SCAN_PULSE_PER_TURN) / 
+             -engine_actual_scan_time_cnt;
+  64   2              if (engine_speed_scan_cnt < ENGINE_SPEED_SCAN_FILTER_CNT)
+  65   2              {
+  66   3                  // 如果未达到重复扫描的检测次数
+  67   3                  engine_speed_scan_cnt++;
+  68   3                  cur_rpm_average += rpm;
+  69   3      
+  70   3                  // if (rpm)
+  71   3                  // {
+  72   3                  //     printf("ori rpm %lu\n", rpm);
+  73   3                  // }
+  74   3              }
+  75   2              else
+  76   2              {
+  77   3                  // 如果达到的重复扫描的检测次数
+  78   3                  cur_rpm_average /= ENGINE_SPEED_SCAN_FILTER_CNT;
+  79   3      
+  80   3                  engine_speed_scan_cnt = 0; // 清除扫描次数的计数值
+  81   3      
+  82   3                  // 限制待发送的发动机转速
+  83   3                  if (cur_rpm_average >= 65535)
+  84   3                  {
+  85   4                      cur_rpm_average = 65535;
+  86   4                  }
+  87   3      
+  88   3      #ifdef USE_MY_DEBUG
+  89   3      #if USE_MY_DEBUG
+              
+                          if (cur_rpm_average != 0)
+                          {
+                              printf("engine speed %lu rpm\n", cur_rpm_average);
+                          }
+              
+              #endif // #if USE_MY_DEBUG
+  97   3      #endif // #ifdef USE_MY_DEBUG
+  98   3      
+  99   3                  fun_info.engine_speeed = cur_rpm_average; // 向全局变量存放发动机转速
+ 100   3                  cur_rpm_average = 0;
+ 101   3      
+ 102   3                  flag_get_engine_speed = 1; // 发送发动机转速
+ 103   3              }
+ 104   2          }
+ 105   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    179    ----
+   CONSTANT SIZE    =   ----    ----
+C51 COMPILER V9.60.7.0   ENGINE_SPEED_SCAN                                                 05/20/2025 17:55:59 PAGE 3   
+
+   XDATA SIZE       =     17       4
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

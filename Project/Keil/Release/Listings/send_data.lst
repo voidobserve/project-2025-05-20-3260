@@ -1,0 +1,105 @@
+C51 COMPILER V9.60.7.0   SEND_DATA                                                         05/20/2025 17:55:59 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE SEND_DATA
+OBJECT MODULE PLACED IN .\Release\Objects\send_data.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\User\send_data.c LARGE OPTIMIZE(8,SIZE) BROWSE INTVECTOR(0X000C) I
+                    -NCDIR(..\..\Libraries\Include;..\..\User;..\..\User\lib;..\..\Hardware) INTERVAL(3) DEBUG OBJECTEXTEND PRINT(.\Release\L
+                    -istings\send_data.lst) OBJECT(.\Release\Objects\send_data.obj)
+
+line level    source
+
+   1          #include "send_data.h"
+   2          
+   3          void send_data(u8 instruct, u32 send_data)
+   4          {
+   5   1          u32 check_num = 0; // 存放校验和
+   6   1      
+   7   1          uart0_sendbyte(FORMAT_HEAD); // 先发送格式头
+   8   1      
+   9   1          check_num += FORMAT_HEAD; // 使用if()语句时，才使用这一条程序
+  10   1      
+  11   1          if (SEND_GEAR == instruct ||                /* 发送挡位的状态 */
+  12   1              SEND_BATTERY == instruct ||             /* 发送电池电量的状态 */
+  13   1              SEND_BARKE == instruct ||               /* 发送刹车的状态 */
+  14   1              SEND_LEFT_TURN == instruct ||           /* 发送左转向灯的状态 */
+  15   1              SEND_RIGHT_TURN == instruct ||          /* 发送右转向灯的状态 */
+  16   1              SEND_HIGH_BEAM == instruct ||           /* 发送远光灯的状态 */
+  17   1              SEND_FUEL == instruct ||                /* 发送油量 */
+  18   1              SEND_WATER_TEMP == instruct ||          /* 发送水温 */
+  19   1              SEND_TEMP_OF_WATER_ALERT == instruct || /* 发送水温报警 */
+  20   1              SEND_MALFUNCTION_STATUS == instruct /* 发送故障的状态 */ 
+  21   1          )    // 如果指令的总长度只有5个字节
+  22   1          {
+  23   2              uart0_sendbyte(0x05);     // 发送指令的总长度
+  24   2              uart0_sendbyte(instruct); // 发送指令
+  25   2              uart0_sendbyte(send_data);
+  26   2      
+  27   2              check_num += 0x05 + (u8)instruct + (u8)send_data;
+  28   2          }
+  29   1          else if (SEND_ENGINE_SPEED == instruct ||     /* 发送发动机的转速 */
+  30   1                   SEND_SPEED == instruct ||            /* 发送时速 */
+  31   1                   SEND_SUBTOTAL_MILEAGE == instruct || /* 发送小计里程 */
+  32   1                   SEND_TOUCH_KEY_STATUS == instruct || /* 发送触摸按键的状态 */
+  33   1                   SEND_VOLTAGE_OF_BATTERY == instruct  /* 发送电池电压 */
+  34   1                   )                                    // 如果指令的总长度为6个字节
+  35   1          {
+  36   2              uart0_sendbyte(0x06);           // 发送指令的总长度
+  37   2              uart0_sendbyte(instruct);       // 发送指令
+  38   2              uart0_sendbyte(send_data >> 8); // 发送信息
+  39   2              uart0_sendbyte(send_data);      // 发送信息
+  40   2      
+  41   2              check_num += 0x06 + (u8)instruct + (u8)(send_data >> 8) + (u8)(send_data);
+  42   2          }
+  43   1          else if (SEND_TOTAL_MILEAGE == instruct || /* 发送大计里程 */
+  44   1                   SEND_TIME == instruct             /* 发送时间 */
+  45   1                   )                                 // 如果指令的总长度为7个字节
+  46   1          {
+  47   2      
+  48   2              uart0_sendbyte(0x07);     // 发送指令的总长度
+  49   2              uart0_sendbyte(instruct); // 发送指令
+  50   2      
+  51   2              uart0_sendbyte(send_data >> 16); // 发送信息
+  52   2              uart0_sendbyte(send_data >> 8);  // 发送信息
+  53   2              uart0_sendbyte(send_data);       // 发送信息
+C51 COMPILER V9.60.7.0   SEND_DATA                                                         05/20/2025 17:55:59 PAGE 2   
+
+  54   2      
+  55   2              check_num += 0x07 + (u8)instruct + (u8)(send_data >> 16) + (u8)(send_data >> 8) + (u8)send_data;
+  56   2          }
+  57   1          else if (SEND_DATE == instruct /* 发送日期(年月日) */
+  58   1                   )                     // 如果指令的总长度为8个字节
+  59   1          {
+  60   2              uart0_sendbyte(0x08);     // 发送指令的总长度
+  61   2              uart0_sendbyte(instruct); // 发送指令
+  62   2      
+  63   2              uart0_sendbyte(send_data >> 24); // 发送信息
+  64   2              uart0_sendbyte(send_data >> 16); // 发送信息
+  65   2              uart0_sendbyte(send_data >> 8);  // 发送信息
+  66   2              uart0_sendbyte(send_data);       // 发送信息
+  67   2      
+  68   2              check_num += 0x08 + (u8)instruct + (u8)(send_data >> 24) + (u8)(send_data >> 16) + (u8)(send_data 
+             ->> 8) + (u8)send_data;
+  69   2          }
+  70   1      
+  71   1          // check_num &= 0x0F;         // 取前面的数字相加的低四位
+  72   1          check_num &= 0xFF;         // 取前面的数字相加的低八位
+  73   1          uart0_sendbyte(check_num); // 发送校验和
+  74   1      
+  75   1          delay_ms(1);
+  76   1          // delay_ms(10); // 每次发送完成后，延时10ms
+  77   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    656    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----       9
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

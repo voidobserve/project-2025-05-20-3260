@@ -1,0 +1,457 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              05/20/2025 17:55:59 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Release\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\User\main.c LARGE OPTIMIZE(8,SIZE) BROWSE INTVECTOR(0X000C) INCDIR
+                    -(..\..\Libraries\Include;..\..\User;..\..\User\lib;..\..\Hardware) INTERVAL(3) DEBUG OBJECTEXTEND PRINT(.\Release\Listin
+                    -gs\main.lst) OBJECT(.\Release\Objects\main.obj)
+
+line level    source
+
+   1          /**
+   2           ******************************************************************************
+   3           * @file    main.c
+   4           * @author  HUGE-IC Application Team
+   5           * @version V1.0.0
+   6           * @date    05-11-2022
+   7           * @brief   Main program body
+   8           ******************************************************************************
+   9           * @attention
+  10           *
+  11           * <h2><center>&copy; COPYRIGHT 2021 HUGE-IC</center></h2>
+  12           *
+  13           * 版权说明后续补上
+  14           *
+  15           ******************************************************************************
+  16           */
+  17          
+  18          /* Includes ------------------------------------------------------------------*/
+  19          #include "include.h"
+  20          #include "my_config.h"
+  21          
+  22          #if 0
+              
+              // 更新时间
+              // void time_update(void)
+              // {
+              //     if (tmr4_cnt >= 1000) // 如果计时满1s(1000ms)
+              //     {
+              //         tmr4_cnt -= 1000; // 为了尽量让时间准确，这里是 -=1000 ，而不是清零
+              
+              //         if (fun_info.save_info.time_sec < 59) // 最大加到59s，测试通过
+              //         {
+              //             fun_info.save_info.time_sec++;
+              //         }
+              //         else
+              //         {
+              //             fun_info.save_info.time_sec = 0;
+              //             fun_info_save(); // 每分钟保存一次时间到flash
+              
+              //             // printf("cur min %d \n", (u16)fun_info.time_min);
+              
+              //             if (fun_info.save_info.time_min < 59) // 最大加到59min，测试通过
+              //             {
+              //                 fun_info.save_info.time_min++;
+              //             }
+              //             else
+              //             {
+              //                 fun_info.save_info.time_min = 0;
+              //                 // printf("cur hour %d \n", (u16)fun_info.time_hour);
+              
+              //                 if (fun_info.save_info.time_hour < 23) // 最大加到23h，测试通过
+              //                 {
+              //                     fun_info.save_info.time_hour++;
+C51 COMPILER V9.60.7.0   MAIN                                                              05/20/2025 17:55:59 PAGE 2   
+
+              //                 }
+              //                 else
+              //                 {
+              //                     // 加到 23:59:59 后，将时间全部清零
+              //                     fun_info.save_info.time_hour = 0;
+              //                     fun_info.save_info.time_min = 0;
+              //                     fun_info.save_info.time_sec = 0;
+              //                 }
+              //             }
+              //         }
+              
+              // #if USE_MY_DEBUG // 测试单片机发送的数据
+              //         // printf("cur sec %d \n", (u16)fun_info.time_sec);
+              
+              //         // 测试用，可以在这里修改数据，然后发送
+              //         {
+              //             /*
+              //                 #define TEST_SEND_BATTERY // 测试通过
+              //                 #define TEST_SEND_BRAKE // MP5上面没有显示，串口有发送对应的数据
+              //                 #define TEST_SEND_LEFT_TURN // 测试通过
+              //                 #define TEST_SEND_RIGHT_TURN // 测试通过
+              //                 #define TEST_SEND_HIGH_BEAM // 测试通过
+              
+              //                 #define TEST_SEND_SPEED // 测试通过，但是要注意时速的显示范围
+              //                 #define TEST_SEND_ENGINE_SPEED // 测试通过
+              //                 #define TEST_SEND_FUEL // 测试通过
+              
+              //                 #define TEST_SEND_TEMP_OF_WATER // 没有显示，改用水温报警
+              //                 #define TEST_SEND_TOTAL_MILEAGE // 测试通过
+              //                 #define TEST_SEND_SUBTOTAL_MILEAGE // 测试通过
+              
+              //                 #define TEST_SEND_TOUCH_KEY
+              //                 #define TEST_SEND_TEMP_OF_WATER_WARNING // 测试通过
+              //                 #define TEST_SEND_VOLTAGE_OF_BATTERY // 测试通过
+              //             */
+              
+              //             // #define TEST_SEND_VOLTAGE_OF_BATTERY
+              
+              // #ifdef TEST_SEND_BATTERY
+              //             // =============================================
+              //             // 测试发送电池电量--单位：百分比
+              //             if (fun_info.battery < 100)
+              //             {
+              //                 fun_info.battery++;
+              //             }
+              //             else
+              //             {
+              //                 fun_info.battery = 0;
+              //             }
+              
+              //             // printf("cur battery %d \%\n", (u16)fun_info.battery);
+              //             flag_get_battery = 1;
+              // #endif
+              
+              // #ifdef TEST_SEND_BRAKE
+              //             // =============================================
+              //             // 测试发送 刹车状态
+              //             if (fun_info.brake)
+              //             {
+              //                 fun_info.brake = 0;
+              //             }
+              //             else
+C51 COMPILER V9.60.7.0   MAIN                                                              05/20/2025 17:55:59 PAGE 3   
+
+              //             {
+              //                 fun_info.brake = 1;
+              //             }
+              
+              //             flag_get_brake = 1;
+              // #endif
+              
+              // #ifdef TEST_SEND_LEFT_TURN
+              //             // =============================================
+              //             // 测试发送 左转向灯
+              //             if (fun_info.left_turn)
+              //             {
+              //                 fun_info.left_turn = 0;
+              //             }
+              //             else
+              //             {
+              //                 fun_info.left_turn = 1;
+              //             }
+              
+              //             flag_get_left_turn = 1;
+              // #endif
+              
+              // #ifdef TEST_SEND_RIGHT_TURN
+              //             // =============================================
+              //             // 测试发送 右转向灯
+              //             if (fun_info.right_turn)
+              //             {
+              //                 fun_info.right_turn = 0;
+              //             }
+              //             else
+              //             {
+              //                 fun_info.right_turn = 1;
+              //             }
+              
+              //             flag_get_right_turn = 1;
+              // #endif
+              
+              // #ifdef TEST_SEND_HIGH_BEAM
+              //             // #if 1
+              //             // =============================================
+              //             // 测试发送 远光灯 状态
+              //             if (fun_info.high_beam)
+              //             {
+              //                 fun_info.high_beam = 0;
+              //             }
+              //             else
+              //             {
+              //                 fun_info.high_beam = 1;
+              //             }
+              
+              //             flag_get_high_beam = 1;
+              // #endif
+              
+              // #ifdef TEST_SEND_SPEED
+              //             // =============================================
+              //             // 测试发送 时速
+              //             if (fun_info.speed < 0xFFFF)
+              //             {
+              //                 fun_info.speed++;
+              //             }
+              //             else
+              //             {
+C51 COMPILER V9.60.7.0   MAIN                                                              05/20/2025 17:55:59 PAGE 4   
+
+              //                 fun_info.speed = 0;
+              //             }
+              
+              //             flag_get_speed = 1;
+              // #endif
+              
+              // #ifdef TEST_SEND_ENGINE_SPEED
+              //             // =============================================
+              //             // 测试发送 发动机转速
+              //             if (fun_info.engine_speeed < (0xFFFF - 1000))
+              //             {
+              //                 fun_info.engine_speeed += 1000;
+              //             }
+              //             else
+              //             {
+              //                 fun_info.engine_speeed = 1000;
+              //             }
+              
+              //             flag_get_engine_speed = 1;
+              // #endif
+              
+              // #ifdef TEST_SEND_FUEL
+              //             // =============================================
+              //             // 测试发送 油量
+              //             if (fun_info.fuel < 0xFF)
+              //             {
+              //                 fun_info.fuel++;
+              //             }
+              //             else
+              //             {
+              //                 fun_info.fuel = 0;
+              //             }
+              
+              //             flag_get_fuel = 1;
+              
+              // #endif
+              
+              // #ifdef TEST_SEND_TEMP_OF_WATER
+              //             // =============================================
+              //             // 测试发送 水温
+              //             if (fun_info.temp_of_water < 0xFF)
+              //             {
+              //                 fun_info.temp_of_water++;
+              //             }
+              //             else
+              //             {
+              //                 fun_info.temp_of_water = 0;
+              //             }
+              
+              //             flag_get_temp_of_water = 1;
+              // #endif
+              
+              // #ifdef TEST_SEND_TOTAL_MILEAGE
+              //             // =============================================
+              //             // 测试发送 大计里程
+              //             // fun_info.save_info.total_mileage = 90000;
+              //             if (fun_info.save_info.total_mileage < (0xFFFFFFFF - 1000))
+              //             {
+              //                 fun_info.save_info.total_mileage += 1000;
+              //             }
+              //             else
+              //             {
+C51 COMPILER V9.60.7.0   MAIN                                                              05/20/2025 17:55:59 PAGE 5   
+
+              //                 fun_info.save_info.total_mileage = 0xFFFF0000;
+              //             }
+              
+              //             flag_get_total_mileage = 1;
+              
+              // #endif
+              
+              // #ifdef TEST_SEND_SUBTOTAL_MILEAGE
+              //             // =============================================
+              //             // 测试发送 小计里程
+              //             if (fun_info.save_info.subtotal_mileage < 1000)
+              //             {
+              //                 fun_info.save_info.subtotal_mileage++;
+              //             }
+              //             else
+              //             {
+              //                 fun_info.save_info.subtotal_mileage = 0;
+              //             }
+              
+              //             flag_get_sub_total_mileage = 1;
+              // #endif
+              
+              // #ifdef TEST_SEND_TEMP_OF_WATER_WARNING
+              //             // =============================================
+              //             // 测试发送 水温报警
+              
+              //             if (fun_info.flag_is_in_water_temp_warning)
+              //             {
+              //                 fun_info.flag_is_in_water_temp_warning = 0;
+              //             }
+              //             else
+              //             {
+              //                 fun_info.flag_is_in_water_temp_warning = 1;
+              //             }
+              
+              //             flag_set_temp_of_water_warning = 1;
+              // #endif
+              
+              // #ifdef TEST_SEND_VOLTAGE_OF_BATTERY
+              //             // 测试 发送电池电压
+              //             if (fun_info.voltage_of_battery < (0xFFFF - 10))
+              //             {
+              //                 fun_info.voltage_of_battery += 10;
+              //             }
+              //             else
+              //             {
+              //                 fun_info.voltage_of_battery = 10000;
+              //             }
+              
+              //             flag_get_voltage_of_battery = 1;
+              // #endif
+              //         }
+              
+              // #endif // #if USE_MY_DEBUG // 测试单片机发送的数据
+              //     }
+              // }
+              #endif
+ 297          
+ 298          void user_init(void)
+ 299          {
+ 300   1      
+ 301   1      #if USE_MY_DEBUG
+C51 COMPILER V9.60.7.0   MAIN                                                              05/20/2025 17:55:59 PAGE 6   
+
+              
+                  uart1_config();
+              
+              #endif
+ 306   1          aip1302_config(); // 初始化时钟ic，函数内部会读取时间信息，并存放到全局变量�
+             -��
+ 307   1          fun_info_init();  // 初始化用于存放信息的变量
+ 308   1      
+ 309   1          tmr0_config();           // 串口检测数据超时需要使用到的定时器
+ 310   1          uart0_config();          // 发送和接收指令使用到的串口
+ 311   1          pin_level_scan_config(); // 刹车、转向灯、挡位的检测引脚配置
+ 312   1      
+ 313   1          tmr1_config(); // 检测一段时间内的脉冲个数所需的定时器(用于计时)
+ 314   1      
+ 315   1          speed_scan_config();        // 时速扫描的配置
+ 316   1          engine_speed_scan_config(); // 发动机转速扫描的配置
+ 317   1      
+ 318   1          p03_output_config(); // 输出高电平用的引脚，到时候检测acc,才输出高电平
+ 319   1      
+ 320   1          adc_config();
+ 321   1          tmr2_config(); // 扫描脉冲(电平变化)的定时器
+ 322   1      }
+ 323          
+ 324          void main(void)
+ 325          {
+ 326   1          // 看门狗默认打开, 复位时间2s
+ 327   1          system_init();
+ 328   1      
+ 329   1          // WDT_KEY = WDT_KEY_VAL(0xDD); //  关闭看门狗
+ 330   1      
+ 331   1          // 关闭HCK和HDA的调试功能
+ 332   1          WDT_KEY = 0x55;  // 解除写保护
+ 333   1          IO_MAP &= ~0x01; // 清除这个寄存器的值，实现关闭HCK和HDA引脚的调试功能（解除�
+             -��射）
+ 334   1          WDT_KEY = 0xBB;
+ 335   1      
+ 336   1          /* 用户代码初始化接口 */
+ 337   1          user_init();
+ 338   1      
+ 339   1          tmr1_enable(); // 打开 检测引脚电平、检测时速、发动机转速、更新里程、定时�
+             -�测油量 使用的定时器
+ 340   1          tmr2_enable(); // 打开定时检测脉冲的定时器
+ 341   1      
+ 342   1          // 测试用到的配置：
+ 343   1          // P1_MD0 &= (~GPIO_P11_MODE_SEL(0x3));
+ 344   1          // P1_MD0 |= GPIO_P11_MODE_SEL(0x1); // 输出模式
+ 345   1          // FOUT_S11 |= GPIO_FOUT_AF_FUNC;
+ 346   1          // P11 = 0;
+ 347   1          // P2_MD0 &= ~GPIO_P20_MODE_SEL(0x3); // 清空对应的配置
+ 348   1          // P2_MD0 |= GPIO_P20_MODE_SEL(0x1);  // 输出模式
+ 349   1          // FOUT_S20 |= GPIO_FOUT_AF_FUNC;
+ 350   1          // P20 = 0;
+ 351   1      
+ 352   1          // 上电后，需要点亮一下所有的指示灯，再关闭
+ 353   1      
+ 354   1          /* 系统主循环 */
+ 355   1          while (1)
+ 356   1          {
+ 357   2      #if 1
+ 358   2              // 扫描状态是否变化，如果变化则更新标志位，更新状态的信息到结构体�
+             -�
+ 359   2              // P0_PD |= GPIO_P04_PULL_PD(0x01);     // 下拉
+C51 COMPILER V9.60.7.0   MAIN                                                              05/20/2025 17:55:59 PAGE 7   
+
+ 360   2              // P0_MD1 &= ~(GPIO_P04_MODE_SEL(0x3)); // 输入模式
+ 361   2              pin_level_scan();                    // 检测引脚电平变化
+ 362   2              ad_key_scan();              // 检测触摸按键，内部会发送检测到的按键状态
+ 363   2      
+ 364   2              // 注意要先打开对应的定时器
+ 365   2              engine_speed_scan(); // 检测发动机转速
+ 366   2              speed_scan();        // 检测时速
+ 367   2              mileage_scan();      // 检测大计里程和小计里程
+ 368   2      
+ 369   2              // 油量检测：
+ 370   2              fuel_capacity_scan();
+ 371   2      
+ 372   2              // 水温检测：
+ 373   2              temp_of_water_scan();
+ 374   2      
+ 375   2              // 电池电量检测：
+ 376   2              // P04--测量电池电压的引脚
+ 377   2              // P0_MD1 |= GPIO_P04_MODE_SEL(0x3); // 模拟模式
+ 378   2              battery_scan();
+ 379   2      
+ 380   2              uart0_scan_handle();  // 检查串口接收缓冲区的数据是否符合协议,如果有正确的
+             -指令，会存到另一个缓冲区中
+ 381   2              instruction_scan();   // 扫描是否有合法的指令
+ 382   2              instruction_handle(); // 扫描是否有对应的获取/状态更新操作(最占用时间,因为�
+             -��等待串口的数据发送完成)
+ 383   2                                    // printf("main\n");
+ 384   2      #ifdef USE_MY_DEBUG
+ 385   2      #if USE_MY_DEBUG
+                      // aip1302_test();
+              #endif // #if USE_MY_DEBUG
+ 388   2      #endif // #ifdef USE_MY_DEBUG
+ 389   2      
+ 390   2              heart_beat_handle(); //
+ 391   2      
+ 392   2      #endif //
+ 393   2      
+ 394   2              // if (PIN_DETECT_MALFUNCTION) // 如果检测故障的引脚为高电平
+ 395   2              // {
+ 396   2              //     // printf("");
+ 397   2              // }
+ 398   2              // else // 如果检测故障的引脚为低电平
+ 399   2              // {
+ 400   2              //     printf("detect malfunction\n");
+ 401   2              // }
+ 402   2      
+ 403   2              // P20 = ~P20;                  // 测试主循环的时间周期
+ 404   2              WDT_KEY = WDT_KEY_VAL(0xAA); // 喂狗并清除 wdt_pending
+ 405   2          }
+ 406   1      }
+ 407          
+ 408          /**
+ 409           * @}
+ 410           */
+ 411          
+ 412          /*************************** (C) COPYRIGHT 2022 HUGE-IC ***** END OF FILE *****/
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     99    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+C51 COMPILER V9.60.7.0   MAIN                                                              05/20/2025 17:55:59 PAGE 8   
+
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

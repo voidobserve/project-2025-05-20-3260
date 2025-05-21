@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "pin_level_scan.h": "c",
+        "speed_scan.h": "c",
+        "fuel_capacity.h": "c"
+    }
+}

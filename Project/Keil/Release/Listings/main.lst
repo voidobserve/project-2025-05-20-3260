@@ -1,9 +1,9 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              05/20/2025 17:55:59 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              05/21/2025 18:01:22 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
 OBJECT MODULE PLACED IN .\Release\Objects\main.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\User\main.c LARGE OPTIMIZE(8,SIZE) BROWSE INTVECTOR(0X000C) INCDIR
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\User\main.c LARGE OPTIMIZE(9,SIZE) BROWSE INTVECTOR(0X000C) INCDIR
                     -(..\..\Libraries\Include;..\..\User;..\..\User\lib;..\..\Hardware) INTERVAL(3) DEBUG OBJECTEXTEND PRINT(.\Release\Listin
                     -gs\main.lst) OBJECT(.\Release\Objects\main.obj)
 
@@ -62,7 +62,7 @@ line level    source
               //                 if (fun_info.save_info.time_hour < 23) // 最大加到23h，测试通过
               //                 {
               //                     fun_info.save_info.time_hour++;
-C51 COMPILER V9.60.7.0   MAIN                                                              05/20/2025 17:55:59 PAGE 2   
+C51 COMPILER V9.60.7.0   MAIN                                                              05/21/2025 18:01:22 PAGE 2   
 
               //                 }
               //                 else
@@ -126,7 +126,7 @@ line level    source
               //                 fun_info.brake = 0;
               //             }
               //             else
-C51 COMPILER V9.60.7.0   MAIN                                                              05/20/2025 17:55:59 PAGE 3   
+C51 COMPILER V9.60.7.0   MAIN                                                              05/21/2025 18:01:22 PAGE 3   
 
               //             {
               //                 fun_info.brake = 1;
@@ -190,7 +190,7 @@ line level    source
               //             }
               //             else
               //             {
-C51 COMPILER V9.60.7.0   MAIN                                                              05/20/2025 17:55:59 PAGE 4   
+C51 COMPILER V9.60.7.0   MAIN                                                              05/21/2025 18:01:22 PAGE 4   
 
               //                 fun_info.speed = 0;
               //             }
@@ -254,7 +254,7 @@ line level    source
               //             }
               //             else
               //             {
-C51 COMPILER V9.60.7.0   MAIN                                                              05/20/2025 17:55:59 PAGE 5   
+C51 COMPILER V9.60.7.0   MAIN                                                              05/21/2025 18:01:22 PAGE 5   
 
               //                 fun_info.save_info.total_mileage = 0xFFFF0000;
               //             }
@@ -318,7 +318,7 @@ line level    source
  299          {
  300   1      
  301   1      #if USE_MY_DEBUG
-C51 COMPILER V9.60.7.0   MAIN                                                              05/20/2025 17:55:59 PAGE 6   
+C51 COMPILER V9.60.7.0   MAIN                                                              05/21/2025 18:01:22 PAGE 6   
 
               
                   uart1_config();
@@ -337,117 +337,124 @@ line level    source
  315   1          speed_scan_config();        // 时速扫描的配置
  316   1          engine_speed_scan_config(); // 发动机转速扫描的配置
  317   1      
- 318   1          p03_output_config(); // 输出高电平用的引脚，到时候检测acc,才输出高电平
+ 318   1          adc_config();
  319   1      
- 320   1          adc_config();
- 321   1          tmr2_config(); // 扫描脉冲(电平变化)的定时器
- 322   1      }
- 323          
- 324          void main(void)
- 325          {
- 326   1          // 看门狗默认打开, 复位时间2s
- 327   1          system_init();
- 328   1      
- 329   1          // WDT_KEY = WDT_KEY_VAL(0xDD); //  关闭看门狗
- 330   1      
- 331   1          // 关闭HCK和HDA的调试功能
- 332   1          WDT_KEY = 0x55;  // 解除写保护
- 333   1          IO_MAP &= ~0x01; // 清除这个寄存器的值，实现关闭HCK和HDA引脚的调试功能（解除�
-             -��射）
- 334   1          WDT_KEY = 0xBB;
- 335   1      
- 336   1          /* 用户代码初始化接口 */
- 337   1          user_init();
- 338   1      
- 339   1          tmr1_enable(); // 打开 检测引脚电平、检测时速、发动机转速、更新里程、定时�
+ 320   1          tk_param_init(); // 触摸按键模块初始化
+ 321   1          tmr2_config();   // 扫描脉冲(电平变化)的定时器
+ 322   1      
+ 323   1          tmr1_enable(); // 打开 检测引脚电平、检测时速、发动机转速、更新里程、定时�
              -�测油量 使用的定时器
- 340   1          tmr2_enable(); // 打开定时检测脉冲的定时器
- 341   1      
- 342   1          // 测试用到的配置：
- 343   1          // P1_MD0 &= (~GPIO_P11_MODE_SEL(0x3));
- 344   1          // P1_MD0 |= GPIO_P11_MODE_SEL(0x1); // 输出模式
- 345   1          // FOUT_S11 |= GPIO_FOUT_AF_FUNC;
- 346   1          // P11 = 0;
- 347   1          // P2_MD0 &= ~GPIO_P20_MODE_SEL(0x3); // 清空对应的配置
- 348   1          // P2_MD0 |= GPIO_P20_MODE_SEL(0x1);  // 输出模式
- 349   1          // FOUT_S20 |= GPIO_FOUT_AF_FUNC;
- 350   1          // P20 = 0;
- 351   1      
- 352   1          // 上电后，需要点亮一下所有的指示灯，再关闭
+ 324   1          tmr2_enable(); // 打开定时检测脉冲的定时器
+ 325   1      
+ 326   1          delay_ms(1); // 等待系统稳定
+ 327   1      }
+ 328          
+ 329          void main(void)
+ 330          {
+ 331   1          // 看门狗默认打开, 复位时间2s
+ 332   1          system_init();
+ 333   1      
+ 334   1          // WDT_KEY = WDT_KEY_VAL(0xDD); //  关闭看门狗
+ 335   1      
+ 336   1          // 关闭HCK和HDA的调试功能
+ 337   1          WDT_KEY = 0x55;  // 解除写保护
+ 338   1          IO_MAP &= ~0x01; // 清除这个寄存器的值，实现关闭HCK和HDA引脚的调试功能（解除�
+             -��射）
+ 339   1          WDT_KEY = 0xBB;
+ 340   1      
+ 341   1          /* 用户代码初始化接口 */
+ 342   1          user_init();
+ 343   1      
+ 344   1          // 测试用到的配置：
+ 345   1          // P1_MD0 &= (~GPIO_P11_MODE_SEL(0x3));
+ 346   1          // P1_MD0 |= GPIO_P11_MODE_SEL(0x1); // 输出模式
+ 347   1          // FOUT_S11 |= GPIO_FOUT_AF_FUNC;
+ 348   1          // P11 = 0;
+ 349   1          // P2_MD0 &= ~GPIO_P20_MODE_SEL(0x3); // 清空对应的配置
+ 350   1          // P2_MD0 |= GPIO_P20_MODE_SEL(0x1);  // 输出模式
+ 351   1          // FOUT_S20 |= GPIO_FOUT_AF_FUNC;
+ 352   1          // P20 = 0;
  353   1      
- 354   1          /* 系统主循环 */
- 355   1          while (1)
- 356   1          {
- 357   2      #if 1
- 358   2              // 扫描状态是否变化，如果变化则更新标志位，更新状态的信息到结构体�
-             -�
- 359   2              // P0_PD |= GPIO_P04_PULL_PD(0x01);     // 下拉
-C51 COMPILER V9.60.7.0   MAIN                                                              05/20/2025 17:55:59 PAGE 7   
+ 354   1          // 上电后，需要点亮一下所有的指示灯，再关闭
+ 355   1      
+ 356   1          printf("sys reset\n");
+ 357   1      
+ 358   1          /* 系统主循环 */
+ 359   1          while (1)
+ 360   1          {
+C51 COMPILER V9.60.7.0   MAIN                                                              05/21/2025 18:01:22 PAGE 7   
 
- 360   2              // P0_MD1 &= ~(GPIO_P04_MODE_SEL(0x3)); // 输入模式
- 361   2              pin_level_scan();                    // 检测引脚电平变化
- 362   2              ad_key_scan();              // 检测触摸按键，内部会发送检测到的按键状态
+ 361   2              // touch_key_scan();
+ 362   2              ad_key_scan();
  363   2      
- 364   2              // 注意要先打开对应的定时器
- 365   2              engine_speed_scan(); // 检测发动机转速
- 366   2              speed_scan();        // 检测时速
- 367   2              mileage_scan();      // 检测大计里程和小计里程
- 368   2      
- 369   2              // 油量检测：
- 370   2              fuel_capacity_scan();
- 371   2      
- 372   2              // 水温检测：
- 373   2              temp_of_water_scan();
- 374   2      
- 375   2              // 电池电量检测：
- 376   2              // P04--测量电池电压的引脚
- 377   2              // P0_MD1 |= GPIO_P04_MODE_SEL(0x3); // 模拟模式
- 378   2              battery_scan();
- 379   2      
- 380   2              uart0_scan_handle();  // 检查串口接收缓冲区的数据是否符合协议,如果有正确的
+ 364   2      #if 0
+                      // 扫描状态是否变化，如果变化则更新标志位，更新状态的信息到结构体�
+             -�
+                      // P0_PD |= GPIO_P04_PULL_PD(0x01);     // 下拉
+                      // P0_MD1 &= ~(GPIO_P04_MODE_SEL(0x3)); // 输入模式
+                      pin_level_scan();                    // 检测引脚电平变化
+                      ad_key_scan();              // 检测触摸按键，内部会发送检测到的按键状态
+              
+                      // 注意要先打开对应的定时器
+                      engine_speed_scan(); // 检测发动机转速
+                      speed_scan();        // 检测时速
+                      mileage_scan();      // 检测大计里程和小计里程
+              
+                      // 油量检测：
+                      fuel_capacity_scan();
+              
+                      // 水温检测：
+                      temp_of_water_scan();
+              
+                      // 电池电量检测：
+                      // P04--测量电池电压的引脚
+                      // P0_MD1 |= GPIO_P04_MODE_SEL(0x3); // 模拟模式
+                      battery_scan();
+              
+                      uart0_scan_handle();  // 检查串口接收缓冲区的数据是否符合协议,如果有正确的
              -指令，会存到另一个缓冲区中
- 381   2              instruction_scan();   // 扫描是否有合法的指令
- 382   2              instruction_handle(); // 扫描是否有对应的获取/状态更新操作(最占用时间,因为�
+                      instruction_scan();   // 扫描是否有合法的指令
+                      instruction_handle(); // 扫描是否有对应的获取/状态更新操作(最占用时间,因为�
              -��等待串口的数据发送完成)
- 383   2                                    // printf("main\n");
- 384   2      #ifdef USE_MY_DEBUG
- 385   2      #if USE_MY_DEBUG
+                                            // printf("main\n");
+              #ifdef USE_MY_DEBUG
+              #if USE_MY_DEBUG
                       // aip1302_test();
               #endif // #if USE_MY_DEBUG
- 388   2      #endif // #ifdef USE_MY_DEBUG
- 389   2      
- 390   2              heart_beat_handle(); //
- 391   2      
- 392   2      #endif //
- 393   2      
- 394   2              // if (PIN_DETECT_MALFUNCTION) // 如果检测故障的引脚为高电平
- 395   2              // {
- 396   2              //     // printf("");
- 397   2              // }
- 398   2              // else // 如果检测故障的引脚为低电平
- 399   2              // {
- 400   2              //     printf("detect malfunction\n");
- 401   2              // }
- 402   2      
- 403   2              // P20 = ~P20;                  // 测试主循环的时间周期
- 404   2              WDT_KEY = WDT_KEY_VAL(0xAA); // 喂狗并清除 wdt_pending
- 405   2          }
- 406   1      }
- 407          
- 408          /**
- 409           * @}
- 410           */
- 411          
- 412          /*************************** (C) COPYRIGHT 2022 HUGE-IC ***** END OF FILE *****/
+              #endif // #ifdef USE_MY_DEBUG
+              
+                      heart_beat_handle(); //
+              
+              #endif //
+ 400   2      
+ 401   2              // if (PIN_DETECT_MALFUNCTION) // 如果检测故障的引脚为高电平
+ 402   2              // {
+ 403   2              //     // printf("");
+ 404   2              // }
+ 405   2              // else // 如果检测故障的引脚为低电平
+ 406   2              // {
+ 407   2              //     printf("detect malfunction\n");
+ 408   2              // }
+ 409   2      
+ 410   2              // P20 = ~P20;                  // 测试主循环的时间周期
+ 411   2              WDT_KEY = WDT_KEY_VAL(0xAA); // 喂狗并清除 wdt_pending
+ 412   2          }
+ 413   1      }
+ 414          
+ 415          /**
+ 416           * @}
+ 417           */
+ 418          
+ 419          /*************************** (C) COPYRIGHT 2022 HUGE-IC ***** END OF FILE *****/
+C51 COMPILER V9.60.7.0   MAIN                                                              05/21/2025 18:01:22 PAGE 8   
+
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     99    ----
-   CONSTANT SIZE    =   ----    ----
+   CODE SIZE        =     82    ----
+   CONSTANT SIZE    =     11    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-C51 COMPILER V9.60.7.0   MAIN                                                              05/20/2025 17:55:59 PAGE 8   
-
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----

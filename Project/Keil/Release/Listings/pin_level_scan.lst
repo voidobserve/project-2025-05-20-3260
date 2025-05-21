@@ -1,9 +1,9 @@
-C51 COMPILER V9.60.7.0   PIN_LEVEL_SCAN                                                    05/20/2025 17:55:59 PAGE 1   
+C51 COMPILER V9.60.7.0   PIN_LEVEL_SCAN                                                    05/21/2025 18:01:23 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE PIN_LEVEL_SCAN
 OBJECT MODULE PLACED IN .\Release\Objects\pin_level_scan.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\User\pin_level_scan.c LARGE OPTIMIZE(8,SIZE) BROWSE INTVECTOR(0X00
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\User\pin_level_scan.c LARGE OPTIMIZE(9,SIZE) BROWSE INTVECTOR(0X00
                     -0C) INCDIR(..\..\Libraries\Include;..\..\User;..\..\User\lib;..\..\Hardware) INTERVAL(3) DEBUG OBJECTEXTEND PRINT(.\Rele
                     -ase\Listings\pin_level_scan.lst) OBJECT(.\Release\Objects\pin_level_scan.obj)
 
@@ -62,7 +62,7 @@ line level    source
   51   3                  // 如果左转向灯未开启
   52   3                  fun_info.left_turn = OFF;
   53   3              }
-C51 COMPILER V9.60.7.0   PIN_LEVEL_SCAN                                                    05/20/2025 17:55:59 PAGE 2   
+C51 COMPILER V9.60.7.0   PIN_LEVEL_SCAN                                                    05/21/2025 18:01:23 PAGE 2   
 
   54   2              else
   55   2              {
@@ -126,7 +126,7 @@ line level    source
  112   2              else if (0 == PIN_DETECT_FIFTH_GEAR)
  113   2              {
  114   3                  // 五档
-C51 COMPILER V9.60.7.0   PIN_LEVEL_SCAN                                                    05/20/2025 17:55:59 PAGE 3   
+C51 COMPILER V9.60.7.0   PIN_LEVEL_SCAN                                                    05/21/2025 18:01:23 PAGE 3   
 
  115   3                  fun_info.gear = GEAR_FIFTH;
  116   3              }

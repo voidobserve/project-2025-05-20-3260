@@ -1,9 +1,9 @@
-C51 COMPILER V9.60.7.0   ADC                                                               05/20/2025 17:55:58 PAGE 1   
+C51 COMPILER V9.60.7.0   ADC                                                               05/21/2025 18:01:22 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE ADC
 OBJECT MODULE PLACED IN .\Release\Objects\adc.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\Hardware\adc.c LARGE OPTIMIZE(8,SIZE) BROWSE INTVECTOR(0X000C) INC
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\Hardware\adc.c LARGE OPTIMIZE(9,SIZE) BROWSE INTVECTOR(0X000C) INC
                     -DIR(..\..\Libraries\Include;..\..\User;..\..\User\lib;..\..\Hardware) INTERVAL(3) DEBUG OBJECTEXTEND PRINT(.\Release\Lis
                     -tings\adc.lst) OBJECT(.\Release\Objects\adc.obj)
 
@@ -49,71 +49,72 @@ line level    source
   36   2                         ADC_EXT_SEL(0x0);       // 选择外部通路
   37   2              break;
   38   2      
-  39   2          case ADC_PIN_TOUCH:                    // 检测触摸IC传过来的电压
-  40   2              ADC_CHS0 = ADC_ANALOG_CHAN(0x05) | // P05通路
-  41   2                         ADC_EXT_SEL(0x0);       // 选择外部通路
-  42   2              break;
-  43   2      
-  44   2          case ADC_PIN_FUEL:                     // 检测油量
-  45   2              ADC_CHS0 = ADC_ANALOG_CHAN(0x01) | // P01通路
-  46   2                         ADC_EXT_SEL(0x0);       // 选择外部通路
-  47   2              break;
-  48   2      
-  49   2          case ADC_PIN_TEMP_OF_WATER:            // 检测水温的引脚
-  50   2              ADC_CHS0 = ADC_ANALOG_CHAN(0x00) | // P00通路
-  51   2                         ADC_EXT_SEL(0x0);       // 选择外部通路
-C51 COMPILER V9.60.7.0   ADC                                                               05/20/2025 17:55:58 PAGE 2   
+  39   2          // case ADC_PIN_TOUCH:                    // 检测触摸IC传过来的电压
+  40   2          case ADC_PIN_KEY:                      // 检测ad按键
+  41   2              ADC_CHS0 = ADC_ANALOG_CHAN(0x05) | // P05通路
+  42   2                         ADC_EXT_SEL(0x0);       // 选择外部通路
+  43   2              break;
+  44   2      
+  45   2          case ADC_PIN_FUEL:                     // 检测油量
+  46   2              ADC_CHS0 = ADC_ANALOG_CHAN(0x01) | // P01通路
+  47   2                         ADC_EXT_SEL(0x0);       // 选择外部通路
+  48   2              break;
+  49   2      
+  50   2          case ADC_PIN_TEMP_OF_WATER:            // 检测水温的引脚
+  51   2              ADC_CHS0 = ADC_ANALOG_CHAN(0x00) | // P00通路
+C51 COMPILER V9.60.7.0   ADC                                                               05/21/2025 18:01:22 PAGE 2   
 
-  52   2              break;
-  53   2          }
-  54   1      
-  55   1          ADC_CFG0 |= ADC_CHAN0_EN(0x1) | // 使能通道0转换
-  56   1                      ADC_EN(0x1);        // 使能A/D转换
-  57   1      
-  58   1          delay_ms(1); // 等待ADC模块配置稳定，需要等待20us以上
-  59   1      }
-  60          
-  61          // 获取adc值，存放到变量adc_val中(adc单次转换)
-  62          u16 adc_single_convert(void)
-  63          {
-  64   1          ADC_CFG0 |= ADC_CHAN0_TRG(0x1); // 触发ADC0转换
-  65   1          while (!(ADC_STA & ADC_CHAN0_DONE(0x1)))
-  66   1              ;                                           // 等待转换完成
-  67   1          ADC_STA = ADC_CHAN0_DONE(0x1);                  // 清除ADC0转换完成标志位
-  68   1          return ((ADC_DATAH0 << 4) | (ADC_DATAL0 >> 4)); // 读取ADC0的值
-  69   1      }
-  70          
-  71          // adc采集+滤波
-  72          u16 adc_getval(void)
-  73          {
-  74   1          u16 adc_val_tmp = 0;     // 存放单次采集到的ad值
-  75   1          u32 adc_val_sum = 0;     // 存放所有采集到的ad值的累加
-  76   1          u16 get_adcmax = 0;      // 存放采集到的最大的ad值
-  77   1          u16 get_adcmin = 0xFFFF; // 存放采集到的最小的ad值(初始值为最大值)
-  78   1          u8 i = 0;
-  79   1      
-  80   1          for (i = 0; i < 20; i++)
-  81   1          {
-  82   2              adc_val_tmp = adc_single_convert(); // 获取一次ad值
-  83   2              if (i < 2)
-  84   2                  continue; // 丢弃前两次采样的
-  85   2              if (adc_val_tmp > get_adcmax)
-  86   2                  get_adcmax = adc_val_tmp; // 更新当前采集到的最大值
-  87   2              if (adc_val_tmp < get_adcmin)
-  88   2                  get_adcmin = adc_val_tmp; // 更新当前采集到的最小值
-  89   2              adc_val_sum += adc_val_tmp;
-  90   2          }
-  91   1      
-  92   1          adc_val_sum -= get_adcmax;        // 去掉一个最大
-  93   1          adc_val_sum -= get_adcmin;        // 去掉一个最小
-  94   1          adc_val_tmp = (adc_val_sum >> 4); // 除以16，取平均值
-  95   1      
-  96   1          return adc_val_tmp;
-  97   1      }
+  52   2                         ADC_EXT_SEL(0x0);       // 选择外部通路
+  53   2              break;
+  54   2          }
+  55   1      
+  56   1          ADC_CFG0 |= ADC_CHAN0_EN(0x1) | // 使能通道0转换
+  57   1                      ADC_EN(0x1);        // 使能A/D转换
+  58   1      
+  59   1          delay_ms(1); // 等待ADC模块配置稳定，需要等待20us以上
+  60   1      }
+  61          
+  62          // 获取adc值，存放到变量adc_val中(adc单次转换)
+  63          u16 adc_single_convert(void)
+  64          {
+  65   1          ADC_CFG0 |= ADC_CHAN0_TRG(0x1); // 触发ADC0转换
+  66   1          while (!(ADC_STA & ADC_CHAN0_DONE(0x1)))
+  67   1              ;                                           // 等待转换完成
+  68   1          ADC_STA = ADC_CHAN0_DONE(0x1);                  // 清除ADC0转换完成标志位
+  69   1          return ((ADC_DATAH0 << 4) | (ADC_DATAL0 >> 4)); // 读取ADC0的值
+  70   1      }
+  71          
+  72          // adc采集+滤波
+  73          u16 adc_getval(void)
+  74          {
+  75   1          u16 adc_val_tmp = 0;     // 存放单次采集到的ad值
+  76   1          u32 adc_val_sum = 0;     // 存放所有采集到的ad值的累加
+  77   1          u16 get_adcmax = 0;      // 存放采集到的最大的ad值
+  78   1          u16 get_adcmin = 0xFFFF; // 存放采集到的最小的ad值(初始值为最大值)
+  79   1          u8 i = 0;
+  80   1      
+  81   1          for (i = 0; i < 20; i++)
+  82   1          {
+  83   2              adc_val_tmp = adc_single_convert(); // 获取一次ad值
+  84   2              if (i < 2)
+  85   2                  continue; // 丢弃前两次采样的
+  86   2              if (adc_val_tmp > get_adcmax)
+  87   2                  get_adcmax = adc_val_tmp; // 更新当前采集到的最大值
+  88   2              if (adc_val_tmp < get_adcmin)
+  89   2                  get_adcmin = adc_val_tmp; // 更新当前采集到的最小值
+  90   2              adc_val_sum += adc_val_tmp;
+  91   2          }
+  92   1      
+  93   1          adc_val_sum -= get_adcmax;        // 去掉一个最大
+  94   1          adc_val_sum -= get_adcmin;        // 去掉一个最小
+  95   1          adc_val_tmp = (adc_val_sum >> 4); // 除以16，取平均值
+  96   1      
+  97   1          return adc_val_tmp;
+  98   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    361    ----
+   CODE SIZE        =    349    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =      2      11
    PDATA SIZE       =   ----    ----

@@ -1,9 +1,9 @@
-C51 COMPILER V9.60.7.0   TMR0                                                              05/20/2025 17:55:58 PAGE 1   
+C51 COMPILER V9.60.7.0   TMR0                                                              05/21/2025 18:01:21 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE TMR0
 OBJECT MODULE PLACED IN .\Release\Objects\tmr0.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\Hardware\tmr0.c LARGE OPTIMIZE(8,SIZE) BROWSE INTVECTOR(0X000C) IN
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\Hardware\tmr0.c LARGE OPTIMIZE(9,SIZE) BROWSE INTVECTOR(0X000C) IN
                     -CDIR(..\..\Libraries\Include;..\..\User;..\..\User\lib;..\..\Hardware) INTERVAL(3) DEBUG OBJECTEXTEND PRINT(.\Release\Li
                     -stings\tmr0.lst) OBJECT(.\Release\Objects\tmr0.obj)
 
@@ -62,7 +62,7 @@ line level    source
   49   1      }
   50          
   51          /**
-C51 COMPILER V9.60.7.0   TMR0                                                              05/20/2025 17:55:58 PAGE 2   
+C51 COMPILER V9.60.7.0   TMR0                                                              05/21/2025 18:01:21 PAGE 2   
 
   52           * @brief 关闭定时器0，清空计数值
   53           */
@@ -103,7 +103,7 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    179    ----
+   CODE SIZE        =    175    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =      4    ----
    PDATA SIZE       =   ----    ----

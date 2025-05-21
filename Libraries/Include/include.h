@@ -39,9 +39,8 @@
 #include "tx8T326x_uart_spi_i2c.h"
 #include "tx8T326x_amp.h"
 #include "tk_config.h"
-#include "tk_debug.h"
+// #include "tk_debug.h"
 #include "tk_set.h"
-// #include "tk_user.h"
 #include "tk_simplify_algorithm.h"
 
 /* Private typedef -----------------------------------------------------------*/

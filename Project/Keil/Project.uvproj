@@ -177,7 +177,7 @@
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\SampTarg.dll</Flash2>
-          <Flash3></Flash3>
+          <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -191,7 +191,7 @@
             <RomSize>2</RomSize>
             <DataHold>0</DataHold>
             <XDataHold>0</XDataHold>
-            <UseOnchipRom>0</UseOnchipRom>
+            <UseOnchipRom>1</UseOnchipRom>
             <UseOnchipArithmetic>0</UseOnchipArithmetic>
             <UseMultipleDPTR>0</UseMultipleDPTR>
             <UseOnchipXram>0</UseOnchipXram>
@@ -314,7 +314,7 @@
             <uAregs>0</uAregs>
             <UseInterruptVector>1</UseInterruptVector>
             <Fuzzy>3</Fuzzy>
-            <Optimize>8</Optimize>
+            <Optimize>9</Optimize>
             <WarningLevel>2</WarningLevel>
             <SizeSpeed>0</SizeSpeed>
             <ObjectExtend>1</ObjectExtend>
@@ -390,6 +390,18 @@
         </Group>
         <Group>
           <GroupName>LIb</GroupName>
+          <Files>
+            <File>
+              <FileName>tk_simplify_algorithm_V1.0.0.LIB</FileName>
+              <FileType>4</FileType>
+              <FilePath>..\..\User\lib\tk_simplify_algorithm_V1.0.0.LIB</FilePath>
+            </File>
+            <File>
+              <FileName>tk_set.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\lib\tk_set.c</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>Hardware</GroupName>
@@ -438,6 +450,11 @@
               <FileName>uart1.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Hardware\uart1.c</FilePath>
+            </File>
+            <File>
+              <FileName>key_driver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Hardware\key_driver.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -508,6 +525,11 @@
               <FileName>battery.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\battery.c</FilePath>
+            </File>
+            <File>
+              <FileName>touch_key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\touch_key.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -11,7 +11,8 @@ enum
     ADC_PIN_NONE = 0x00,
     
     ADC_PIN_BATTERY = 0x01, // 电池电量检测引脚
-    ADC_PIN_TOUCH, // 检测触摸IC发送过来的电压的引脚
+    // ADC_PIN_TOUCH, // 检测触摸IC发送过来的电压的引脚
+    ADC_PIN_KEY, // 检测ad按键的引脚
     ADC_PIN_FUEL, // 检测油量的引脚
     ADC_PIN_TEMP_OF_WATER, // 检测水温的引脚
 };

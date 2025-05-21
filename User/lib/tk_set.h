@@ -84,7 +84,7 @@
 /* Private functions ---------------------------------------------------------*/
 
 
-void tk_param_init(void);
+extern void tk_param_init(void);
 
 #ifdef __cplusplus
 }

@@ -315,10 +315,15 @@ void user_init(void)
     speed_scan_config();        // 时速扫描的配置
     engine_speed_scan_config(); // 发动机转速扫描的配置
 
-    p03_output_config(); // 输出高电平用的引脚，到时候检测acc,才输出高电平
-
     adc_config();
-    tmr2_config(); // 扫描脉冲(电平变化)的定时器
+
+    tk_param_init(); // 触摸按键模块初始化
+    tmr2_config();   // 扫描脉冲(电平变化)的定时器
+
+    tmr1_enable(); // 打开 检测引脚电平、检测时速、发动机转速、更新里程、定时检测油量 使用的定时器
+    tmr2_enable(); // 打开定时检测脉冲的定时器
+
+    delay_ms(1); // 等待系统稳定
 }
 
 void main(void)
@@ -336,9 +341,6 @@ void main(void)
     /* 用户代码初始化接口 */
     user_init();
 
-    tmr1_enable(); // 打开 检测引脚电平、检测时速、发动机转速、更新里程、定时检测油量 使用的定时器
-    tmr2_enable(); // 打开定时检测脉冲的定时器
-
     // 测试用到的配置：
     // P1_MD0 &= (~GPIO_P11_MODE_SEL(0x3));
     // P1_MD0 |= GPIO_P11_MODE_SEL(0x1); // 输出模式
@@ -351,10 +353,15 @@ void main(void)
 
     // 上电后，需要点亮一下所有的指示灯，再关闭
 
+    printf("sys reset\n");
+
     /* 系统主循环 */
     while (1)
     {
-#if 1
+        // touch_key_scan();
+        ad_key_scan();
+
+#if 0
         // 扫描状态是否变化，如果变化则更新标志位，更新状态的信息到结构体中
         // P0_PD |= GPIO_P04_PULL_PD(0x01);     // 下拉
         // P0_MD1 &= ~(GPIO_P04_MODE_SEL(0x3)); // 输入模式

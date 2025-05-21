@@ -36,7 +36,8 @@ void adc_sel_pin(u8 adc_pin)
                    ADC_EXT_SEL(0x0);       // 选择外部通路
         break;
 
-    case ADC_PIN_TOUCH:                    // 检测触摸IC传过来的电压
+    // case ADC_PIN_TOUCH:                    // 检测触摸IC传过来的电压
+    case ADC_PIN_KEY:                      // 检测ad按键
         ADC_CHS0 = ADC_ANALOG_CHAN(0x05) | // P05通路
                    ADC_EXT_SEL(0x0);       // 选择外部通路
         break;

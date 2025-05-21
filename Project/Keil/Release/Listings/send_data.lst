@@ -1,9 +1,9 @@
-C51 COMPILER V9.60.7.0   SEND_DATA                                                         05/20/2025 17:55:59 PAGE 1   
+C51 COMPILER V9.60.7.0   SEND_DATA                                                         05/21/2025 18:01:23 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE SEND_DATA
 OBJECT MODULE PLACED IN .\Release\Objects\send_data.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\User\send_data.c LARGE OPTIMIZE(8,SIZE) BROWSE INTVECTOR(0X000C) I
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\User\send_data.c LARGE OPTIMIZE(9,SIZE) BROWSE INTVECTOR(0X000C) I
                     -NCDIR(..\..\Libraries\Include;..\..\User;..\..\User\lib;..\..\Hardware) INTERVAL(3) DEBUG OBJECTEXTEND PRINT(.\Release\L
                     -istings\send_data.lst) OBJECT(.\Release\Objects\send_data.obj)
 
@@ -62,7 +62,7 @@ line level    source
   51   2              uart0_sendbyte(send_data >> 16); // 发送信息
   52   2              uart0_sendbyte(send_data >> 8);  // 发送信息
   53   2              uart0_sendbyte(send_data);       // 发送信息
-C51 COMPILER V9.60.7.0   SEND_DATA                                                         05/20/2025 17:55:59 PAGE 2   
+C51 COMPILER V9.60.7.0   SEND_DATA                                                         05/21/2025 18:01:23 PAGE 2   
 
   54   2      
   55   2              check_num += 0x07 + (u8)instruct + (u8)(send_data >> 16) + (u8)(send_data >> 8) + (u8)send_data;
@@ -92,7 +92,7 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    656    ----
+   CODE SIZE        =    528    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----       9
    PDATA SIZE       =   ----    ----

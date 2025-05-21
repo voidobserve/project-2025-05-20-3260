@@ -2,7 +2,7 @@
 #define __FUN_INFO_H
 
 #include "include.h" // 使用芯片官方提供的头文件
-// #include "my_config.h" // 包含自定义的头文件
+#include "my_config.h" // 包含自定义的头文件
 #include "typedef_struct.h"
 
 // 挡位的定义

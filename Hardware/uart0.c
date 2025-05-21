@@ -35,12 +35,6 @@ char putchar(char c)
 // 波特率由宏 UART0_BAUDRATE 来决定
 void uart0_config(void)
 {
-    // // 电路板上，P11为发送引脚，P12为接收引脚
-    // P1_MD0 &= (~GPIO_P11_MODE_SEL(0x3) | ~GPIO_P12_MODE_SEL(0x3));
-    // P1_MD0 |= GPIO_P11_MODE_SEL(0x1); // 输出模式
-    // FOUT_S11 |= GPIO_FOUT_UART0_TX;   // 配置P11为UART0_TX
-    // FIN_S7 |= GPIO_FIN_SEL_P12;       // 配置P12为UART0_RX
-
     // P03 为单片机TX，P00 为单片机RX
     P0_MD0 &= ~(GPIO_P03_MODE_SEL(0x03));// 清空寄存器配置
     P0_MD0 &= ~(GPIO_P00_MODE_SEL(0x03)); // 清空寄存器配置
@@ -49,10 +43,10 @@ void uart0_config(void)
     FIN_S0 |= GPIO_FIN_SEL_P00; // 配置P00为UART0_RX
 
     // 测试时，使用开发板上面的P25来打印输出
-    // P2_MD1 &= ~(GPIO_P25_MODE_SEL(0x03));// 清空寄存器配置
+    // P2_MD1 &= ~(GPIO_P25_MODE_SEL(0x03)); // 清空寄存器配置
     // // P2_MD1 &= ~(GPIO_P00_MODE_SEL(0x03)); // 清空寄存器配置
     // P2_MD1 |= GPIO_P25_MODE_SEL(0x01); // 输出模式
-    // FOUT_S25 |= GPIO_FOUT_UART0_TX; // 配置P03为UART0_TX
+    // FOUT_S25 |= GPIO_FOUT_UART0_TX;    // 配置P03为UART0_TX
 
     __EnableIRQ(UART0_IRQn); // 打开UART模块中断
     IE_EA = 1;               // 打开总中断

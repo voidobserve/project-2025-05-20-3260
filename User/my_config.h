@@ -79,20 +79,6 @@
 // 油量检测配置
 // ======================================================
 
-// ======================================================
-// 触摸按键配置
-// 使用5V参考电压，外部没有分压的情况下：
-#define AD_KEY_INTERVAL (75)         // 判断区间，检测到ad值在(目标ad值-区间区 ~ 目标ad值+区间值,认为条件成立)
-#define AD_KEY_ONE_LEFT_VAL (876)    // 从左往下数，第一个按键对应的ad值 (1.07V)
-#define AD_KEY_TWO_LEFT_VAL (3604)   // 从左往下数，第二个按键对应的ad值 (4.40V)
-#define AD_KEY_THREE_LEFT_VAL (2859) // 从左往下数，第三个按键对应的ad值 (3.49V)
-
-#define AD_KEY_ONE_RIGHT_VAL (1499)   // 从右往下数，第一个按键对应的ad值 (1.83V)
-#define AD_KEY_TWO_RIGHT_VAL (1744)   // 从右往下数，第二个按键对应的ad值 (2.13V)
-#define AD_KEY_THREE_RIGHT_VAL (2359) // 从右往下数，第三个按键对应的ad值 (2.88V)
-
-// 不能使用这种方式，ad值不在定义的按键对应的ad值区间时，都认为按键没有按下:
-// #define AD_KEY_NONE (4095) // 没有按键按下时，对应的ad值
 
 // 触摸按键键值定义(检测到短按/持续时，要发送的键值)：
 #define TOUCH_KEY_VAL_MUTE ((u16)0x0040)    // 左2 从左往下数，第二个按键
@@ -110,9 +96,10 @@
 
 // 扫描时间配置：
 // #define DETECT_DOUBLE_CLICK_INTERVAL (100) // 检测双击的时间间隔(单位：ms)(没有用到双击操作)
-#define LONG_PRESS_TIME_THRESHOLD_MS (500) // 长按时间阈值(单位：ms)(注意不能大于变量类型的大小)
-#define HOLD_PRESS_TIME_THRESHOLD_MS (25)  // 长按持续(不松手)的时间阈值(单位：ms)，每隔 xx 时间认为有一次长按持续事件(注意不能大于变量类型的大小)
-#define LOOSE_PRESS_CNT_MS (0)             // 松手计时，松开手多久，才认为是真的松手了(注意不能大于变量类型的大小)
+
+// #define LONG_PRESS_TIME_THRESHOLD_MS (500) // 长按时间阈值(单位：ms)(注意不能大于变量类型的大小)
+// #define HOLD_PRESS_TIME_THRESHOLD_MS (25)  // 长按持续(不松手)的时间阈值(单位：ms)，每隔 xx 时间认为有一次长按持续事件(注意不能大于变量类型的大小)
+// #define LOOSE_PRESS_CNT_MS (0)             // 松手计时，松开手多久，才认为是真的松手了(注意不能大于变量类型的大小)
 
 // 触摸按键配置
 // ======================================================
@@ -159,7 +146,10 @@
 #define ONE_CYCLE_TIME_MS (8)
 
 #include <stdio.h>   // printf()
+#include "tk_set.h" // 包含触摸按键的初始化接口
+
 #include "my_gpio.h" // 自定义的、使用到的引脚
+#include "key_driver.h"
 
 #include "uart0.h"             // 接收 / 发送 指令 使用的串口(使能USE_MY_DEBUG宏时，printf()也是使用该串口)
 #include "uart1.h"             // printf()调试使用到的串口
@@ -179,6 +169,7 @@
 #include "fuel_capacity.h"     // 油量检测
 #include "temp_of_water.h"     // 水温报警检测
 #include "battery.h"           // 电池电量检测
-#include "aip1302.h"
+#include "aip1302.h" // 时钟IC aip1302
+#include "touch_key.h" // 触摸按键
 
 #endif // end file

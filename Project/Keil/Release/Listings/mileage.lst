@@ -1,9 +1,9 @@
-C51 COMPILER V9.60.7.0   MILEAGE                                                           05/20/2025 17:55:59 PAGE 1   
+C51 COMPILER V9.60.7.0   MILEAGE                                                           05/21/2025 18:01:23 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MILEAGE
 OBJECT MODULE PLACED IN .\Release\Objects\mileage.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\User\mileage.c LARGE OPTIMIZE(8,SIZE) BROWSE INTVECTOR(0X000C) INC
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\User\mileage.c LARGE OPTIMIZE(9,SIZE) BROWSE INTVECTOR(0X000C) INC
                     -DIR(..\..\Libraries\Include;..\..\User;..\..\User\lib;..\..\Hardware) INTERVAL(3) DEBUG OBJECTEXTEND PRINT(.\Release\Lis
                     -tings\mileage.lst) OBJECT(.\Release\Objects\mileage.obj)
 
@@ -62,7 +62,7 @@ line level    source
   48   2              //     fun_info.save_info.subtotal_mileage += distance / 1000; // 将毫米转换成米，再保�
              -�
   49   2              // }
-C51 COMPILER V9.60.7.0   MILEAGE                                                           05/20/2025 17:55:59 PAGE 2   
+C51 COMPILER V9.60.7.0   MILEAGE                                                           05/21/2025 18:01:23 PAGE 2   
 
   50   2      
   51   2              // 限制小计里程在 1000km(1,000,000m)以内
@@ -120,13 +120,13 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    286    ----
+   CODE SIZE        =    255    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =     18    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
-C51 COMPILER V9.60.7.0   MILEAGE                                                           05/20/2025 17:55:59 PAGE 3   
+C51 COMPILER V9.60.7.0   MILEAGE                                                           05/21/2025 18:01:23 PAGE 3   
 
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

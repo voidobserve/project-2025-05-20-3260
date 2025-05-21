@@ -1,9 +1,9 @@
-C51 COMPILER V9.60.7.0   INSTRUCTION                                                       05/20/2025 17:56:00 PAGE 1   
+C51 COMPILER V9.60.7.0   INSTRUCTION                                                       05/21/2025 18:01:23 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE INSTRUCTION
 OBJECT MODULE PLACED IN .\Release\Objects\instruction.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\User\instruction.c LARGE OPTIMIZE(8,SIZE) BROWSE INTVECTOR(0X000C)
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\User\instruction.c LARGE OPTIMIZE(9,SIZE) BROWSE INTVECTOR(0X000C)
                     - INCDIR(..\..\Libraries\Include;..\..\User;..\..\User\lib;..\..\Hardware) INTERVAL(3) DEBUG OBJECTEXTEND PRINT(.\Release
                     -\Listings\instruction.lst) OBJECT(.\Release\Objects\instruction.obj)
 
@@ -62,7 +62,7 @@ line level    source
   49          void instruction_scan(void)
   50          {
   51   1          u8 i = 0; // 注意要大于等于缓冲区能存放的指令数目
-C51 COMPILER V9.60.7.0   INSTRUCTION                                                       05/20/2025 17:56:00 PAGE 2   
+C51 COMPILER V9.60.7.0   INSTRUCTION                                                       05/21/2025 18:01:23 PAGE 2   
 
   52   1          for (i = 0; i < (UART0_RXBUF_LEN) / (FRAME_MAX_LEN); i++)
   53   1          {
@@ -126,7 +126,7 @@ line level    source
                               //     flag_get_sub_total_mileage = 1;
                               //     break;
               
-C51 COMPILER V9.60.7.0   INSTRUCTION                                                       05/20/2025 17:56:00 PAGE 3   
+C51 COMPILER V9.60.7.0   INSTRUCTION                                                       05/21/2025 18:01:23 PAGE 3   
 
                               // case INSTRUCTION_GET_TOUCH_KEY_STATUS: // 获取触摸按键的状态
                               //     flag_get_touch_key_status = 1;
@@ -190,7 +190,7 @@ line level    source
                                       u8 j = 0;
                                       for (i = 0; i < (UART0_RXBUF_LEN) / (FRAME_MAX_LEN); i++)
                                       {
-C51 COMPILER V9.60.7.0   INSTRUCTION                                                       05/20/2025 17:56:00 PAGE 4   
+C51 COMPILER V9.60.7.0   INSTRUCTION                                                       05/21/2025 18:01:23 PAGE 4   
 
                                           printf("buff_index %bu ", i);
                                           for (j = 0; j < FRAME_MAX_LEN; j++)
@@ -254,7 +254,7 @@ line level    source
  231   3                  send_data(SEND_BATTERY, fun_info.battery);                                   // 2. 发送电�
              -�电量
  232   3                  send_data(SEND_BARKE, fun_info.brake);                                       // 3. 发送当�
-C51 COMPILER V9.60.7.0   INSTRUCTION                                                       05/20/2025 17:56:00 PAGE 5   
+C51 COMPILER V9.60.7.0   INSTRUCTION                                                       05/21/2025 18:01:23 PAGE 5   
 
              -�刹车的状态
  233   3                  send_data(SEND_LEFT_TURN, fun_info.left_turn);                               // 4. 发送当�
@@ -318,7 +318,7 @@ line level    source
               #endif
  280   2      
  281   2              send_data(SEND_GEAR, fun_info.gear); // 发送当前挡位的状态
-C51 COMPILER V9.60.7.0   INSTRUCTION                                                       05/20/2025 17:56:00 PAGE 6   
+C51 COMPILER V9.60.7.0   INSTRUCTION                                                       05/21/2025 18:01:23 PAGE 6   
 
  282   2          }
  283   1      
@@ -382,7 +382,7 @@ line level    source
  341   2              // 如果要获取发动机的转速
  342   2              flag_get_engine_speed = 0;
  343   2      #if USE_MY_DEBUG
-C51 COMPILER V9.60.7.0   INSTRUCTION                                                       05/20/2025 17:56:00 PAGE 7   
+C51 COMPILER V9.60.7.0   INSTRUCTION                                                       05/21/2025 18:01:23 PAGE 7   
 
                       // printf(" flag_get_engine_speed \n");
                       // printf(" cur engine speed %u rpm ", (u16)fun_info.engine_speeed);
@@ -446,7 +446,7 @@ line level    source
  403   1      
  404   1          if (flag_get_total_mileage)
  405   1          {
-C51 COMPILER V9.60.7.0   INSTRUCTION                                                       05/20/2025 17:56:00 PAGE 8   
+C51 COMPILER V9.60.7.0   INSTRUCTION                                                       05/21/2025 18:01:23 PAGE 8   
 
  406   2              // 如果要获取大计里程 / 得到了大计里程新的数据
  407   2              flag_get_total_mileage = 0;
@@ -510,7 +510,7 @@ line level    source
  464   1          //         flag_get_touch_key_status = 0;
  465   1          // #if USE_MY_DEBUG
  466   1          //         printf(" flag_get_touch_key_status \n");
-C51 COMPILER V9.60.7.0   INSTRUCTION                                                       05/20/2025 17:56:00 PAGE 9   
+C51 COMPILER V9.60.7.0   INSTRUCTION                                                       05/21/2025 18:01:23 PAGE 9   
 
  467   1          // #endif
  468   1          //         send_data(SEND_TOUCH_KEY_STATUS, fun_info.touch_key_val);
@@ -574,7 +574,7 @@ line level    source
  524   1          {
  525   2              // 如果要设置水温报警
  526   2              flag_set_temp_of_water_warning = 0;
-C51 COMPILER V9.60.7.0   INSTRUCTION                                                       05/20/2025 17:56:00 PAGE 10  
+C51 COMPILER V9.60.7.0   INSTRUCTION                                                       05/21/2025 18:01:23 PAGE 10  
 
  527   2      #if USE_MY_DEBUG
                       // printf(" flag_set_temp_of_water_warning \n");
@@ -610,7 +610,7 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1335    ----
+   CODE SIZE        =   1046    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =      9       5
    PDATA SIZE       =   ----    ----

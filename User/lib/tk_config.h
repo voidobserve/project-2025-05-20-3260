@@ -16,7 +16,7 @@
 #ifndef __TK_CONFIG_H
 #define __TK_CONFIG_H
 /* Includes ------------------------------------------------------------------------------------*/
-#include "my_config.h"
+// #include "my_config.h"
 
 /************************************************************************************************
 ******************************用户配置区：user configuration area********************************
@@ -34,13 +34,13 @@
 #define TK_NOISE_VAL                    ( 10 )                // 按键噪声值
 #define TK_CM_VALE                      ( 5 )                 // 按键释放迟滞
 #define TK_CH_MAX                       ( 26 )                // 配置最大按键个数
-#define TK_CH_USE                       ( 6 )                 // 需要使用的按键个数
+#define TK_CH_USE                       ( 2 )                 // 需要使用的按键个数
 
 
 /* TK0 使能位
  * TK0 通道灵敏度
  */
-#define TK0_CH_EN                       (1)
+#define TK0_CH_EN                       (0)
 #define TK0_THR_DATA                    (100)
 /*
  * TK1 使能位
@@ -52,13 +52,13 @@
  * TK2 使能位
  * TK2 通道灵敏度
  */
-#define TK2_CH_EN                       (1)
+#define TK2_CH_EN                       (0)
 #define TK2_THR_DATA                    (100)
 /*
  * TK3 使能位
  * TK3 通道灵敏度
  */
-#define TK3_CH_EN                       (1)
+#define TK3_CH_EN                       (0)
 #define TK3_THR_DATA                    (100)
 /*
  * TK4 使能位
@@ -95,13 +95,13 @@
  * TK9 通道灵敏度
  */
 #define TK9_CH_EN                       (1)
-#define TK9_THR_DATA                    (100)
+#define TK9_THR_DATA                    (1500) // 这里调节到900，刚上电还是会一直触发长按
 /*
  * TK10 使能位
  * TK10 通道灵敏度
  */
 #define TK10_CH_EN                      (1)
-#define TK10_THR_DATA                   (100)
+#define TK10_THR_DATA                   (1500)
 /*
  * TK11 使能位
  * TK11 通道灵敏度
@@ -190,7 +190,7 @@
  * TK25 使能位
  * TK25 通道灵敏度
  */
-#define TK25_CH_EN                      (1)
+#define TK25_CH_EN                      (0)
 #define TK25_THR_DATA                   (100)
 
 

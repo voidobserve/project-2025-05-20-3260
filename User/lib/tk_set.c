@@ -33,7 +33,7 @@
  * @}
  */
 // 配置一个10ms的中断
-#define PEROID_VAL (SYSCLK / 128 / 100 - 1)
+// #define PEROID_VAL (SYSCLK / 128 / 100 - 1)
 // 用户不允许修改
 volatile unsigned short xdata __tk_ch_data_0[TK_CH_USE] _at_(0x6000 + 0);
 volatile unsigned short xdata __tk_ch_data_1[TK_CH_USE] _at_(0x6000 + TK_CH_USE * 2);
@@ -358,20 +358,20 @@ void tk_init(void)
  * @param  None
  * @retval None
  */
-void WUT_IRQHandler(void) interrupt WUT_IRQn
-{
-    // 进入中断设置IP，不可删除
-    __IRQnIPnPush(WUT_IRQn);
-    // 周期中断
-    if (WUT_CONH & TMR_PRD_PND(0x1))
-    {
-        WUT_CONH |= TMR_PRD_PND(0x1); // 清除pending
-        __tk_ms_handler();            // 闭源的，不知道做了什么，看上去是让CPU进入睡眠，单位为ms（手册上说是睡眠300ms）
-    }
+// void WUT_IRQHandler(void) interrupt WUT_IRQn
+// {
+//     // 进入中断设置IP，不可删除
+//     __IRQnIPnPush(WUT_IRQn);
+//     // 周期中断
+//     if (WUT_CONH & TMR_PRD_PND(0x1))
+//     {
+//         WUT_CONH |= TMR_PRD_PND(0x1); // 清除pending
+//         __tk_ms_handler();            // 闭源的，不知道做了什么，看上去是让CPU进入睡眠，单位为ms（手册上说是睡眠300ms）
+//     }
 
-    // 退出中断设置IP，不可删除
-    __IRQnIPnPop(WUT_IRQn);
-}
+//     // 退出中断设置IP，不可删除
+//     __IRQnIPnPop(WUT_IRQn);
+// }
 
 #if 0
 /**

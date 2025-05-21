@@ -1,9 +1,9 @@
-C51 COMPILER V9.60.7.0   TK_SET                                                            11/21/2024 14:20:15 PAGE 1   
+C51 COMPILER V9.60.7.0   TK_SET                                                            05/21/2025 18:01:21 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE TK_SET
 OBJECT MODULE PLACED IN .\Release\Objects\tk_set.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\User\lib\tk_set.c LARGE OPTIMIZE(8,SIZE) BROWSE INTVECTOR(0X000C) 
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\User\lib\tk_set.c LARGE OPTIMIZE(9,SIZE) BROWSE INTVECTOR(0X000C) 
                     -INCDIR(..\..\Libraries\Include;..\..\User;..\..\User\lib;..\..\Hardware) INTERVAL(3) DEBUG OBJECTEXTEND PRINT(.\Release\
                     -Listings\tk_set.lst) OBJECT(.\Release\Objects\tk_set.obj)
 
@@ -44,7 +44,7 @@ line level    source
   33           * @}
   34           */
   35          // ≈‰÷√“ª∏ˆ10msµƒ÷–∂œ
-  36          #define PEROID_VAL (SYSCLK / 128 / 100 - 1)
+  36          // #define PEROID_VAL (SYSCLK / 128 / 100 - 1)
   37          // ”√ªß≤ª‘ –Ì–ﬁ∏ƒ
   38          volatile unsigned short xdata __tk_ch_data_0[TK_CH_USE] _at_(0x6000 + 0);
   39          volatile unsigned short xdata __tk_ch_data_1[TK_CH_USE] _at_(0x6000 + TK_CH_USE * 2);
@@ -62,7 +62,7 @@ line level    source
   51          
   52          // ”√ªß≤ª‘ –Ì–ﬁ∏ƒ
   53          unsigned long code __tk_adjust_line = TK_DATA_LINE;
-C51 COMPILER V9.60.7.0   TK_SET                                                            11/21/2024 14:20:15 PAGE 2   
+C51 COMPILER V9.60.7.0   TK_SET                                                            05/21/2025 18:01:21 PAGE 2   
 
   54          unsigned short code __tk_adjust_time = TK_ADJUST_TIME;
   55          unsigned short code __tk_adjust_diff_valu = TK_MAX_DIFF_VALU;
@@ -85,11 +85,11 @@ line level    source
   72          static u16 code TK_CH_EN_BUG[][2] =
   73              {
   74          #if TK0_CH_EN
-  75                  {
-  76                      0u,           // Õ®µ¿÷µ
-  77                      TK0_THR_DATA, // √≈œﬁ÷µ
-  78                  },
-  79          #endif
+                      {
+                          0u,           // Õ®µ¿÷µ
+                          TK0_THR_DATA, // √≈œﬁ÷µ
+                      },
+              #endif
   80          
   81          #if TK1_CH_EN
                       {
@@ -99,18 +99,18 @@ line level    source
               #endif
   87          
   88          #if TK2_CH_EN
-  89                  {
-  90                      2u,
-  91                      TK2_THR_DATA,
-  92                  },
-  93          #endif
+                      {
+                          2u,
+                          TK2_THR_DATA,
+                      },
+              #endif
   94          
   95          #if TK3_CH_EN
-  96                  {
-  97                      3u,
-  98                      TK3_THR_DATA,
-  99                  },
- 100          #endif
+                      {
+                          3u,
+                          TK3_THR_DATA,
+                      },
+              #endif
  101          
  102          #if TK4_CH_EN
                       {
@@ -126,7 +126,7 @@ line level    source
                       },
               #endif
  115          
-C51 COMPILER V9.60.7.0   TK_SET                                                            11/21/2024 14:20:15 PAGE 3   
+C51 COMPILER V9.60.7.0   TK_SET                                                            05/21/2025 18:01:21 PAGE 3   
 
  116          #if TK6_CH_EN
                       {
@@ -190,7 +190,7 @@ line level    source
                           TK14_THR_DATA,
                       },
               #endif
-C51 COMPILER V9.60.7.0   TK_SET                                                            11/21/2024 14:20:15 PAGE 4   
+C51 COMPILER V9.60.7.0   TK_SET                                                            05/21/2025 18:01:21 PAGE 4   
 
  178          
  179          #if TK15_CH_EN
@@ -254,7 +254,7 @@ line level    source
                           23u,
                           TK23_THR_DATA,
                       },
-C51 COMPILER V9.60.7.0   TK_SET                                                            11/21/2024 14:20:15 PAGE 5   
+C51 COMPILER V9.60.7.0   TK_SET                                                            05/21/2025 18:01:21 PAGE 5   
 
               #endif
  241          
@@ -266,11 +266,11 @@ line level    source
               #endif
  248          
  249          #if TK25_CH_EN
- 250                  {
- 251                      25u,
- 252                      TK25_THR_DATA,
- 253                  },
- 254          #endif
+                      {
+                          25u,
+                          TK25_THR_DATA,
+                      },
+              #endif
  255          };
  256          
  257          /**
@@ -318,7 +318,7 @@ line level    source
  299   4                      P2_MD0 &= ~(0x3 << (__tk_ch_index[i] - 16) * 2);
  300   4                      P2_MD0 |= (0x3 << (__tk_ch_index[i] - 16) * 2);
  301   4                  }
-C51 COMPILER V9.60.7.0   TK_SET                                                            11/21/2024 14:20:15 PAGE 6   
+C51 COMPILER V9.60.7.0   TK_SET                                                            05/21/2025 18:01:21 PAGE 6   
 
  302   3                  else
  303   3                  {
@@ -379,23 +379,23 @@ line level    source
  358           * @param  None
  359           * @retval None
  360           */
- 361          void WUT_IRQHandler(void) interrupt WUT_IRQn
- 362          {
- 363   1          // Ω¯»Î÷–∂œ…Ë÷√IP£¨≤ªø……æ≥˝
-C51 COMPILER V9.60.7.0   TK_SET                                                            11/21/2024 14:20:15 PAGE 7   
+ 361          // void WUT_IRQHandler(void) interrupt WUT_IRQn
+ 362          // {
+ 363          //     // Ω¯»Î÷–∂œ…Ë÷√IP£¨≤ªø……æ≥˝
+C51 COMPILER V9.60.7.0   TK_SET                                                            05/21/2025 18:01:21 PAGE 7   
 
- 364   1          __IRQnIPnPush(WUT_IRQn);
- 365   1          // ÷‹∆⁄÷–∂œ
- 366   1          if (WUT_CONH & TMR_PRD_PND(0x1))
- 367   1          {
- 368   2              WUT_CONH |= TMR_PRD_PND(0x1); // «Â≥˝pending
- 369   2              __tk_ms_handler();            // ±’‘¥µƒ£¨≤ª÷™µ¿◊ˆ¡À ≤√¥£¨ø¥…œ»• «»√CPUΩ¯»ÎÀØ√ﬂ£¨µ•ŒªŒ™ms£® ÷≤·…œÀµ
-             - «ÀØ√ﬂ300ms£©
- 370   2          }
- 371   1      
- 372   1          // ÕÀ≥ˆ÷–∂œ…Ë÷√IP£¨≤ªø……æ≥˝
- 373   1          __IRQnIPnPop(WUT_IRQn);
- 374   1      }
+ 364          //     __IRQnIPnPush(WUT_IRQn);
+ 365          //     // ÷‹∆⁄÷–∂œ
+ 366          //     if (WUT_CONH & TMR_PRD_PND(0x1))
+ 367          //     {
+ 368          //         WUT_CONH |= TMR_PRD_PND(0x1); // «Â≥˝pending
+ 369          //         __tk_ms_handler();            // ±’‘¥µƒ£¨≤ª÷™µ¿◊ˆ¡À ≤√¥£¨ø¥…œ»• «»√CPUΩ¯»ÎÀØ√ﬂ£¨µ•ŒªŒ™ms£® ÷≤·…
+             -œÀµ «ÀØ√ﬂ300ms£©
+ 370          //     }
+ 371          
+ 372          //     // ÕÀ≥ˆ÷–∂œ…Ë÷√IP£¨≤ªø……æ≥˝
+ 373          //     __IRQnIPnPop(WUT_IRQn);
+ 374          // }
  375          
  376          #if 0
               /**
@@ -446,7 +446,7 @@ line level    source
  420   1          __tk_lib_init(); // µ˜”√¡Àø‚£®±’‘¥£©
  421   1      
  422   1          /* ∞¥º¸ƒ£øÈ≈‰÷√∫Ø ˝ */
-C51 COMPILER V9.60.7.0   TK_SET                                                            11/21/2024 14:20:15 PAGE 8   
+C51 COMPILER V9.60.7.0   TK_SET                                                            05/21/2025 18:01:21 PAGE 8   
 
  423   1          tk_init();
  424   1      
@@ -471,9 +471,9 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    914    ----
-   CONSTANT SIZE    =     46    ----
-   XDATA SIZE       =     72    ----
+   CODE SIZE        =    634    ----
+   CONSTANT SIZE    =     30    ----
+   XDATA SIZE       =     24    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

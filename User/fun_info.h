@@ -20,8 +20,8 @@ enum
 //
 enum
 {
-    ON = 0x01,
-    OFF = 0x00
+    OFF = 0x00,
+    ON = 0x01,    
 };
 
 // 定义存储在flash中的数据
@@ -73,7 +73,7 @@ typedef struct
     u8 flag_is_detect_malfunction;    // 标志位，是否检测到了故障
     u8 flag_is_detect_abs; // 标志位，是否检测到了ABS，0--否，1--检测到了ABS故障
 
-    // 在结构体中使用一位的数据：
+    // 在结构体中使用一位的数据：(调用时，占用的程序空间会比单独用u8类型的还要大)
     // u8 bit0 : 1;
     // u8 bit1 : 1;
     // u8 bit2 : 1;

@@ -17,7 +17,8 @@ void send_data(u8 instruct, u32 send_data)
         SEND_FUEL == instruct ||                /* 发送油量 */
         SEND_WATER_TEMP == instruct ||          /* 发送水温 */
         SEND_TEMP_OF_WATER_ALERT == instruct || /* 发送水温报警 */
-        SEND_MALFUNCTION_STATUS == instruct /* 发送故障的状态 */ 
+        SEND_MALFUNCTION_STATUS == instruct || /* 发送故障的状态 */ 
+        SEND_ABS_STATUS == instruct /* 发送ABS的状态 */ 
     )    // 如果指令的总长度只有5个字节
     {
         uart0_sendbyte(0x05);     // 发送指令的总长度

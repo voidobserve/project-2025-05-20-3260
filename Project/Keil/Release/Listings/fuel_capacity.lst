@@ -1,11 +1,11 @@
-C51 COMPILER V9.60.7.0   FUEL_CAPACITY                                                     05/21/2025 18:01:24 PAGE 1   
+C51 COMPILER V9.60.7.0   FUEL_CAPACITY                                                     05/24/2025 16:58:02 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE FUEL_CAPACITY
 OBJECT MODULE PLACED IN .\Release\Objects\fuel_capacity.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\User\fuel_capacity.c LARGE OPTIMIZE(9,SIZE) BROWSE INTVECTOR(0X000
-                    -C) INCDIR(..\..\Libraries\Include;..\..\User;..\..\User\lib;..\..\Hardware) INTERVAL(3) DEBUG OBJECTEXTEND PRINT(.\Relea
-                    -se\Listings\fuel_capacity.lst) OBJECT(.\Release\Objects\fuel_capacity.obj)
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\User\fuel_capacity.c LARGE OPTIMIZE(9,SIZE) BROWSE ORDER INTVECTOR
+                    -(0X000C) INCDIR(..\..\Libraries\Include;..\..\User;..\..\User\lib;..\..\Hardware) INTERVAL(3) DEBUG OBJECTEXTEND PRINT(.
+                    -\Release\Listings\fuel_capacity.lst) OBJECT(.\Release\Objects\fuel_capacity.obj)
 
 line level    source
 
@@ -62,7 +62,7 @@ line level    source
              -VAL) / 3))
   49   2              {
   50   3                  fuel_percent = 70;
-C51 COMPILER V9.60.7.0   FUEL_CAPACITY                                                     05/21/2025 18:01:24 PAGE 2   
+C51 COMPILER V9.60.7.0   FUEL_CAPACITY                                                     05/24/2025 16:58:02 PAGE 2   
 
   51   3              }
   52   2              else if (fuel_adc_val < (FUEL_60_PERCENT_ADC_VAL - (FUEL_60_PERCENT_ADC_VAL - FUEL_70_PERCENT_ADC_
@@ -126,7 +126,7 @@ line level    source
              -AL) / 3)
  101   2              {
  102   3                  // 20%油量
-C51 COMPILER V9.60.7.0   FUEL_CAPACITY                                                     05/21/2025 18:01:24 PAGE 3   
+C51 COMPILER V9.60.7.0   FUEL_CAPACITY                                                     05/24/2025 16:58:02 PAGE 3   
 
  103   3                  fuel_percent = 20;
  104   3              }
@@ -190,7 +190,7 @@ line level    source
  148   2              else if (fuel_adc_val < (FUEL_MAX_ADC_VAL + ((FUEL_90_PERCENT_ADC_VAL - FUEL_MAX_ADC_VAL) / 3)))
  149   2              {
  150   3                  // 100%油量
-C51 COMPILER V9.60.7.0   FUEL_CAPACITY                                                     05/21/2025 18:01:24 PAGE 4   
+C51 COMPILER V9.60.7.0   FUEL_CAPACITY                                                     05/24/2025 16:58:02 PAGE 4   
 
  151   3                  fuel_percent = 100;
  152   3              }

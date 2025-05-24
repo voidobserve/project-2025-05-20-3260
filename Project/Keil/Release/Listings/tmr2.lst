@@ -1,11 +1,11 @@
-C51 COMPILER V9.60.7.0   TMR2                                                              05/21/2025 18:01:22 PAGE 1   
+C51 COMPILER V9.60.7.0   TMR2                                                              05/24/2025 16:58:00 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE TMR2
 OBJECT MODULE PLACED IN .\Release\Objects\tmr2.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\Hardware\tmr2.c LARGE OPTIMIZE(9,SIZE) BROWSE INTVECTOR(0X000C) IN
-                    -CDIR(..\..\Libraries\Include;..\..\User;..\..\User\lib;..\..\Hardware) INTERVAL(3) DEBUG OBJECTEXTEND PRINT(.\Release\Li
-                    -stings\tmr2.lst) OBJECT(.\Release\Objects\tmr2.obj)
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\Hardware\tmr2.c LARGE OPTIMIZE(9,SIZE) BROWSE ORDER INTVECTOR(0X00
+                    -0C) INCDIR(..\..\Libraries\Include;..\..\User;..\..\User\lib;..\..\Hardware) INTERVAL(3) DEBUG OBJECTEXTEND PRINT(.\Rele
+                    -ase\Listings\tmr2.lst) OBJECT(.\Release\Objects\tmr2.obj)
 
 line level    source
 
@@ -62,7 +62,7 @@ line level    source
   49   1      }
   50          
   51          #if 0  // void tmr2_disable(void)
-C51 COMPILER V9.60.7.0   TMR2                                                              05/21/2025 18:01:22 PAGE 2   
+C51 COMPILER V9.60.7.0   TMR2                                                              05/24/2025 16:58:00 PAGE 2   
 
               /**
                * @brief 关闭定时器，清空计数值
@@ -126,7 +126,7 @@ line level    source
  109   4                      {
  110   5                          detect_speed_pulse_cnt[0]++;
  111   5                      }
-C51 COMPILER V9.60.7.0   TMR2                                                              05/21/2025 18:01:22 PAGE 3   
+C51 COMPILER V9.60.7.0   TMR2                                                              05/24/2025 16:58:00 PAGE 3   
 
  112   4                  }
  113   3      

@@ -33,7 +33,7 @@
           <SFDFile></SFDFile>
           <bCustSvd>0</bCustSvd>
           <UseEnv>0</UseEnv>
-          <BinPath></BinPath>
+          <BinPath>C:\Keil_v5\C51\BIN\</BinPath>
           <IncludePath></IncludePath>
           <LibPath></LibPath>
           <RegisterFilePath></RegisterFilePath>
@@ -309,7 +309,7 @@
           </Target51Misc>
           <C51>
             <RegisterColoring>0</RegisterColoring>
-            <VariablesInOrder>0</VariablesInOrder>
+            <VariablesInOrder>1</VariablesInOrder>
             <IntegerPromotion>1</IntegerPromotion>
             <uAregs>0</uAregs>
             <UseInterruptVector>1</UseInterruptVector>

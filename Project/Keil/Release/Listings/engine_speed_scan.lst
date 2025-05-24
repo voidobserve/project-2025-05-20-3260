@@ -1,11 +1,11 @@
-C51 COMPILER V9.60.7.0   ENGINE_SPEED_SCAN                                                 05/21/2025 18:01:23 PAGE 1   
+C51 COMPILER V9.60.7.0   ENGINE_SPEED_SCAN                                                 05/24/2025 16:58:02 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE ENGINE_SPEED_SCAN
 OBJECT MODULE PLACED IN .\Release\Objects\engine_speed_scan.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\User\engine_speed_scan.c LARGE OPTIMIZE(9,SIZE) BROWSE INTVECTOR(0
-                    -X000C) INCDIR(..\..\Libraries\Include;..\..\User;..\..\User\lib;..\..\Hardware) INTERVAL(3) DEBUG OBJECTEXTEND PRINT(.\R
-                    -elease\Listings\engine_speed_scan.lst) OBJECT(.\Release\Objects\engine_speed_scan.obj)
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\User\engine_speed_scan.c LARGE OPTIMIZE(9,SIZE) BROWSE ORDER INTVE
+                    -CTOR(0X000C) INCDIR(..\..\Libraries\Include;..\..\User;..\..\User\lib;..\..\Hardware) INTERVAL(3) DEBUG OBJECTEXTEND PRI
+                    -NT(.\Release\Listings\engine_speed_scan.lst) OBJECT(.\Release\Objects\engine_speed_scan.obj)
 
 line level    source
 
@@ -62,7 +62,7 @@ line level    source
   49   2                  1min转过的圈数 == 扫描时间内采集到的脉冲个数 * 1min / 发动机转过一圈�
              -��应的脉冲个数 / 扫描时间
   50   2                  1min转过的圈数 == 扫描时间内采集到的脉冲个数 * 1min / 扫描时间 / 发动�
-C51 COMPILER V9.60.7.0   ENGINE_SPEED_SCAN                                                 05/21/2025 18:01:23 PAGE 2   
+C51 COMPILER V9.60.7.0   ENGINE_SPEED_SCAN                                                 05/24/2025 16:58:02 PAGE 2   
 
              -��转过一圈对应的脉冲个数
   51   2              */
@@ -126,7 +126,7 @@ line level    source
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =    179    ----
    CONSTANT SIZE    =   ----    ----
-C51 COMPILER V9.60.7.0   ENGINE_SPEED_SCAN                                                 05/21/2025 18:01:23 PAGE 3   
+C51 COMPILER V9.60.7.0   ENGINE_SPEED_SCAN                                                 05/24/2025 16:58:02 PAGE 3   
 
    XDATA SIZE       =     17       4
    PDATA SIZE       =   ----    ----

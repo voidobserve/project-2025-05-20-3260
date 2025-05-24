@@ -1,11 +1,11 @@
-C51 COMPILER V9.60.7.0   TMR1                                                              05/21/2025 18:01:21 PAGE 1   
+C51 COMPILER V9.60.7.0   TMR1                                                              05/24/2025 16:58:00 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE TMR1
 OBJECT MODULE PLACED IN .\Release\Objects\tmr1.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\Hardware\tmr1.c LARGE OPTIMIZE(9,SIZE) BROWSE INTVECTOR(0X000C) IN
-                    -CDIR(..\..\Libraries\Include;..\..\User;..\..\User\lib;..\..\Hardware) INTERVAL(3) DEBUG OBJECTEXTEND PRINT(.\Release\Li
-                    -stings\tmr1.lst) OBJECT(.\Release\Objects\tmr1.obj)
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\Hardware\tmr1.c LARGE OPTIMIZE(9,SIZE) BROWSE ORDER INTVECTOR(0X00
+                    -0C) INCDIR(..\..\Libraries\Include;..\..\User;..\..\User\lib;..\..\Hardware) INTERVAL(3) DEBUG OBJECTEXTEND PRINT(.\Rele
+                    -ase\Listings\tmr1.lst) OBJECT(.\Release\Objects\tmr1.obj)
 
 line level    source
 
@@ -62,7 +62,7 @@ line level    source
   50   1      }
   51          
   52          #if 0  // void tmr1_disable(void)
-C51 COMPILER V9.60.7.0   TMR1                                                              05/21/2025 18:01:21 PAGE 2   
+C51 COMPILER V9.60.7.0   TMR1                                                              05/24/2025 16:58:00 PAGE 2   
 
               /**
                * @brief 关闭定时器，清空计数值
@@ -126,7 +126,7 @@ line level    source
  108   3                  speed_scan_time_cnt = 0;
  109   3                  // detect_speed_pulse_cnt[1] += detect_speed_pulse_cnt[0]; // 将另一个定时器中断扫�
              -�到的脉冲更新到[1]
-C51 COMPILER V9.60.7.0   TMR1                                                              05/21/2025 18:01:21 PAGE 3   
+C51 COMPILER V9.60.7.0   TMR1                                                              05/24/2025 16:58:00 PAGE 3   
 
  110   3                  // 不能在定时器中断内累加脉冲计数，主循环执行时间过长，相关的计�
              -��函数就不能定期取到这个值，
@@ -190,7 +190,7 @@ line level    source
  166   3              }
  167   2          }
  168   1      }
-C51 COMPILER V9.60.7.0   TMR1                                                              05/21/2025 18:01:21 PAGE 4   
+C51 COMPILER V9.60.7.0   TMR1                                                              05/24/2025 16:58:00 PAGE 4   
 
  169          
  170          // TMR1中断服务函数
@@ -226,39 +226,50 @@ line level    source
  199   2              tmr1_cnt++;
  200   2      
  201   2              {
- 202   3                  static u8 cnt = 0;
- 203   3                  cnt++;
- 204   3                  if (cnt >= TOUCH_KEY_SCAN_CIRCLE_TIMES) // xx ms
- 205   3                  {
- 206   4                      cnt = 0;
- 207   4                      flag_is_touch_key_scan_circle_arrived = 1; // 表示扫描周期到来，执行一次按�
-             -�扫描
- 208   4      
- 209   4                      // {
- 210   4                      //     static u8 send_cnt = 0;
- 211   4                      //     send_cnt++;
- 212   4                      //     if (send_cnt >= 100)
- 213   4                      //     {
- 214   4                      //         send_cnt = 0;
- 215   4                      //         printf("touch key scan\n");
- 216   4                      //     }
- 217   4                      // }
- 218   4                  }
- 219   3              }
- 220   2          }
- 221   1      
- 222   1          // P20 = 0;// 测试中断持续时间
- 223   1          // 退出中断设置IP，不可删除
- 224   1          __IRQnIPnPop(TMR1_IRQn);
- 225   1      }
+ 202   3                  // static u8 cnt = 0;
+ 203   3                  // cnt++;
+ 204   3                  // if (cnt >= TOUCH_KEY_SCAN_CIRCLE_TIMES) // xx ms
+ 205   3                  // {
+ 206   3                  //     cnt = 0;
+ 207   3                  //     // flag_is_touch_key_scan_circle_arrived = 1; // 表示扫描周期到来，执行一�
+             -�按键扫描
+ 208   3      
+ 209   3                  //     // {
+ 210   3                  //     //     static u8 send_cnt = 0;
+ 211   3                  //     //     send_cnt++;
+ 212   3                  //     //     if (send_cnt >= 100)
+ 213   3                  //     //     {
+ 214   3                  //     //         send_cnt = 0;
+ 215   3                  //     //         printf("touch key scan\n");
+ 216   3                  //     //     }
+ 217   3                  //     // }
+ 218   3                  // }
+ 219   3      
+ 220   3                  // 在定时器注册按键扫描：
+ 221   3                  if (ad_key_para.cur_scan_times < 255)
+ 222   3                  {
+ 223   4                      ad_key_para.cur_scan_times++;
+ 224   4                  }
+ 225   3      
+ 226   3                  if (touch_key_para.cur_scan_times < 255)
+ 227   3                  {
+ 228   4                      touch_key_para.cur_scan_times++;
+C51 COMPILER V9.60.7.0   TMR1                                                              05/24/2025 16:58:00 PAGE 5   
+
+ 229   4                  }
+ 230   3              }
+ 231   2          }
+ 232   1      
+ 233   1          // P20 = 0;// 测试中断持续时间
+ 234   1          // 退出中断设置IP，不可删除
+ 235   1          __IRQnIPnPop(TMR1_IRQn);
+ 236   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-C51 COMPILER V9.60.7.0   TMR1                                                              05/21/2025 18:01:21 PAGE 5   
-
-   CODE SIZE        =    665    ----
+   CODE SIZE        =    673    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =      9       8
+   XDATA SIZE       =      8       8
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

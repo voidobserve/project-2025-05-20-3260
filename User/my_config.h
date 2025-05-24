@@ -79,7 +79,6 @@
 // 油量检测配置
 // ======================================================
 
-
 // 触摸按键键值定义(检测到短按/持续时，要发送的键值)：
 #define TOUCH_KEY_VAL_MUTE ((u16)0x0040)    // 左2 从左往下数，第二个按键
 #define TOUCH_KEY_VAL_VOL_INC ((u16)0x0041) // 左3 从左往下数，第三个按键
@@ -145,7 +144,7 @@
 // 功能全部开放后，每一轮的时间可能都不一样，不在时间要求高的场合使用(目前最短的一个周期是8ms)
 #define ONE_CYCLE_TIME_MS (8)
 
-#include <stdio.h>   // printf()
+#include <stdio.h>  // printf()
 #include "tk_set.h" // 包含触摸按键的初始化接口
 
 #include "my_gpio.h" // 自定义的、使用到的引脚
@@ -169,7 +168,7 @@
 #include "fuel_capacity.h"     // 油量检测
 #include "temp_of_water.h"     // 水温报警检测
 #include "battery.h"           // 电池电量检测
-#include "aip1302.h" // 时钟IC aip1302
-#include "touch_key.h" // 触摸按键
+#include "aip1302.h"           // 时钟IC aip1302
+#include "touch_key.h"         // 触摸按键
 
 #endif // end file

@@ -1,11 +1,11 @@
-C51 COMPILER V9.60.7.0   SPEED_SCAN                                                        05/21/2025 18:01:23 PAGE 1   
+C51 COMPILER V9.60.7.0   SPEED_SCAN                                                        05/24/2025 16:58:02 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE SPEED_SCAN
 OBJECT MODULE PLACED IN .\Release\Objects\speed_scan.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\User\speed_scan.c LARGE OPTIMIZE(9,SIZE) BROWSE INTVECTOR(0X000C) 
-                    -INCDIR(..\..\Libraries\Include;..\..\User;..\..\User\lib;..\..\Hardware) INTERVAL(3) DEBUG OBJECTEXTEND PRINT(.\Release\
-                    -Listings\speed_scan.lst) OBJECT(.\Release\Objects\speed_scan.obj)
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\User\speed_scan.c LARGE OPTIMIZE(9,SIZE) BROWSE ORDER INTVECTOR(0X
+                    -000C) INCDIR(..\..\Libraries\Include;..\..\User;..\..\User\lib;..\..\Hardware) INTERVAL(3) DEBUG OBJECTEXTEND PRINT(.\Re
+                    -lease\Listings\speed_scan.lst) OBJECT(.\Release\Objects\speed_scan.obj)
 
 line level    source
 
@@ -62,7 +62,7 @@ line level    source
   49   2                  计算 xx ms内走过了多少毫米
   50   2                  xx ms内走过了多少毫米 == 当前扫描时间内检测到的脉冲个数 / 车轮一圈�
              -��应多少个脉冲 * 一圈对应 xx 毫米
-C51 COMPILER V9.60.7.0   SPEED_SCAN                                                        05/21/2025 18:01:23 PAGE 2   
+C51 COMPILER V9.60.7.0   SPEED_SCAN                                                        05/24/2025 16:58:02 PAGE 2   
 
   51   2                  换成单片机可以计算的形式：
   52   2                  xx ms内走过了多少毫米 == 当前扫描时间内检测到的脉冲个数 * 一圈对应 
@@ -126,7 +126,7 @@ line level    source
  109   3                  if (fun_info.speed > 999)
  110   3                  {
  111   4                      fun_info.speed = 999;
-C51 COMPILER V9.60.7.0   SPEED_SCAN                                                        05/21/2025 18:01:23 PAGE 3   
+C51 COMPILER V9.60.7.0   SPEED_SCAN                                                        05/24/2025 16:58:02 PAGE 3   
 
  112   4                  }
  113   3      

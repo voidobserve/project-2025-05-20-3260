@@ -17,7 +17,7 @@ volatile bit flag_get_fuel = 0;         // 获取油量 / 得到了油量（单�
 // volatile bit flag_get_temp_of_water = 0; // 获取水温 / 得到了水温
 
 volatile bit flag_update_malfunction_status; // 标志位，更新故障状态
-volatile bit flag_update_abs_status; // 标志位，更新abs的状态
+volatile bit flag_update_abs_status;         // 标志位，更新abs的状态
 
 volatile bit flag_get_total_mileage = 0;     // 获取大计里程 / 得到了大计里程
 volatile bit flag_get_sub_total_mileage = 0; // 获取小计里程 / 得到了小计里程
@@ -269,9 +269,8 @@ void instruction_handle(void)
         }
     }
 
-    if (flag_get_gear)
+    if (flag_get_gear) // 如果要获取挡位的状态
     {
-        // 如果要获取挡位的状态
         flag_get_gear = 0; //
 
 #if USE_MY_DEBUG
@@ -279,7 +278,8 @@ void instruction_handle(void)
 #endif
 
         send_data(SEND_GEAR, fun_info.gear); // 发送当前挡位的状态
-    }
+                                             // printf("cur gear %u\n", fun_info.gear);
+    } //  if (flag_get_gear) // 如果要获取挡位的状态
 
     if (flag_get_battery)
     {
@@ -292,6 +292,7 @@ void instruction_handle(void)
         send_data(SEND_BATTERY, fun_info.battery); // 发送电池电量
     }
 
+#if 0 // 发送刹车的状态
     if (flag_get_brake)
     {
         // 如果要获取获取刹车的状态
@@ -303,10 +304,10 @@ void instruction_handle(void)
 
         send_data(SEND_BARKE, fun_info.brake); // 发送当前刹车的状态
     }
+#endif // 发送刹车的状态
 
-    if (flag_get_left_turn)
+    if (flag_get_left_turn) // 如果要获取左转向灯的状态
     {
-        // 如果要获取左转向灯的状态
         flag_get_left_turn = 0;
 
 #if USE_MY_DEBUG
@@ -314,7 +315,7 @@ void instruction_handle(void)
 #endif
 
         send_data(SEND_LEFT_TURN, fun_info.left_turn); // 发送当前左转向灯的状态
-    }
+    } // if (flag_get_left_turn) // 如果要获取左转向灯的状态
 
     if (flag_get_right_turn)
     {
@@ -451,7 +452,7 @@ void instruction_handle(void)
 #endif // USE_MY_DEBUG
        // 只发送0.1英里及以上的数据
        // 变量中存放的是以m为单位的数据，需要做转换再发送
-        // 1km == 0.621427mile，1km == 6.21427 * 0.1 mile
+       // 1km == 0.621427mile，1km == 6.21427 * 0.1 mile
         send_data(SEND_SUBTOTAL_MILEAGE, fun_info.save_info.subtotal_mileage / 161);
 
 #endif // USE_IMPERIAL 英制单位

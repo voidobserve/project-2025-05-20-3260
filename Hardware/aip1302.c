@@ -31,12 +31,12 @@ void aip1302_config(void)
     if (ret)
     {
         // 如果时钟芯片aip1302的晶振正在运行
-        // printf("aip1302 is running\n");
+        printf("aip1302 is running\n");
     }
     else
     {
         // 如果时钟芯片aip1302的晶振不在运行
-        // printf("aip1302 is sleep\n");
+        printf("aip1302 is sleep\n");
         // aip1302上电复位后，默认不跑时钟，这里要配置它开始跑时钟
         aip1302_write_byte(AIP1302_YEAR_REG_ADDR, 0);    // 0年
         aip1302_write_byte(AIP1302_MONTH_REG_ADDR, 1);   // 1月
@@ -265,6 +265,7 @@ static void __aip1302_write_byte(u8 cmd, u8 byte)
 static u8 aip1302_is_running(void)
 {
     u8 recv_data = __aip1302_read_byte(AIP1302_SEC_REG_ADDR); // 读取到的是反转后的数据
+    // 秒寄存器的最高位Bit7是时钟停止标志位，1--时钟晶振停止，进入低功耗，0--晶振运转
     if (recv_data & 0x01)
     {
         // 如果时钟ic的时钟晶振停止
@@ -337,19 +338,18 @@ void aip1302_write_byte(const u8 cmd, u8 byte)
     __aip1302_write_byte(AIP1302_WRITE_PROTECT_REG_ADDR, 0x80);
 }
 
-#ifdef USE_MY_DEBUG
-#if USE_MY_DEBUG
+#if 1 // 
 void aip1302_test(void)
 {
     // u8 recv_data = 0xFF;
 
     u8 ret = 0;
     static u16 cnt = 0;
-    // static u8 flag = 0;
+    static u8 flag = 0;
 
     cnt++;
 
-    if (cnt >= 50) // 每隔一段时间，打印一次时钟ic中的时间
+    if (cnt >= 200) // 每隔一段时间，打印一次时钟ic中的时间
     {
         cnt = 0;
         ret = aip1302_read_byte(AIP1302_YEAR_REG_ADDR + 1);
@@ -375,24 +375,22 @@ void aip1302_test(void)
         printf("\n");
     }
 
-    // if (flag == 0 && cnt >= 10)
-    // {
-    //     cnt = 0;
-    //     aip1302_write_byte(AIP1302_YEAR_REG_ADDR, 24);
-    //     aip1302_write_byte(AIP1302_MONTH_REG_ADDR, 12);
-    //     aip1302_write_byte(AIP1302_DATE_REG_ADDR, 31);
-    //     aip1302_write_byte(AIP1302_WEEKDAY_REG_ADDR, 7);
-    //     aip1302_write_byte(AIP1302_HOUR_REG_ADDR, 23);
-    //     aip1302_write_byte(AIP1302_MIN_REG_ADDR, 59);
-    //     aip1302_write_byte(AIP1302_SEC_REG_ADDR, 45);
-    //     flag = 1;
-    // }
+    if (flag == 0 && cnt >= 10)
+    {
+        cnt = 0;
+        aip1302_write_byte(AIP1302_YEAR_REG_ADDR, 24);
+        aip1302_write_byte(AIP1302_MONTH_REG_ADDR, 12);
+        aip1302_write_byte(AIP1302_DATE_REG_ADDR, 31);
+        aip1302_write_byte(AIP1302_WEEKDAY_REG_ADDR, 7);
+        aip1302_write_byte(AIP1302_HOUR_REG_ADDR, 23);
+        aip1302_write_byte(AIP1302_MIN_REG_ADDR, 59);
+        aip1302_write_byte(AIP1302_SEC_REG_ADDR, 45);
+        flag = 1;
+    }
 }
 #endif
-#endif // void aip1302_test(void)
 
-#ifdef USE_MY_DEBUG
-#if USE_MY_DEBUG
+#if 1
 // 向aip1302更新所有关于时间的数据
 void aip1302_update_all_data(aip1302_saveinfo_t aip1302_saveinfo)
 {
@@ -404,7 +402,6 @@ void aip1302_update_all_data(aip1302_saveinfo_t aip1302_saveinfo)
     aip1302_write_byte(AIP1302_YEAR_REG_ADDR, aip1302_saveinfo.year - 2000); // 时钟IC内部只存0~99年
     // aip1302_write_byte(AIP1302_WEEKDAY_REG_ADDR, );
 }
-#endif
 #endif // void aip1302_update_all_data(aip1302_saveinfo_t aip1302_saveinfo)
 
 void aip1302_update_time(aip1302_saveinfo_t aip1302_saveinfo)

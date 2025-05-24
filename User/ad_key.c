@@ -1,17 +1,15 @@
 #include "ad_key.h"
 
-extern u8 ad_key_get_key_id(void);
-
 // 自定义ad按键的键值:
-enum
-{
-    AD_KEY_ID_ONE_LEFT = 0x01,
-    AD_KEY_ID_TWO_LEFT,
-    AD_KEY_ID_THREE_LEFT,
-    AD_KEY_ID_ONE_RIGHT,
-    AD_KEY_ID_TWO_RIGHT,
-    AD_KEY_ID_THREE_RIGHT,
-};
+// enum
+// {
+//     AD_KEY_ID_ONE_LEFT = 0x01,
+//     AD_KEY_ID_TWO_LEFT,
+//     AD_KEY_ID_THREE_LEFT,
+//     AD_KEY_ID_ONE_RIGHT,
+//     AD_KEY_ID_TWO_RIGHT,
+//     AD_KEY_ID_THREE_RIGHT,
+// };
 
 // 定义按键扫描函数中，各个扫描状态：
 // enum
@@ -45,7 +43,56 @@ static const u16 ad_key_scan_table[][2] = {
     {AD_KEY_ID_5, AD_KEY_ID_5_VAL}, // 3309
 };
 
-struct key_driver_para ad_key_para = {
+// 定义ad按键的按键事件
+enum AD_KEY_EVENT
+{
+    AD_KEY_EVENT_NONE,
+    AD_KEY_EVENT_ID_1_CLICK,
+    AD_KEY_EVENT_ID_1_DOUBLE,
+    AD_KEY_EVENT_ID_1_LONG,
+    AD_KEY_EVENT_ID_1_HOLD,
+    AD_KEY_EVENT_ID_1_LOOSE,
+
+    AD_KEY_EVENT_ID_2_CLICK,
+    AD_KEY_EVENT_ID_2_DOUBLE,
+    AD_KEY_EVENT_ID_2_LONG,
+    AD_KEY_EVENT_ID_2_HOLD,
+    AD_KEY_EVENT_ID_2_LOOSE,
+
+    AD_KEY_EVENT_ID_3_CLICK,
+    AD_KEY_EVENT_ID_3_DOUBLE,
+    AD_KEY_EVENT_ID_3_LONG,
+    AD_KEY_EVENT_ID_3_HOLD,
+    AD_KEY_EVENT_ID_3_LOOSE,
+
+    AD_KEY_EVENT_ID_4_CLICK,
+    AD_KEY_EVENT_ID_4_DOUBLE,
+    AD_KEY_EVENT_ID_4_LONG,
+    AD_KEY_EVENT_ID_4_HOLD,
+    AD_KEY_EVENT_ID_4_LOOSE,
+
+    AD_KEY_EVENT_ID_5_CLICK,
+    AD_KEY_EVENT_ID_5_DOUBLE,
+    AD_KEY_EVENT_ID_5_LONG,
+    AD_KEY_EVENT_ID_5_HOLD,
+    AD_KEY_EVENT_ID_5_LOOSE,
+};
+
+#define AD_KEY_EFFECT_EVENT_NUMS (5) // 单个ad按键的有效按键事件个数
+// 将按键id和按键事件绑定起来，在 xx 函数中，通过查表的方式得到按键事件
+static const u8 ad_key_event_table[][AD_KEY_EFFECT_EVENT_NUMS + 1] = {
+    // [0]--按键对应的id号，用于查表，[1]、[2]、[3]...--用于与 key_driver.h 中定义的按键事件KEY_EVENT绑定关系(一定要一一对应)
+    {AD_KEY_ID_1, AD_KEY_EVENT_ID_1_CLICK, AD_KEY_EVENT_ID_1_DOUBLE, AD_KEY_EVENT_ID_1_LONG, AD_KEY_EVENT_ID_1_HOLD, AD_KEY_EVENT_ID_1_LOOSE}, //
+    {AD_KEY_ID_2, AD_KEY_EVENT_ID_2_CLICK, AD_KEY_EVENT_ID_2_DOUBLE, AD_KEY_EVENT_ID_2_LONG, AD_KEY_EVENT_ID_2_HOLD, AD_KEY_EVENT_ID_2_LOOSE}, //
+    {AD_KEY_ID_3, AD_KEY_EVENT_ID_3_CLICK, AD_KEY_EVENT_ID_3_DOUBLE, AD_KEY_EVENT_ID_3_LONG, AD_KEY_EVENT_ID_3_HOLD, AD_KEY_EVENT_ID_3_LOOSE}, //
+    {AD_KEY_ID_4, AD_KEY_EVENT_ID_4_CLICK, AD_KEY_EVENT_ID_4_DOUBLE, AD_KEY_EVENT_ID_4_LONG, AD_KEY_EVENT_ID_4_HOLD, AD_KEY_EVENT_ID_4_LOOSE}, //
+    {AD_KEY_ID_5, AD_KEY_EVENT_ID_5_CLICK, AD_KEY_EVENT_ID_5_DOUBLE, AD_KEY_EVENT_ID_5_LONG, AD_KEY_EVENT_ID_5_HOLD, AD_KEY_EVENT_ID_5_LOOSE}, //
+};
+
+extern u8 ad_key_get_key_id(void);
+// volatile key_driver_para_t ad_key_para = {
+volatile struct key_driver_para ad_key_para = {
+    // 编译器不支持指定成员赋值的写法，会报错：
     // .scan_times = 10,   // 扫描频率，单位：ms
     // .last_key = NO_KEY, // 上一次得到的按键键值，初始化为无效的键值
     // // .filter_value = NO_KEY, // 按键消抖期间得到的键值(在key_driver_scan()函数中使用)，初始化为 NO_KEY
@@ -62,13 +109,38 @@ struct key_driver_para ad_key_para = {
 
     // .latest_key_val = AD_KEY_ID_NONE,
     // .latest_key_event = KEY_EVENT_NONE,
+
+    TOUCH_KEY_SCAN_CIRCLE_TIMES,
+    0,
+    // NO_KEY,
+    0,
+
+    0,
+    0,
+    3,
+
+    LONG_PRESS_TIME_THRESHOLD_MS / TOUCH_KEY_SCAN_CIRCLE_TIMES,
+    (LONG_PRESS_TIME_THRESHOLD_MS + HOLD_PRESS_TIME_THRESHOLD_MS) / TOUCH_KEY_SCAN_CIRCLE_TIMES,
+    0,
+
+    0,
+    0,
+    200 / TOUCH_KEY_SCAN_CIRCLE_TIMES,
+    // NO_KEY,
+    0,
+    KEY_TYPE_AD,
+    ad_key_get_key_id,
+
+    AD_KEY_ID_NONE,
+    KEY_EVENT_NONE,
 };
 
 // 将采集到的ad值转换成自定义的键值
 static u16 __conver_cur_ad_to_ad_key(const u16 cur_ad_key)
 {
     u8 i = 0;
-    u16 ad_key_id = AD_KEY_ID_NONE;
+    // u16 ad_key_id = AD_KEY_ID_NONE;
+    u16 ad_key_id = NO_KEY;
 
     // ARRAY_SIZE(ad_key_scan_table) 这里是求出数组中存放的按键个数
     for (i = 0; i < ARRAY_SIZE(ad_key_scan_table); i++)
@@ -91,6 +163,41 @@ static u16 __conver_cur_ad_to_ad_key(const u16 cur_ad_key)
     return ad_key_id;
 }
 
+//
+/**
+ * @brief 将按键值和key_driver_scan得到的按键事件转换成ad按键的事件
+ *
+ * @param key_val ad按键键值
+ * @param key_event 在key_driver_scan得到的按键事件 KEY_EVENT
+ * @return u8 在ad_key_event_table中找到的对应的按键事件，如果没有则返回 AD_KEY_EVENT_NONE
+ */
+static u8 __ad_key_get_event(const u8 key_val, const u8 key_event)
+{
+    u8 ret_key_event = AD_KEY_EVENT_NONE;
+    u8 i = 0;
+    for (; i < ARRAY_SIZE(ad_key_event_table); i++)
+    {
+        if (key_val == ad_key_event_table[i][0])
+        {
+            // 如果往 KEY_EVENT 枚举中添加了新的按键事件，这里查表的方法就会失效，需要手动修改
+            ret_key_event = ad_key_event_table[i][key_event];
+
+            // if (KEY_EVENT_CLICK == key_event)
+            // {
+            //     ret_key_event = ad_key_event_table[i][1];
+            // }
+            // else if (KEY_EVENT_DOUBLE_CLICK == key_event)
+            // {
+            //     ret_key_event = ad_key_event_table[i][2];
+            // }
+
+            break;
+        }
+    }
+
+    return ret_key_event;
+}
+
 u8 ad_key_get_key_id(void)
 {
     volatile u16 ad_key_id = 0;       // 单次按键标志
@@ -109,358 +216,122 @@ u8 ad_key_get_key_id(void)
     return ad_key_id;
 }
 
-#if 0
-// 非阻塞的按键扫描函数
-// 内部的比较只会比对自定义的键值(id)
-void ad_key_scan(void)
+void ad_key_handle(void)
 {
-    volatile u16 ad_key_id = 0;             // 单次按键标志
-    static u16 ad_key_last_id = 0;          // 用于存放长按时，对应的按键
-    static volatile u32 touch_time_cnt = 0; // 长按计数值
+    u8 ad_key_event = AD_KEY_EVENT_NONE;
 
-    if (0 == flag_is_touch_key_scan_circle_arrived)
+    if (ad_key_para.latest_key_val == AD_KEY_ID_NONE)
     {
         return;
     }
 
-    flag_is_touch_key_scan_circle_arrived = 0;
+    ad_key_event = __ad_key_get_event(ad_key_para.latest_key_val, ad_key_para.latest_key_event);
+    ad_key_para.latest_key_val = AD_KEY_ID_NONE;
+    ad_key_para.latest_key_event = KEY_EVENT_NONE;
 
-    adc_sel_pin(ADC_PIN_KEY);         // 内部至少占用1ms
-    ad_key_id = adc_single_convert(); // 直接用单次转换,不取平均值,防止识别不到按键
-    // printf("ad key val %u \n", ad_key_id);
-    // printf("ad_key_id val %u\n", ad_key_id);
-    ad_key_id = __conver_cur_ad_to_ad_key(ad_key_id); // 将采集到的ad值转换成自定义的键值
-
-    // 测试用：
-    // if (ad_key_id != 0)
-    // {
-    //     printf("ad key id %u\n", ad_key_id);
-    // }
-
-    //
-    //     if (0 != ad_key_id)
-    //     {
-    //         printf("ad_key_id id : %u\n", ad_key_id);
-    //     }
-
-#if 0
-    if (AD_KEY_SCAN_STATUS_NONE == ad_key_scan_status) // 未检测到按键时
+    switch (ad_key_event)
     {
-        // 如果有按键按下（并且之前扫描到的不是长按）
-        // 判断是否为长按：
+#if 1
 
-        if (0 == ad_key_last_id)
-        {
-            // 如果之前未检测到按键，现在检测到按键按下:
-            ad_key_last_id = ad_key_id;
-        }
-        else if (ad_key_last_id == ad_key_id)
-        {
-            // 如果上次检测到的按键与此次的按键相等，说明按键还未松开
-            // touch_time_cnt += (1 + ONE_CYCLE_TIME_MS);
-            touch_time_cnt += (TOUCH_KEY_SCAN_CIRCLE_TIMES);
+    case AD_KEY_EVENT_ID_1_CLICK:
+        printf("key 1 click\n");
+        break;
 
-            if (touch_time_cnt >= LONG_PRESS_TIME_THRESHOLD_MS)
-            {
-                // 如果长按超过了设置的长按时间
-                // 跳转到长按处理
-                touch_time_cnt = 0; // 清除长按时间计数
-#if USE_MY_DEBUG
-                printf("long press\n"); // 测试用
+    case AD_KEY_EVENT_ID_1_DOUBLE:
+        // printf("key 1 double\n");
+        break;
+
+    case AD_KEY_EVENT_ID_1_LONG:
+        // printf("key 1 long\n");
+        break;
+
+    case AD_KEY_EVENT_ID_1_HOLD:
+        // printf("key 1 hold\n");
+        break;
+
+    case AD_KEY_EVENT_ID_1_LOOSE:
+        // printf("key 1 loose\n");
+        break;
+    case AD_KEY_EVENT_ID_2_CLICK:
+        // printf("key 2 click\n");
+        break;
+
+    case AD_KEY_EVENT_ID_2_DOUBLE:
+        // printf("key 2 double\n");
+        break;
+
+    case AD_KEY_EVENT_ID_2_LONG:
+        // printf("key 2 long\n");
+        break;
+
+    case AD_KEY_EVENT_ID_2_HOLD:
+        // printf("key 2 hold\n");
+        break;
+
+    case AD_KEY_EVENT_ID_2_LOOSE:
+        // printf("key 2 loose\n");
+        break;
+    case AD_KEY_EVENT_ID_3_CLICK:
+        // printf("key 3 click\n");
+        break;
+
+    case AD_KEY_EVENT_ID_3_DOUBLE:
+        // printf("key 3 double\n");
+        break;
+
+    case AD_KEY_EVENT_ID_3_LONG:
+        // printf("key 3 long\n");
+        break;
+
+    case AD_KEY_EVENT_ID_3_HOLD:
+        // printf("key 3 hold\n");
+        break;
+
+    case AD_KEY_EVENT_ID_3_LOOSE:
+        // printf("key 3 loose\n");
+        break;
+    case AD_KEY_EVENT_ID_4_CLICK:
+        // printf("key 4 click\n");
+        break;
+
+    case AD_KEY_EVENT_ID_4_DOUBLE:
+        // printf("key 4 double\n");
+        break;
+
+    case AD_KEY_EVENT_ID_4_LONG:
+        // printf("key 4 long\n");
+        break;
+
+    case AD_KEY_EVENT_ID_4_HOLD:
+        // printf("key 4 hold\n");
+        break;
+
+    case AD_KEY_EVENT_ID_4_LOOSE:
+        // printf("key 4 loose\n");
+        break;
+    case AD_KEY_EVENT_ID_5_CLICK:
+        // printf("key 5 click\n");
+        break;
+
+    case AD_KEY_EVENT_ID_5_DOUBLE:
+        // printf("key 5 double\n");
+        break;
+
+    case AD_KEY_EVENT_ID_5_LONG:
+        // printf("key 5 long\n");
+        break;
+
+    case AD_KEY_EVENT_ID_5_HOLD:
+        // printf("key 5 hold\n");
+        break;
+
+    case AD_KEY_EVENT_ID_5_LOOSE:
+        // printf("key 5 loose\n");
+        break;
+
+    default:
+        break;
+
 #endif
-                ad_key_scan_status = AD_KEY_SCAN_STATUS_IS_HANDLE_LONG_PRESS;
-            }
-        }
-        else
-        {
-            // 如果上次检测到的按键与此次的按键不相等，并且上次检测到的按键不等于0
-            // touch_time_cnt = 0; // 清除长按时间计数（可以留到收尾处理）
-
-            // 跳转到短按处理
-            ad_key_scan_status = AD_KEY_SCAN_STATUS_IS_HANDLE_SHORT_PRESS;
-#if USE_MY_DEBUG
-            printf("short press\n"); // 测试用
-#endif
-        }
-
-        // delay_ms(1); //
     }
-
-    if (AD_KEY_SCAN_STATUS_IS_HANDLE_SHORT_PRESS == ad_key_scan_status)
-    {
-        // 如果是正在处理短按
-        if (AD_KEY_ID_1 == ad_key_last_id)
-        {
-            // 如果  被触摸
-              printf("key 1 press\n");
-#if USE_MY_DEBUG
-            printf("one left press\n");
-#endif
-            // send_data(SEND_TOUCH_KEY_STATUS, TOUCH_KEY_VAL_VOL_DEC);
-        }
-        else if (AD_KEY_ID_2 == ad_key_last_id)
-        {
-            // 如果  被触摸
-               printf("key 2 press\n");
-#if USE_MY_DEBUG
-            printf("two left press\n");
-#endif
-            // send_data(SEND_TOUCH_KEY_STATUS, TOUCH_KEY_VAL_MUTE);
-        }
-        else if (AD_KEY_ID_3 == ad_key_last_id)
-        {
-            // 如果  被触摸
-               printf("key 3 press\n");
-#if USE_MY_DEBUG
-            printf("three left press\n");
-#endif
-            // send_data(SEND_TOUCH_KEY_STATUS, TOUCH_KEY_VAL_VOL_INC);
-        }
-        else if (AD_KEY_ID_4 == ad_key_last_id)
-        {
-            // 如果  被触摸
-               printf("key 4 press\n");
-#if USE_MY_DEBUG
-            printf("one right press\n");
-#endif
-            // send_data(SEND_TOUCH_KEY_STATUS, TOUCH_KEY_VAL_PRE);
-        }
-        else if (AD_KEY_ID_5 == ad_key_last_id)
-        {
-            // 如果  被触摸
-               printf("key 5 press\n");
-#if USE_MY_DEBUG
-            printf("two right press\n");
-#endif
-            // send_data(SEND_TOUCH_KEY_STATUS, TOUCH_KEY_VAL_MODE);
-        }
-        else
-        {
-            // 如果没有按键被触摸
-        }
-
-        ad_key_scan_status = AD_KEY_SCAN_STATUS_IS_WAIT_SHORT_PRESS_RELEASE;
-    }
-
-    if (AD_KEY_SCAN_STATUS_IS_HANDLE_LONG_PRESS == ad_key_scan_status)
-    {
-        // 处理长按
-        if (AD_KEY_ID_ONE_LEFT == ad_key_last_id)
-        {
-            // 如果  被触摸
-#if USE_MY_DEBUG
-            // printf("one left long press\n");
-#endif
-            // 这个按键没有长按对应的操作
-        }
-        else if (AD_KEY_ID_TWO_LEFT == ad_key_last_id)
-        {
-            // 如果  被触摸
-#if USE_MY_DEBUG
-            printf("two left long press\n");
-#endif
-            // send_data(SEND_TOUCH_KEY_STATUS, TOUCH_KEY_VAL_POWER);
-        }
-        else if (AD_KEY_ID_THREE_LEFT == ad_key_last_id)
-        {
-            // 如果  被触摸
-#if USE_MY_DEBUG
-            // printf("three left long press\n");
-#endif
-            // 这个按键没有长按对应的操作
-        }
-        else if (AD_KEY_ID_ONE_RIGHT == ad_key_last_id)
-        {
-            // 如果  被触摸
-#if USE_MY_DEBUG
-            // printf("one right long press\n");
-#endif
-            // 这个按键没有长按对应的操作
-        }
-        else if (AD_KEY_ID_TWO_RIGHT == ad_key_last_id)
-        {
-            // 如果  被触摸
-#if USE_MY_DEBUG
-            printf("two right long press\n");
-#endif
-            // send_data(SEND_TOUCH_KEY_STATUS, TOUCH_KEY_VAL_MAIN);
-        }
-        else if (AD_KEY_ID_THREE_RIGHT == ad_key_last_id)
-        {
-            // 如果  被触摸
-
-#if USE_MY_DEBUG
-            // printf("three right long press\n");
-#endif
-            // 这个按键没有长按对应的操作
-        }
-
-        ad_key_scan_status = AD_KEY_SCAN_STATUS_IS_HANDLE_HOLD_PRESS; // 跳转到长按持续
-    }
-
-    if (AD_KEY_SCAN_STATUS_IS_HANDLE_HOLD_PRESS == ad_key_scan_status)
-    {
-        // 处理长按持续
-
-        if (ad_key_last_id == ad_key_id)
-        {
-            touch_time_cnt+=TOUCH_KEY_SCAN_CIRCLE_TIMES;
-            if (AD_KEY_ID_ONE_LEFT == ad_key_last_id)
-            {
-                if (touch_time_cnt >= HOLD_PRESS_TIME_THRESHOLD_MS)
-                {
-                    touch_time_cnt = 0;
-#if USE_MY_DEBUG
-                    printf("one left continue press\n");
-#endif
-                    // send_data(SEND_TOUCH_KEY_STATUS, TOUCH_KEY_VAL_VOL_DEC);
-                }
-            }
-            else if (AD_KEY_ID_TWO_LEFT == ad_key_last_id)
-            {
-                if (touch_time_cnt >= HOLD_PRESS_TIME_THRESHOLD_MS)
-                {
-                    touch_time_cnt = 0;
-#if USE_MY_DEBUG
-                    // printf("two left continue press\n");
-#endif
-                    // 这个按键没有长按持续对应的操作
-                }
-            }
-            else if (AD_KEY_ID_THREE_LEFT == ad_key_last_id)
-            {
-                if (touch_time_cnt >= HOLD_PRESS_TIME_THRESHOLD_MS)
-                {
-                    touch_time_cnt = 0;
-#if USE_MY_DEBUG
-                    // printf("three left continue press\n");
-#endif
-                    // send_data(SEND_TOUCH_KEY_STATUS, TOUCH_KEY_VAL_VOL_INC);
-                }
-            }
-            else if (AD_KEY_ID_ONE_RIGHT == ad_key_last_id)
-            {
-                if (touch_time_cnt >= HOLD_PRESS_TIME_THRESHOLD_MS)
-                {
-                    touch_time_cnt = 0;
-#if USE_MY_DEBUG
-                    // printf("one right continue press\n");
-#endif
-                    // 这个按键没有长按持续对应的操作
-                }
-            }
-            else if (AD_KEY_ID_TWO_RIGHT == ad_key_last_id)
-            {
-                if (touch_time_cnt >= HOLD_PRESS_TIME_THRESHOLD_MS)
-                {
-                    touch_time_cnt = 0;
-#if USE_MY_DEBUG
-                    // printf("two right continue press\n");
-#endif
-                    // 这个按键没有长按持续对应的操作
-                }
-            }
-            else if (AD_KEY_ID_THREE_RIGHT == ad_key_last_id)
-            {
-                if (touch_time_cnt >= HOLD_PRESS_TIME_THRESHOLD_MS)
-                {
-                    touch_time_cnt = 0;
-#if USE_MY_DEBUG
-                    // printf("three right continue press\n");
-#endif
-                    // 这个按键没有长按持续对应的操作
-                }
-            }
-
-            delay_ms(1);
-        }
-        else
-        {
-            // 如果之前检测到的按键与当前检测到的按键不一致，
-            // 说明 可能松开了手 或是 一只手按住了原来的按键另一只手按了其他按键
-
-            // 跳转到等待长按松开
-            ad_key_scan_status = AD_KEY_SCAN_STATUS_IS_WAIT_LONG_PRESS_RELEASE;
-        }
-    }
-
-    if ((AD_KEY_SCAN_STATUS_IS_WAIT_LONG_PRESS_RELEASE == ad_key_scan_status) ||
-        (AD_KEY_SCAN_STATUS_IS_WAIT_SHORT_PRESS_RELEASE == ad_key_scan_status))
-    {
-        // 如果是等待按键松开
-        static volatile u16 loose_cnt = 0; // 存放松手计数值
-
-        if (0 == ad_key_id)
-        {
-            // 如果当前检测到一次键值id为空
-            loose_cnt += ONE_CYCLE_TIME_MS;
-            // delay_ms(1);
-        }
-        else
-        {
-            // 只要有一次检测到按键，说明没有松开手
-            loose_cnt = 0;
-        }
-
-        if (loose_cnt >= LOOSE_PRESS_CNT_MS) // 这里的比较值需要注意，不能大于变量类型对应的最大值
-        {
-            loose_cnt = 0; // 清空松手计数
-            // 如果 xx ms内没有检测到按键按下，说明已经松开手
-
-            if (AD_KEY_SCAN_STATUS_IS_WAIT_LONG_PRESS_RELEASE == ad_key_scan_status)
-            {
-                if (AD_KEY_ID_ONE_LEFT == ad_key_last_id)
-                {
-#if USE_MY_DEBUG
-                    // printf("one left long press loose\n");
-#endif
-                }
-                else if (AD_KEY_ID_TWO_LEFT == ad_key_last_id)
-                {
-#if USE_MY_DEBUG
-                    // printf("two left long press loose\n");
-#endif
-                }
-                else if (AD_KEY_ID_THREE_LEFT == ad_key_last_id)
-                {
-#if USE_MY_DEBUG
-                    // printf("three left long press loose\n");
-#endif
-                }
-                else if (AD_KEY_ID_ONE_RIGHT == ad_key_last_id)
-                {
-#if USE_MY_DEBUG
-                    // printf("one right long press loose\n");
-#endif
-                }
-                else if (AD_KEY_ID_TWO_RIGHT == ad_key_last_id)
-                {
-#if USE_MY_DEBUG
-                    // printf("two right long press loose\n");
-#endif
-                }
-                else if (AD_KEY_ID_THREE_RIGHT == ad_key_last_id)
-                {
-#if USE_MY_DEBUG
-                    // printf("three right long press loose\n");
-#endif
-                }
-            }
-
-            ad_key_scan_status = AD_KEY_SCAN_STATUS_IS_END; // 跳转到收尾处理
-        }
-    }
-
-    if (AD_KEY_SCAN_STATUS_IS_END == ad_key_scan_status)
-    {
-        // 收尾处理
-        ad_key_id = 0;
-        ad_key_last_id = 0;
-        touch_time_cnt = 0;
-
-        ad_key_scan_status = AD_KEY_SCAN_STATUS_NONE;
-    }
-#endif
 }
-
-#endif

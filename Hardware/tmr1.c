@@ -199,22 +199,33 @@ void TIMR1_IRQHandler(void) interrupt TMR1_IRQn
         tmr1_cnt++;
 
         {
-            static u8 cnt = 0;
-            cnt++;
-            if (cnt >= TOUCH_KEY_SCAN_CIRCLE_TIMES) // xx ms
-            {
-                cnt = 0;
-                flag_is_touch_key_scan_circle_arrived = 1; // 表示扫描周期到来，执行一次按键扫描
+            // static u8 cnt = 0;
+            // cnt++;
+            // if (cnt >= TOUCH_KEY_SCAN_CIRCLE_TIMES) // xx ms
+            // {
+            //     cnt = 0;
+            //     // flag_is_touch_key_scan_circle_arrived = 1; // 表示扫描周期到来，执行一次按键扫描
 
-                // {
-                //     static u8 send_cnt = 0;
-                //     send_cnt++;
-                //     if (send_cnt >= 100)
-                //     {
-                //         send_cnt = 0;
-                //         printf("touch key scan\n");
-                //     }
-                // }
+            //     // {
+            //     //     static u8 send_cnt = 0;
+            //     //     send_cnt++;
+            //     //     if (send_cnt >= 100)
+            //     //     {
+            //     //         send_cnt = 0;
+            //     //         printf("touch key scan\n");
+            //     //     }
+            //     // }
+            // }
+
+            // 在定时器注册按键扫描：
+            if (ad_key_para.cur_scan_times < 255)
+            {
+                ad_key_para.cur_scan_times++;
+            }
+
+            if (touch_key_para.cur_scan_times < 255)
+            {
+                touch_key_para.cur_scan_times++;
             }
         }
     }

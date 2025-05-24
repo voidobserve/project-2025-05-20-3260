@@ -1,11 +1,11 @@
-C51 COMPILER V9.60.7.0   UART0                                                             05/21/2025 18:01:22 PAGE 1   
+C51 COMPILER V9.60.7.0   UART0                                                             05/24/2025 16:58:01 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE UART0
 OBJECT MODULE PLACED IN .\Release\Objects\uart0.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\Hardware\uart0.c LARGE OPTIMIZE(9,SIZE) BROWSE INTVECTOR(0X000C) I
-                    -NCDIR(..\..\Libraries\Include;..\..\User;..\..\User\lib;..\..\Hardware) INTERVAL(3) DEBUG OBJECTEXTEND PRINT(.\Release\L
-                    -istings\uart0.lst) OBJECT(.\Release\Objects\uart0.obj)
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\Hardware\uart0.c LARGE OPTIMIZE(9,SIZE) BROWSE ORDER INTVECTOR(0X0
+                    -00C) INCDIR(..\..\Libraries\Include;..\..\User;..\..\User\lib;..\..\Hardware) INTERVAL(3) DEBUG OBJECTEXTEND PRINT(.\Rel
+                    -ease\Listings\uart0.lst) OBJECT(.\Release\Objects\uart0.obj)
 
 line level    source
 
@@ -62,7 +62,7 @@ line level    source
   45   1          // 测试时，使用开发板上面的P25来打印输出
   46   1          // P2_MD1 &= ~(GPIO_P25_MODE_SEL(0x03)); // 清空寄存器配置
   47   1          // // P2_MD1 &= ~(GPIO_P00_MODE_SEL(0x03)); // 清空寄存器配置
-C51 COMPILER V9.60.7.0   UART0                                                             05/21/2025 18:01:22 PAGE 2   
+C51 COMPILER V9.60.7.0   UART0                                                             05/24/2025 16:58:01 PAGE 2   
 
   48   1          // P2_MD1 |= GPIO_P25_MODE_SEL(0x01); // 输出模式
   49   1          // FOUT_S25 |= GPIO_FOUT_UART0_TX;    // 配置P03为UART0_TX
@@ -126,7 +126,7 @@ line level    source
  105   2              {
  106   3                  // 如果接收到一帧的第二个字节的数据，记录下要接收的数据长度
  107   3                  frame_len = uart0_tmp_val;
-C51 COMPILER V9.60.7.0   UART0                                                             05/21/2025 18:01:22 PAGE 3   
+C51 COMPILER V9.60.7.0   UART0                                                             05/24/2025 16:58:01 PAGE 3   
 
  108   3                  // test_val = frame_len;
  109   3                  // printf("frame_len %d\n", (int32)frame_len);
@@ -190,7 +190,7 @@ line level    source
  165   5                          tmr0_cnt = 0;
  166   5                          __IRQnIPnPop(UART0_IRQn);
  167   5                          return;
-C51 COMPILER V9.60.7.0   UART0                                                             05/21/2025 18:01:22 PAGE 4   
+C51 COMPILER V9.60.7.0   UART0                                                             05/24/2025 16:58:01 PAGE 4   
 
  168   5                      }
  169   4                  } // if ((cur_recv_len) == frame_len)
@@ -254,7 +254,7 @@ line level    source
  225   2              frame_len = 0;            // 要接收的帧的长度，清零
  226   2              flag_is_recving_data = 0; // 重新开始接收数据
  227   2      
-C51 COMPILER V9.60.7.0   UART0                                                             05/21/2025 18:01:22 PAGE 5   
+C51 COMPILER V9.60.7.0   UART0                                                             05/24/2025 16:58:01 PAGE 5   
 
  228   2              // if (0 == recved_flagbuf[blank_index])
  229   2              // {
@@ -318,7 +318,7 @@ line level    source
  286   4                  }
  287   3      
  288   3                  {                          // 计算校验和
-C51 COMPILER V9.60.7.0   UART0                                                             05/21/2025 18:01:22 PAGE 6   
+C51 COMPILER V9.60.7.0   UART0                                                             05/24/2025 16:58:01 PAGE 6   
 
  289   4                      u8 __loop_crc_cnt = 0; // 用于计算校验和的循环计数值
  290   4                      checksum = 0;
@@ -382,7 +382,7 @@ line level    source
               {
                   flagbuf_valid_instruction[index] = 0;            // 清空缓冲区对应的元素，表示该下标�
              -�指令已经处理
-C51 COMPILER V9.60.7.0   UART0                                                             05/21/2025 18:01:22 PAGE 7   
+C51 COMPILER V9.60.7.0   UART0                                                             05/24/2025 16:58:01 PAGE 7   
 
                   uart0_recv_len[index] = 0;                       // 清除缓冲区中指令对应的长度
                   recved_flagbuf[index] = 0;                       // 清除接收到指令的标志位
@@ -446,7 +446,7 @@ line level    source
              -v_buf[i][3]) & 0x0F;
                               if (checksum != uart0_recv_buf[i][4])
                               {
-C51 COMPILER V9.60.7.0   UART0                                                             05/21/2025 18:01:22 PAGE 8   
+C51 COMPILER V9.60.7.0   UART0                                                             05/24/2025 16:58:01 PAGE 8   
 
                                   // 如果计算得出的校验和与数据帧中的校验和不一致
                                   // 说明传输的数据有误
@@ -510,7 +510,7 @@ line level    source
                               __flag_is_crc_or_len_err = 1;
               #endif
                               // recved_flagbuf[i] = 0;
-C51 COMPILER V9.60.7.0   UART0                                                             05/21/2025 18:01:22 PAGE 9   
+C51 COMPILER V9.60.7.0   UART0                                                             05/24/2025 16:58:01 PAGE 9   
 
                               // recv_frame_cnt--;
                               // memset(uart0_recv_buf[i], 0, FRAME_MAX_LEN);
@@ -521,7 +521,7 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    765    ----
+   CODE SIZE        =    763    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =     46       5
    PDATA SIZE       =   ----    ----

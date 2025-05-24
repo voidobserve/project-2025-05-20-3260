@@ -55,6 +55,11 @@ enum
 // 不能使用这种方式，ad值不在定义的按键对应的ad值区间时，都认为按键没有按下:
 // #define AD_KEY_NONE (4095) // 没有按键按下时，对应的ad值
 
-void ad_key_scan(void);
+extern volatile struct key_driver_para ad_key_para;
+// extern key_driver_para_t ad_key_para; // 写成这种编译器会报错
+// extern volatile struct key_driver_para *p_ad_key_para;
+
+// void ad_key_scan(void);
+void ad_key_handle(void);
 
 #endif

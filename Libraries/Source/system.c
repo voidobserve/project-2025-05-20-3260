@@ -50,7 +50,7 @@ void delay_ms(u16 ms)
 {
     while (ms--)
     {
-        // WDT_KEY = WDT_KEY_VAL(0xAA); // 喂狗操作
+        WDT_KEY = WDT_KEY_VAL(0xAA); // 喂狗操作
         // delay(1140); // 调试得出的数值（由于这里加了喂狗操作，数值需要重新调整，不用原来的1450）
 
         delay(1450);

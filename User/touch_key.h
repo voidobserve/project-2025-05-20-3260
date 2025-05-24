@@ -15,22 +15,30 @@
 #define HOLD_PRESS_TIME_THRESHOLD_MS (150) // 长按持续(不松手)的时间阈值(单位：ms)，每隔 xx 时间认为有一次长按持续事件
 #define LOOSE_PRESS_CNT_MS (30)            // 松手计时，松开手多久，才认为是真的松手了
 
-#define TOUCH_KEY_ID_NONE 0
-#define TOUCH_KEY_ID_1 TK_CH10_VALIB // 按键标识--触摸按键K1
-#define TOUCH_KEY_ID_2 TK_CH9_VALIB  // 按键标识--触摸按键K2
+// #define TOUCH_KEY_ID_NONE 0
+// #define TOUCH_KEY_ID_1 TK_CH10_VALIB // 按键标识 
+// #define TOUCH_KEY_ID_2 TK_CH9_VALIB  // 按键标识 
 
-enum
+enum TOUCH_KEY_ID
 {
-    TOUCH_KEY_SCAN_STATUS_NONE = 0,              // 空状态，检测是否有按键按下
-    TOUCH_KEY_SCAN_STATUS_IS_DETECT_LOOG_PRESS,  // 正在检测是否为长按（要跟检测长按作区分）
-    TOUCH_KEY_SCAN_STATUS_IS_HANDLE_LONG_PRESS,  // 正在处理长按
-    TOUCH_KEY_SCAN_STATUS_IS_HANDLE_HOLD_PRESS,  // 正在处理长按持续（不松手）
-    TOUCH_KEY_SCAN_STATUS_IS_HANDLE_SHORT_PRESS, // 正在处理短按
-
-    TOUCH_KEY_SCAN_STATUS_IS_WAIT_SHORT_PRESS_RELEASE, // 正在等待短按松开
-    TOUCH_KEY_SCAN_STATUS_IS_WAIT_LONG_PRESS_RELEASE,  // 正在等待长按松开
-    TOUCH_KEY_SCAN_STATUS_IS_END,                      // 收尾处理
+    TOUCH_KEY_ID_NONE = 0x00,
+    TOUCH_KEY_ID_1,
+    TOUCH_KEY_ID_2,
 };
+
+
+// enum
+// {
+//     TOUCH_KEY_SCAN_STATUS_NONE = 0,              // 空状态，检测是否有按键按下
+//     TOUCH_KEY_SCAN_STATUS_IS_DETECT_LOOG_PRESS,  // 正在检测是否为长按（要跟检测长按作区分）
+//     TOUCH_KEY_SCAN_STATUS_IS_HANDLE_LONG_PRESS,  // 正在处理长按
+//     TOUCH_KEY_SCAN_STATUS_IS_HANDLE_HOLD_PRESS,  // 正在处理长按持续（不松手）
+//     TOUCH_KEY_SCAN_STATUS_IS_HANDLE_SHORT_PRESS, // 正在处理短按
+
+//     TOUCH_KEY_SCAN_STATUS_IS_WAIT_SHORT_PRESS_RELEASE, // 正在等待短按松开
+//     TOUCH_KEY_SCAN_STATUS_IS_WAIT_LONG_PRESS_RELEASE,  // 正在等待长按松开
+//     TOUCH_KEY_SCAN_STATUS_IS_END,                      // 收尾处理
+// };
 
 // enum
 // {
@@ -48,12 +56,15 @@ enum
 //     TOUCH_KEY_EVNET_ID_2_LOOSE,
 // };
 
+extern volatile struct key_driver_para touch_key_para;
+
 /*
     标志位，触摸按键的扫描周期是否到来
     由定时器中断置位，扫描函数中判断该标志位的状态，再决定是否要进行按键扫描
 */
+// extern volatile bit flag_is_touch_key_scan_circle_arrived;
+// extern void touch_key_scan(void);
 
-extern void touch_key_scan(void);
+extern void touch_key_handle(void);
 
-extern volatile bit flag_is_touch_key_scan_circle_arrived;
 #endif

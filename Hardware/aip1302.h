@@ -21,6 +21,8 @@
 
 #define AIP1302_DELAY() delay(4)
 
+u8 __aip1302_read_byte(const u8 cmd);
+
 void aip1302_config(void);
 u8 aip1302_read_byte(const u8 cmd);
 void aip1302_write_byte(const u8 cmd, u8 byte);
@@ -30,11 +32,9 @@ void aip1302_update_date(aip1302_saveinfo_t aip1302_saveinfo);     // 向aip1302
 
 void aip1302_read_all(void); // 从aip1302中读出所有有关时间的数据
 
-#ifdef USE_MY_DEBUG
-#if USE_MY_DEBUG
+#if 1
 void aip1302_test(void);
 void aip1302_update_all_data(aip1302_saveinfo_t aip1302_saveinfo); // 从aip1302中读出所有有关时间的数据,存放到全局变量中
-#endif
 #endif
 
 #endif

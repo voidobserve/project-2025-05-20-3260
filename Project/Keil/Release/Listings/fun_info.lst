@@ -1,11 +1,11 @@
-C51 COMPILER V9.60.7.0   FUN_INFO                                                          05/21/2025 18:01:23 PAGE 1   
+C51 COMPILER V9.60.7.0   FUN_INFO                                                          05/24/2025 16:58:01 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE FUN_INFO
 OBJECT MODULE PLACED IN .\Release\Objects\fun_info.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\User\fun_info.c LARGE OPTIMIZE(9,SIZE) BROWSE INTVECTOR(0X000C) IN
-                    -CDIR(..\..\Libraries\Include;..\..\User;..\..\User\lib;..\..\Hardware) INTERVAL(3) DEBUG OBJECTEXTEND PRINT(.\Release\Li
-                    -stings\fun_info.lst) OBJECT(.\Release\Objects\fun_info.obj)
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\User\fun_info.c LARGE OPTIMIZE(9,SIZE) BROWSE ORDER INTVECTOR(0X00
+                    -0C) INCDIR(..\..\Libraries\Include;..\..\User;..\..\User\lib;..\..\Hardware) INTERVAL(3) DEBUG OBJECTEXTEND PRINT(.\Rele
+                    -ase\Listings\fun_info.lst) OBJECT(.\Release\Objects\fun_info.obj)
 
 line level    source
 

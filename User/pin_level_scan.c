@@ -6,7 +6,7 @@ void pin_level_scan_config(void)
 {
     p21_input_config(); // 远光灯状态对应的引脚
     p22_input_config(); // 右转向灯状态对应的引脚
-    p23_input_config(); // 刹车状态对应的引脚
+    // p23_input_config(); // 刹车状态对应的引脚
     p25_input_config(); // 左转向灯状态对应的引脚
 
     p27_input_config(); // 6档对应的引脚
@@ -34,17 +34,20 @@ void pin_level_scan(void)
     {
         pin_level_scan_time_cnt = 0;
 
-        if (PIN_DETECT_BRAKE)
-        {
-            // 如果没有刹车
-            fun_info.brake = OFF;
-        }
-        else
-        {
-            // 如果有刹车
-            fun_info.brake = ON;
-        }
-        flag_get_brake = 1;
+#if 0  // 刹车检测
+        // if (PIN_DETECT_BRAKE)
+        // {
+        //     // 如果没有刹车
+        //     fun_info.brake = OFF;
+        // }
+        // else
+        // {
+        //     // 如果有刹车
+        //     fun_info.brake = ON;
+        // }
+
+        // flag_get_brake = 1;
+#endif // 刹车检测
 
         if (PIN_DETECT_LEFT_TURN)
         {
@@ -119,6 +122,8 @@ void pin_level_scan(void)
             // 六档
             fun_info.gear = GEAR_SIXTH;
         }
+
+        // printf("cur gear %bu\n", fun_info.gear);
         flag_get_gear = 1;
 
         if (0 == PIN_DETECT_MALFUNCTION)
@@ -137,6 +142,8 @@ void pin_level_scan(void)
             // 没有引脚检测abs的状态，这里更新故障的状态后，也顺便设置abs的状态
             fun_info.flag_is_detect_abs = 0;
         }
+
+        //   printf("cur malfunction %bu\n", fun_info.flag_is_detect_malfunction);
 
         flag_update_malfunction_status = 1;
     }

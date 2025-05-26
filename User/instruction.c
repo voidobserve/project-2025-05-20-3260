@@ -23,7 +23,7 @@ volatile bit flag_get_total_mileage = 0;     // 获取大计里程 / 得到了�
 volatile bit flag_get_sub_total_mileage = 0; // 获取小计里程 / 得到了小计里程
 
 // volatile bit flag_get_touch_key_status = 0; // 获取触摸按键的状态
-volatile bit flag_alter_date = 0; // 修改日期
+// volatile bit flag_alter_date = 0; // 修改日期
 volatile bit flag_alter_time = 0; // 修改时间
 
 volatile bit flag_get_voltage_of_battery = 0;    // 获取电池电压
@@ -129,6 +129,7 @@ void instruction_scan(void)
                 //     break;
 #endif // 不对MP5发送的这些指令进行处理
 
+#if 0 // 修改日期
                 case INSTRUCTION_ALTER_DATE: // 修改日期
                     flag_alter_date = 1;
                     fun_info.aip1302_saveinfo.year = (u16)uart0_recv_buf[i][3] +
@@ -157,13 +158,19 @@ void instruction_scan(void)
 #endif
 
                     break;
+#endif // 修改日期
 
                 case INSTRUCTION_ALTER_TIME: // 修改时间
                     flag_alter_time = 1;
-                    // 例：A5 07 2F 0D 37 18 07
-                    fun_info.aip1302_saveinfo.time_hour = uart0_recv_buf[i][3];
-                    fun_info.aip1302_saveinfo.time_min = uart0_recv_buf[i][4];
-                    fun_info.aip1302_saveinfo.time_sec = uart0_recv_buf[i][5];
+
+                    fun_info.aip1302_saveinfo.year = (u16)uart0_recv_buf[i][3] +
+                                                     (u16)uart0_recv_buf[i][4];
+                    fun_info.aip1302_saveinfo.month = uart0_recv_buf[i][5];
+                    fun_info.aip1302_saveinfo.day = uart0_recv_buf[i][6];
+
+                    fun_info.aip1302_saveinfo.time_hour = uart0_recv_buf[i][7];
+                    fun_info.aip1302_saveinfo.time_min = uart0_recv_buf[i][8];
+                    fun_info.aip1302_saveinfo.time_sec = uart0_recv_buf[i][9];
 
 #if USE_MY_DEBUG
 #if 1 // 打印串口缓冲区的数据
@@ -253,15 +260,16 @@ void instruction_handle(void)
             // send_data(SEND_TOUCH_KEY_STATUS, fun_info.touch_key_val);
             aip1302_read_all(); // 先从aip1302时钟ic获取所有关于时间的信息，再发送
             // 14. 发送当前日期
-            temp_val = ((u32)fun_info.aip1302_saveinfo.year << 16) |
-                       ((u32)fun_info.aip1302_saveinfo.month << 8) |
-                       fun_info.aip1302_saveinfo.day;
-            send_data(SEND_DATE, temp_val);
+            //     temp_val = ((u32)fun_info.aip1302_saveinfo.year << 16) |
+            //                ((u32)fun_info.aip1302_saveinfo.month << 8) |
+            //                fun_info.aip1302_saveinfo.day;
+            //     send_data(SEND_DATE, temp_val);
             // 15. 发送当前时间
-            temp_val = ((u32)fun_info.aip1302_saveinfo.time_hour << 16) |
-                       ((u32)fun_info.aip1302_saveinfo.time_min << 8) |
-                       fun_info.aip1302_saveinfo.time_sec;
-            send_data(SEND_TIME, temp_val);
+            //     temp_val = ((u32)fun_info.aip1302_saveinfo.time_hour << 16) |
+            //                ((u32)fun_info.aip1302_saveinfo.time_min << 8) |
+            //                fun_info.aip1302_saveinfo.time_sec;
+            //     send_data(SEND_TIME, temp_val);
+            send_data(SEND_TIME, 0); // 第二个参数无效
             // 16. 发送当前的电池电压
             send_data(SEND_VOLTAGE_OF_BATTERY, fun_info.voltage_of_battery);
             // 17. 发送当前的水温报警状态
@@ -402,9 +410,8 @@ void instruction_handle(void)
         send_data(SEND_ABS_STATUS, fun_info.flag_is_detect_abs);
     }
 
-    if (flag_get_total_mileage)
+    if (flag_get_total_mileage) // 如果要获取大计里程 / 得到了大计里程新的数据
     {
-        // 如果要获取大计里程 / 得到了大计里程新的数据
         flag_get_total_mileage = 0;
 #if USE_MY_DEBUG
         // printf(" flag_get_total_mileage \n");
@@ -429,11 +436,11 @@ void instruction_handle(void)
         send_data(SEND_TOTAL_MILEAGE, fun_info.save_info.total_mileage / 1610); // 1km == 0.621427mile
 
 #endif // USE_IMPERIAL 英制单位
-    }
+    } // if (flag_get_total_mileage) // 如果要获取大计里程 / 得到了大计里程新的数据
 
-    if (flag_get_sub_total_mileage)
+    if (flag_get_sub_total_mileage) // 如果要获取小计里程 / 得到了小计里程新的数据
     {
-        // 如果要获取小计里程 / 得到了小计里程新的数据
+
         flag_get_sub_total_mileage = 0;
 #if USE_MY_DEBUG
         // printf(" flag_get_sub_total_mileage \n");
@@ -456,19 +463,9 @@ void instruction_handle(void)
         send_data(SEND_SUBTOTAL_MILEAGE, fun_info.save_info.subtotal_mileage / 161);
 
 #endif // USE_IMPERIAL 英制单位
-    }
+    } //     if (flag_get_sub_total_mileage) // 如果要获取小计里程 / 得到了小计里程新的数据
 
-    // 触摸按键在 ad_key_scan() 函数中，独立发送
-    //     if (flag_get_touch_key_status)
-    //     {
-    //         // 如果要获取触摸按键的状态 / 得到了触摸按键的状态
-    //         flag_get_touch_key_status = 0;
-    // #if USE_MY_DEBUG
-    //         printf(" flag_get_touch_key_status \n");
-    // #endif
-    //         send_data(SEND_TOUCH_KEY_STATUS, fun_info.touch_key_val);
-    //     }
-
+#if 0 // 修改日期
     if (flag_alter_date)
     {
         // 如果要修改日期
@@ -489,6 +486,7 @@ void instruction_handle(void)
             update_date_status = UPDATE_STATUS_HANDLING;
         }
     }
+#endif // 修改日期
 
     if (flag_alter_time)
     {

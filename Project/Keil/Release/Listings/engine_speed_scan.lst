@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   ENGINE_SPEED_SCAN                                                 05/24/2025 16:58:02 PAGE 1   
+C51 COMPILER V9.60.7.0   ENGINE_SPEED_SCAN                                                 05/26/2025 16:52:38 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE ENGINE_SPEED_SCAN
@@ -62,7 +62,7 @@ line level    source
   49   2                  1min转过的圈数 == 扫描时间内采集到的脉冲个数 * 1min / 发动机转过一圈�
              -��应的脉冲个数 / 扫描时间
   50   2                  1min转过的圈数 == 扫描时间内采集到的脉冲个数 * 1min / 扫描时间 / 发动�
-C51 COMPILER V9.60.7.0   ENGINE_SPEED_SCAN                                                 05/24/2025 16:58:02 PAGE 2   
+C51 COMPILER V9.60.7.0   ENGINE_SPEED_SCAN                                                 05/26/2025 16:52:38 PAGE 2   
 
              -��转过一圈对应的脉冲个数
   51   2              */
@@ -103,8 +103,12 @@ line level    source
   85   4                      cur_rpm_average = 65535;
   86   4                  }
   87   3      
-  88   3      #ifdef USE_MY_DEBUG
-  89   3      #if USE_MY_DEBUG
+  88   3                  // if (cur_rpm_average != 0)
+  89   3                  // {
+  90   3                  //     printf("engine speed %lu rpm\n", cur_rpm_average);
+  91   3                  // }
+  92   3      #ifdef USE_MY_DEBUG
+  93   3      #if USE_MY_DEBUG
               
                           if (cur_rpm_average != 0)
                           {
@@ -112,22 +116,22 @@ line level    source
                           }
               
               #endif // #if USE_MY_DEBUG
-  97   3      #endif // #ifdef USE_MY_DEBUG
-  98   3      
-  99   3                  fun_info.engine_speeed = cur_rpm_average; // 向全局变量存放发动机转速
- 100   3                  cur_rpm_average = 0;
- 101   3      
- 102   3                  flag_get_engine_speed = 1; // 发送发动机转速
- 103   3              }
- 104   2          }
- 105   1      }
+ 101   3      #endif // #ifdef USE_MY_DEBUG
+ 102   3      
+ 103   3                  fun_info.engine_speeed = cur_rpm_average; // 向全局变量存放发动机转速
+ 104   3                  cur_rpm_average = 0;
+ 105   3      
+ 106   3                  flag_get_engine_speed = 1; // 发送发动机转速
+ 107   3              }
+ 108   2          }
+ 109   1      }
+
+C51 COMPILER V9.60.7.0   ENGINE_SPEED_SCAN                                                 05/26/2025 16:52:38 PAGE 3   
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =    179    ----
    CONSTANT SIZE    =   ----    ----
-C51 COMPILER V9.60.7.0   ENGINE_SPEED_SCAN                                                 05/24/2025 16:58:02 PAGE 3   
-
    XDATA SIZE       =     17       4
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----

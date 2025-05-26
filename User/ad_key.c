@@ -234,7 +234,7 @@ void ad_key_handle(void)
 #if 1
 
     case AD_KEY_EVENT_ID_1_CLICK:
-        printf("key 1 click\n");
+        // printf("key 1 click\n");
         break;
 
     case AD_KEY_EVENT_ID_1_DOUBLE:

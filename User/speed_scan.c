@@ -1,21 +1,11 @@
 #include "speed_scan.h"
 
-// 多少个脉冲表示一圈
-#ifndef SPEED_SCAN_PULSE_PER_TURN
-#define SPEED_SCAN_PULSE_PER_TURN (16)
-#endif // 多少个脉冲表示一圈
-
-// 车轮一圈表示多少毫米
-#ifndef SPEED_SCAN_MM_PER_TURN
-#define SPEED_SCAN_MM_PER_TURN (1795) // 一圈1795毫米
-#endif                                // 车轮一圈表示多少毫米
-
 // 标志位，是否由更新计数,由定时器来置位
 // 0--未更新脉冲计数，1--有新的脉冲计数
 volatile bit flag_is_update_speed_pulse_cnt = 0;
 volatile u16 speed_scan_time_cnt = 0;        // 速度扫描时，用到的时间计数值，会在定时器中断中累加
 volatile u16 speed_actual_scan_time_cnt = 0; // 存放实际的速度扫描时间(实际的速度扫描用时)
-// volatile u32 detect_speed_pulse_cnt = 0; // 检测时速的脉冲计数值
+// volatile u32 detect_speed_pulse_cnt = 0; // 检测时速的脉冲计数值(用IO中断来检测)
 /*
     存放 检测到的时速脉冲计数值，会在中断内累加
     使用了双缓冲，[0]用在定时器中断中，[1]用在处理函数中
@@ -96,6 +86,8 @@ void speed_scan(void)
             fun_info.speed = cur_speed_average_val;         // 存放得到的时速
             cur_speed_average_val = 0;                      // 清空变量的值
             
+
+            // printf("cur speed %lu km/h\n", fun_info.speed);
 #if USE_MY_DEBUG
 
             if (fun_info.speed != 0)

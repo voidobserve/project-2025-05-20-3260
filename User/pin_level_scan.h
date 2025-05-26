@@ -18,6 +18,14 @@
 #define PIN_DETECT_FIFTH_GEAR (P30)   // 检测五挡的引脚
 #define PIN_DETECT_XIXTH_GEAR (P27)   // 检测六挡的引脚
 
+// ======================================================
+// 引脚电平扫描配置：
+// 扫描时间，每隔 xx ms更新一次状态(不能大于变量类型对应的最大值)
+#define PIN_LEVEL_SCAN_TIME_MS (200)
+// 引脚电平扫描配置
+// ======================================================
+
+
 extern u16 pin_level_scan_time_cnt;
 
 void pin_level_scan_config(void); // 扫描引脚的配置（初始化）

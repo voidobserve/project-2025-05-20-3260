@@ -3,6 +3,8 @@
 #include "include.h"   // 使用芯片官方提供的头文件
 #include "my_config.h" // 包含自定义的头文件
 
+#if 0
+
 // P0中断服务函数
 void P0_IRQHandler(void) interrupt P0_IRQn
 {
@@ -50,3 +52,5 @@ void P1_IRQHandler(void) interrupt P1_IRQn
     // 退出中断设置IP，不可删除
     __IRQnIPnPop(P1_IRQn);
 }
+
+#endif

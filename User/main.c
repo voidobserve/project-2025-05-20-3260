@@ -321,7 +321,7 @@ void user_init(void)
 
     adc_config();
 
-    tk_param_init();  // 触摸按键模块初始化
+    // tk_param_init();  // 触摸按键模块初始化
     aip1302_config(); // 初始化时钟ic，函数内部会读取时间信息，并存放到全局变量中
     tmr2_config();    // 扫描脉冲(电平变化)的定时器
 
@@ -385,7 +385,7 @@ void main(void)
     // printf("size %bu\n", (u8)sizeof(struct key_driver_para_t *));
     // printf("addr %p\n", (void *)&ad_key_para);
 
-#if 1 // 测试发送日期和时间
+#if 0 // 测试发送日期和时间
     // 当前日期
     fun_info.aip1302_saveinfo.year = 2024;
     fun_info.aip1302_saveinfo.month = 12;
@@ -400,60 +400,48 @@ void main(void)
 
     printf("year %u month %bu day %bu \n", fun_info.aip1302_saveinfo.year, fun_info.aip1302_saveinfo.month, fun_info.aip1302_saveinfo.day);
     printf("hour %bu min %bu sec %bu \n", fun_info.aip1302_saveinfo.time_hour, fun_info.aip1302_saveinfo.time_min, fun_info.aip1302_saveinfo.time_sec);
-#endif
+#endif // 测试发送日期和时间
 
     /* 系统主循环 */
     while (1)
     {
-        // key_driver_scan(&ad_key_para);
-        // ad_key_handle();
-
-        // key_driver_scan(&touch_key_para);
-        // touch_key_handle();
+        // printf("main circle\n");
 
 #if 1
-        // 扫描状态是否变化，如果变化则更新标志位，更新状态的信息到结构体中
-        // P0_PD |= GPIO_P04_PULL_PD(0x01);     // 下拉
-        // P0_MD1 &= ~(GPIO_P04_MODE_SEL(0x3)); // 输入模式
-        // pin_level_scan(); // 检测引脚电平变化
+        key_driver_scan(&ad_key_para);
+        ad_key_handle(); // ad按键处理函数
 
-        // 注意要先打开对应的定时器
-        // engine_speed_scan(); // 检测发动机转速
-        // speed_scan();        // 检测时速
-        // mileage_scan();      // 检测大计里程和小计里程
+        key_driver_scan(&touch_key_para);
+        touch_key_handle(); // 触摸按键处理函数
 
-        // 油量检测：
-        // fuel_capacity_scan();
+        speed_scan();   // 检测时速
+        mileage_scan(); // 检测大计里程和小计里程
 
-        // 水温检测：
-        // temp_of_water_scan();
+        engine_speed_scan();  // 检测发动机转速
+        fuel_capacity_scan(); // 油量检测
 
-        // 电池电量检测：
-        // P04--测量电池电压的引脚
-        // P0_MD1 |= GPIO_P04_MODE_SEL(0x3); // 模拟模式
-        // battery_scan();
+        battery_scan(); // 电池电量检测
 
-        // uart0_scan_handle();  // 检查串口接收缓冲区的数据是否符合协议,如果有正确的指令，会存到另一个缓冲区中
-        // instruction_scan();   // 扫描是否有合法的指令
-        // instruction_handle(); // 扫描是否有对应的获取/状态更新操作(最占用时间,因为要等待串口的数据发送完成)
+        uart0_scan_handle();  // 检查串口接收缓冲区的数据是否符合协议,如果有正确的指令，会存到另一个缓冲区中（接下来让instruction_scan()函数来处理）
+        instruction_scan();   // 扫描是否有合法的指令
+        instruction_handle(); // 扫描是否有对应的获取/状态更新操作(最占用时间,因为要等待串口的数据发送完成)
+#endif //
 
-        aip1302_test();
-        {
-            u8 recv_data = __aip1302_read_byte(AIP1302_SEC_REG_ADDR); // 读取到的是反转后的数据
-
-            u8 ret = aip1302_read_byte(AIP1302_WRITE_PROTECT_REG_ADDR + 1);
-
-            if (recv_data & 0x01)
-            {
-                // 如果时钟ic的时钟晶振停止
-                printf("1302 stop\n");
-            }
-            else
-            {
-                // 如果时钟ic的时钟晶振在运行
-                printf("1302 running\n");
-            }
-        }
+        // aip1302_test();
+        // {
+        //     u8 ret = 0;
+        //     ret = aip1302_is_running();
+        //     if (ret)
+        //     {
+        //         // 如果时钟芯片aip1302的晶振正在运行
+        //         printf("aip1302 is running\n");
+        //     }
+        //     else
+        //     {
+        //         // 如果时钟芯片aip1302的晶振不在运行
+        //         printf("aip1302 is sleep\n");
+        //     }
+        // }
 
         // AIP1302_CE_PIN = 1;
         // delay_ms(500);
@@ -461,8 +449,6 @@ void main(void)
         // delay_ms(500);
 
         heart_beat_handle(); //
-
-#endif //
 
         WDT_KEY = WDT_KEY_VAL(0xAA); // 喂狗并清除 wdt_pending
     }

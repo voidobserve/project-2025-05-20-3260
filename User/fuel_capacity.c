@@ -25,6 +25,8 @@ void fuel_capacity_scan(void)
         fuel_capacity_scan_cnt = 0;
         fuel_adc_val /= fuel_adc_scan_cnt; // 求出扫描时间内得到的ad平均值
         fuel_adc_scan_cnt = 0;
+        // printf("fuel adc val %lu \n", fuel_adc_val);
+
 
 #ifdef USE_MY_DEBUG
 #if USE_MY_DEBUG
@@ -156,6 +158,8 @@ void fuel_capacity_scan(void)
             // flag_is_update_percent = 0;
         }
 
+
+        // printf("fuel percent %bu\n", fuel_percent);
 #ifdef USE_MY_DEBUG
 #if USE_MY_DEBUG
         // printf("fuel percent %bu\n", fuel_percent);

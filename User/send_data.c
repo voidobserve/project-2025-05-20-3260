@@ -1,5 +1,11 @@
 #include "send_data.h"
 
+/**
+ * @brief 通过串口发送数据
+ * 
+ * @param instruct 指令
+ * @param send_data 待发送的数据，如果要发送时间，该参数无效，因为时间信息一共7个字节
+ */
 void send_data(u8 instruct, u32 send_data)
 {
     u32 check_num = 0; // 存放校验和
@@ -17,9 +23,9 @@ void send_data(u8 instruct, u32 send_data)
         SEND_FUEL == instruct ||                /* 发送油量 */
         SEND_WATER_TEMP == instruct ||          /* 发送水温 */
         SEND_TEMP_OF_WATER_ALERT == instruct || /* 发送水温报警 */
-        SEND_MALFUNCTION_STATUS == instruct || /* 发送故障的状态 */ 
-        SEND_ABS_STATUS == instruct /* 发送ABS的状态 */ 
-    )    // 如果指令的总长度只有5个字节
+        SEND_MALFUNCTION_STATUS == instruct ||  /* 发送故障的状态 */
+        SEND_ABS_STATUS == instruct             /* 发送ABS的状态 */
+        )                                       // 如果指令的总长度只有5个字节
     {
         uart0_sendbyte(0x05);     // 发送指令的总长度
         uart0_sendbyte(instruct); // 发送指令
@@ -41,9 +47,9 @@ void send_data(u8 instruct, u32 send_data)
 
         check_num += 0x06 + (u8)instruct + (u8)(send_data >> 8) + (u8)(send_data);
     }
-    else if (SEND_TOTAL_MILEAGE == instruct || /* 发送大计里程 */
-             SEND_TIME == instruct             /* 发送时间 */
-             )                                 // 如果指令的总长度为7个字节
+    else if (SEND_TOTAL_MILEAGE == instruct /* 发送大计里程 */
+
+             ) // 如果指令的总长度为7个字节
     {
 
         uart0_sendbyte(0x07);     // 发送指令的总长度
@@ -55,18 +61,46 @@ void send_data(u8 instruct, u32 send_data)
 
         check_num += 0x07 + (u8)instruct + (u8)(send_data >> 16) + (u8)(send_data >> 8) + (u8)send_data;
     }
-    else if (SEND_DATE == instruct /* 发送日期(年月日) */
-             )                     // 如果指令的总长度为8个字节
+    // else if (SEND_DATE == instruct /* 发送日期(年月日) */
+    //          )                     // 如果指令的总长度为8个字节
+    // {
+    //     uart0_sendbyte(0x08);     // 发送指令的总长度
+    //     uart0_sendbyte(instruct); // 发送指令
+
+    //     uart0_sendbyte(send_data >> 24); // 发送信息
+    //     uart0_sendbyte(send_data >> 16); // 发送信息
+    //     uart0_sendbyte(send_data >> 8);  // 发送信息
+    //     uart0_sendbyte(send_data);       // 发送信息
+
+    //     check_num += 0x08 + (u8)instruct + (u8)(send_data >> 24) + (u8)(send_data >> 16) + (u8)(send_data >> 8) + (u8)send_data;
+    // }
+    else if (SEND_TIME == instruct /* 发送时间 */)
     {
-        uart0_sendbyte(0x08);     // 发送指令的总长度
-        uart0_sendbyte(instruct); // 发送指令
+        uart0_sendbyte(0x0B);      // 发送指令的总长度
+        uart0_sendbyte(SEND_TIME); // 发送指令
 
-        uart0_sendbyte(send_data >> 24); // 发送信息
-        uart0_sendbyte(send_data >> 16); // 发送信息
-        uart0_sendbyte(send_data >> 8);  // 发送信息
-        uart0_sendbyte(send_data);       // 发送信息
+        // uart0_sendbyte(send_data >> 24); // 发送信息
+        // uart0_sendbyte(send_data >> 16); // 发送信息
+        // uart0_sendbyte(send_data >> 8);  // 发送信息
+        // uart0_sendbyte(send_data);       // 发送信息
 
-        check_num += 0x08 + (u8)instruct + (u8)(send_data >> 24) + (u8)(send_data >> 16) + (u8)(send_data >> 8) + (u8)send_data;
+        uart0_sendbyte(fun_info.aip1302_saveinfo.year >> 8);
+        uart0_sendbyte(fun_info.aip1302_saveinfo.year & 0xFF);
+        uart0_sendbyte(fun_info.aip1302_saveinfo.month);
+        uart0_sendbyte(fun_info.aip1302_saveinfo.day);
+        uart0_sendbyte(fun_info.aip1302_saveinfo.time_hour);
+        uart0_sendbyte(fun_info.aip1302_saveinfo.time_min);
+        uart0_sendbyte(fun_info.aip1302_saveinfo.time_sec);
+
+        check_num += 0x0B +
+                     (u8)SEND_TIME +
+                     (u8)(fun_info.aip1302_saveinfo.year >> 8) +
+                     (u8)(fun_info.aip1302_saveinfo.year & 0xFF) +
+                     (u8)(fun_info.aip1302_saveinfo.month) +
+                     (u8)(fun_info.aip1302_saveinfo.day) +
+                     (u8)(fun_info.aip1302_saveinfo.time_hour) +
+                     (u8)(fun_info.aip1302_saveinfo.time_min) +
+                     (u8)(fun_info.aip1302_saveinfo.time_sec);
     }
 
     // check_num &= 0x0F;         // 取前面的数字相加的低四位

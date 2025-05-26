@@ -25,8 +25,11 @@ enum
     SEND_SUBTOTAL_MILEAGE = 0x0C, // 发送小计里程
 
     SEND_TOUCH_KEY_STATUS = 0x0D,    // 发送触摸按键的状态
-    SEND_DATE = 0x0E,                // 发送日期(年月日)
-    SEND_TIME = 0x0F,                // 发送时间(24H)
+    // SEND_DATE = 0x0E,                // 发送日期(年月日)
+    // SEND_TIME = 0x0F,                // 发送时间(24H)
+
+    SEND_TIME = 0x0E, // 发送时间（年月日，时分秒）
+
     SEND_VOLTAGE_OF_BATTERY = 0x10,     // 发送电池电压
     SEND_TEMP_OF_WATER_ALERT = 0x11, // 发送水温报警
 

@@ -4,6 +4,19 @@
 #include "include.h"   // 使用芯片官方提供的头文件
 #include "my_config.h" // 包含自定义的头文件
 
+// ======================================================
+// 检测发动机转速所需的配置：
+#define ENGINE_SPEED_SCAN_PIN P02 // 检测发动机转速的引脚
+// 检测到 多少个脉冲 表示 发动机转过一圈
+#define ENGINE_SPEED_SCAN_PULSE_PER_TURN (16)
+// 累计检测多久的发动机转速： (单位：ms)(不能大于1min,不能大于变量类型对应的最大值)
+#define ENGINE_SPEED_SCAN_TIME_MS (100)
+// 重复检测多少次发动机转速，才更新：
+#define ENGINE_SPEED_SCAN_FILTER_CNT (5)
+
+// 检测发动机转速所需的配置
+// ======================================================
+
 extern volatile bit flag_is_update_engine_pulse_cnt; // 标志位，是否有更新脉冲计数
 extern volatile u16 engine_scan_time_cnt; // 发动机转速扫描时，用到的时间计数值，会在定时器中断中累加
 extern volatile u16 engine_actual_scan_time_cnt; // 实际的发动机转速扫描用时

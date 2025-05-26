@@ -4,10 +4,17 @@
 #include "include.h" // 使用芯片官方提供的头文件
 #include "my_config.h" // 包含自定义的头文件
 
+// 串口0波特率
+#define UART0_BAUDRATE (115200)
+// 串口1波特率
+// #define UART1_BAUDRATE 115200 // 这款芯片（TX3260）不能使用UART1的DMA来接收不定长的数据
+
+// 串口0接收缓冲区的大小（单位：字节）
+#define UART0_RXBUF_LEN (30) // 最大不能超过255，超过之后，串口接收会出错
 // 定义一帧最大的长度
-#ifndef FRAME_MAX_LEN
-#define FRAME_MAX_LEN 10
-#endif // FRAME_MAX_LEN
+#define FRAME_MAX_LEN 20 
+
+
 
 // 用来存放接收的数据帧的缓冲区
 extern volatile u8 uart0_recv_buf[(UART0_RXBUF_LEN) / (FRAME_MAX_LEN)][FRAME_MAX_LEN];

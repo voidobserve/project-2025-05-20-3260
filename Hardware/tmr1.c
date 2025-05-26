@@ -165,6 +165,16 @@ void heart_beat_handle(void)
             update_time_status = UPDATE_STATUS_NONE;
         }
     }
+
+    if (mileage_update_time_cnt < 65535)
+    {
+        mileage_update_time_cnt++;
+    }
+
+    if (battery_scan_time_cnt < 4294967295)
+    {
+        battery_scan_time_cnt++;
+    }
 }
 
 // TMR1中断服务函数

@@ -3,6 +3,7 @@
         {
             "name": "Target 1",
             "includePath": [
+                "C:/Keil_v5/C51/INC", /* C 标准库 头文件 */
                "${workspaceFolder}/",
                "${workspaceFolder}/Hardware",
                "${workspaceFolder}/Libraries/include",

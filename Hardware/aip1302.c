@@ -262,7 +262,8 @@ static void __aip1302_write_byte(u8 cmd, u8 byte)
  *
  * @return u8 0--时钟晶振停止，1--时钟晶振运行
  */
-static u8 aip1302_is_running(void)
+// static u8 aip1302_is_running(void)
+u8 aip1302_is_running(void)
 {
     u8 recv_data = __aip1302_read_byte(AIP1302_SEC_REG_ADDR); // 读取到的是反转后的数据
     // 秒寄存器的最高位Bit7是时钟停止标志位，1--时钟晶振停止，进入低功耗，0--晶振运转
@@ -338,7 +339,7 @@ void aip1302_write_byte(const u8 cmd, u8 byte)
     __aip1302_write_byte(AIP1302_WRITE_PROTECT_REG_ADDR, 0x80);
 }
 
-#if 1 // 
+#if 1 //
 void aip1302_test(void)
 {
     // u8 recv_data = 0xFF;
@@ -353,22 +354,27 @@ void aip1302_test(void)
     {
         cnt = 0;
         ret = aip1302_read_byte(AIP1302_YEAR_REG_ADDR + 1);
-        printf("year %bu ", ret);
+        // printf("year %bu ", ret);
+        printf("year %bu \n", ret);
 
         ret = aip1302_read_byte(AIP1302_MONTH_REG_ADDR + 1);
-        printf("month %bu ", ret);
+        // printf("month %bu ", ret);
+        printf("month %bu \n", ret);
 
         ret = aip1302_read_byte(AIP1302_DATE_REG_ADDR + 1);
-        printf("day %bu ", ret);
+        // printf("day %bu ", ret);
+        printf("day %bu \n", ret);
 
         // ret = aip1302_read_byte(AIP1302_WEEKDAY_REG_ADDR + 1);
         // printf("weekday %bu ", ret);
 
         ret = aip1302_read_byte(AIP1302_HOUR_REG_ADDR + 1);
-        printf("hour %bu ", ret);
+        // printf("hour %bu ", ret);
+        printf("hour %bu \n", ret);
 
         ret = aip1302_read_byte(AIP1302_MIN_REG_ADDR + 1);
-        printf("min %bu ", ret);
+        // printf("min %bu ", ret);
+        printf("min %bu \n", ret);
 
         ret = aip1302_read_byte(AIP1302_SEC_REG_ADDR + 1);
         printf("sec %bu ", ret);
@@ -404,13 +410,19 @@ void aip1302_update_all_data(aip1302_saveinfo_t aip1302_saveinfo)
 }
 #endif // void aip1302_update_all_data(aip1302_saveinfo_t aip1302_saveinfo)
 
+// 向aip1302更新 年、月、日、时、分、秒
 void aip1302_update_time(aip1302_saveinfo_t aip1302_saveinfo)
 {
-    aip1302_write_byte(AIP1302_SEC_REG_ADDR, aip1302_saveinfo.time_sec);
-    aip1302_write_byte(AIP1302_MIN_REG_ADDR, aip1302_saveinfo.time_min);
+    aip1302_write_byte(AIP1302_YEAR_REG_ADDR, aip1302_saveinfo.year - 2000);
+    aip1302_write_byte(AIP1302_MONTH_REG_ADDR, aip1302_saveinfo.month);
+    aip1302_write_byte(AIP1302_DATE_REG_ADDR, aip1302_saveinfo.day);
+
     aip1302_write_byte(AIP1302_HOUR_REG_ADDR, aip1302_saveinfo.time_hour);
+    aip1302_write_byte(AIP1302_MIN_REG_ADDR, aip1302_saveinfo.time_min);
+    aip1302_write_byte(AIP1302_SEC_REG_ADDR, aip1302_saveinfo.time_sec);
 }
 
+#if 0 
 // 向aip1302更新日期,年月日
 void aip1302_update_date(aip1302_saveinfo_t aip1302_saveinfo)
 {
@@ -418,6 +430,7 @@ void aip1302_update_date(aip1302_saveinfo_t aip1302_saveinfo)
     aip1302_write_byte(AIP1302_MONTH_REG_ADDR, aip1302_saveinfo.month);
     aip1302_write_byte(AIP1302_YEAR_REG_ADDR, aip1302_saveinfo.year - 2000);
 }
+#endif
 
 // 向aip1302更新星期
 // void aip1302_update_weekday(aip1302_saveinfo_t aip1302_saveinfo)

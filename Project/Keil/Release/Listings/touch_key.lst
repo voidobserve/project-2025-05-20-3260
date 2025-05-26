@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         05/24/2025 16:58:03 PAGE 1   
+C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         05/26/2025 16:52:39 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE TOUCH_KEY
@@ -62,7 +62,7 @@ line level    source
   45              // // .click_cnt = 0,
   46              // .click_delay_time = 20, // 按键抬起后，等待连击的数量，与扫描频率有关
   47              // // .notify_value = 0,
-C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         05/24/2025 16:58:03 PAGE 2   
+C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         05/26/2025 16:52:39 PAGE 2   
 
   48              // .key_type = KEY_TYPE_AD, // 按键类型为ad按键
   49              // .get_value = ad_key_get_key_id,
@@ -126,7 +126,7 @@ line level    source
  107           * @brief 将按键值和key_driver_scan得到的按键事件转换成触摸按键的事件
  108           *
  109           * @param key_val 触摸按键键值
-C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         05/24/2025 16:58:03 PAGE 3   
+C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         05/26/2025 16:52:39 PAGE 3   
 
  110           * @param key_event 在key_driver_scan得到的按键事件 KEY_EVENT
  111           * @return u8 在touch_key_event_table中找到的对应的按键事件，如果没有则返回 TOUCH_KEY_
@@ -190,7 +190,7 @@ line level    source
  166   2              break;
  167   2      
  168   2          case TOUCH_KEY_EVENT_ID_2_DOUBLE:
-C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         05/24/2025 16:58:03 PAGE 4   
+C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         05/26/2025 16:52:39 PAGE 4   
 
  169   2              printf("touch key 2 double\n");
  170   2              break;
@@ -254,7 +254,7 @@ line level    source
  226          
  227          //     if (0 == flag_is_touch_key_scan_circle_arrived)
  228          //     {
-C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         05/24/2025 16:58:03 PAGE 5   
+C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         05/26/2025 16:52:39 PAGE 5   
 
  229          //         // 如果扫描周期没有到来，不执行按键扫描
  230          //         return;
@@ -318,7 +318,7 @@ line level    source
  287          //             flag_is_double_click = __is_double_click(touch_key_last);
  288          //             if (flag_is_double_click)
  289          //             {
-C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         05/24/2025 16:58:03 PAGE 6   
+C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         05/26/2025 16:52:39 PAGE 6   
 
  290          //                 // 如果有按键双击
  291          //                 printf("k1 double press\n");
@@ -382,7 +382,7 @@ line level    source
  345          // #endif
  346          //             // send_status_keyval(KEY_PRESS_LONG, TOUCH_KEY1);
  347          //         }
-C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         05/24/2025 16:58:03 PAGE 7   
+C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         05/26/2025 16:52:39 PAGE 7   
 
  348          //         else if (TOUCH_KEY_ID_2 == touch_key)
  349          //         {
@@ -446,7 +446,7 @@ line level    source
  406          //         (TOUCH_KEY_SCAN_STATUS_IS_WAIT_SHORT_PRESS_RELEASE == touch_key_scan_status))
  407          //     {
  408          //         // 如果是等待按键松开
-C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         05/24/2025 16:58:03 PAGE 8   
+C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         05/26/2025 16:52:39 PAGE 8   
 
  409          //         static volatile u16 loose_cnt = 0; // 存放松手计数值
  410          
@@ -510,7 +510,7 @@ line level    source
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =    260    ----
-C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         05/24/2025 16:58:03 PAGE 9   
+C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         05/26/2025 16:52:39 PAGE 9   
 
    CONSTANT SIZE    =    188    ----
    XDATA SIZE       =     31       2

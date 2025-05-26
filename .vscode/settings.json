@@ -20,7 +20,9 @@
         "fun_info.h": "c",
         "ad_key.h": "c",
         "key_driver.h": "c",
-        "adc.h": "c"
+        "adc.h": "c",
+        "mileage.h": "c",
+        "STDIO.H": "cpp"
     },
     "clangd.checkUpdates": true,
     "clangd.inactiveRegions.useBackgroundHighlight": true,

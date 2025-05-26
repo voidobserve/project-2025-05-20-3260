@@ -9,87 +9,28 @@
 
 #define USE_MY_DEBUG 0
 
-// 串口0波特率
-#define UART0_BAUDRATE (115200)
-// 串口1波特率
-// #define UART1_BAUDRATE 115200 // 这款芯片（TX3260）不能使用UART1的DMA来接收不定长的数据
+#define KEY_UP_VOL_UP       ((u16)209)
+#define KEY_DOWN_VOL_DOWN   ((u16)210)
+#define KEY_LEFT_PRE        ((u16)207)
+#define KEY_RIGHT_NEXT      ((u16)208)
+#define KEY_ENTER_MENU      ((u16)127)
 
-// 串口0接收缓冲区的大小（单位：字节）
-#define UART0_RXBUF_LEN (30) // 最大不能超过255，超过之后，串口接收会出错
-
-// 长度单位
+// 长度单位（在检测时速和计算里程时使用）
 // USE_INTERNATIONAL -- 国际通用单位
 // USE_IMPERIAL -- 英制单位
 #define USE_INTERNATIONAL
-// ======================================================
-// 引脚电平扫描配置：
-// 扫描时间，每隔 xx ms更新一次状态(不能大于变量类型对应的最大值)
-#define PIN_LEVEL_SCAN_TIME_MS (200)
-// 引脚电平扫描配置
-// ======================================================
-
-// ======================================================
-// 检测发动机转速所需的配置：
-#define ENGINE_SPEED_SCAN_PIN P02 // 检测发动机转速的引脚
-// 检测到 多少个脉冲 表示 发动机转过一圈
-#define ENGINE_SPEED_SCAN_PULSE_PER_TURN (16)
-// 累计检测多久的发动机转速： (单位：ms)(不能大于1min,不能大于变量类型对应的最大值)
-#define ENGINE_SPEED_SCAN_TIME_MS (100)
-// 重复检测多少次时速，才更新：
-#define ENGINE_SPEED_SCAN_FILTER_CNT (5)
-
-// 检测发动机转速所需的配置
-// ======================================================
-
-// ======================================================
-// 检测时速所需的配置：
-#define SPEED_SCAN_PIN P15 // 检测时速的引脚
-// 检测到 多少个脉冲 表示 车轮走过一圈
-#define SPEED_SCAN_PULSE_PER_TURN (32)
-// 车轮的一圈对应多少毫米
-#define SPEED_SCAN_MM_PER_TURN (1795) // 一圈 xx 毫米
-// 累计检测多久的时速：(单位：ms)
-#define SPEED_SCAN_TIME_MS (100)
-// 重复检测多少次时速，才更新：(不能为0，也不能太大)
-// 例如 5次，  5(次) *  SPEED_SCAN_TIME_MS 之后，才更新速度
-#define SPEED_SCAN_FILTER_CNT (10)
-
-// 检测时速所需的配置
-// ======================================================
-
-// ======================================================
-// 油量检测配置：
-// 油量检测并更新的时间(单位：ms)
-#define FUEL_CAPACITY_SCAN_TIME_MS (500)
-// 油量最大时，对应的ad值
-#define FUEL_MAX_ADC_VAL (600)
-// 油量最小时，对应的ad值
-#define FUEL_MIN_ADC_VAL (2700)
-
-// 油量各个百分比下，对应的ad值
-#define FUEL_10_PERCENT_ADC_VAL (2654)
-#define FUEL_20_PERCENT_ADC_VAL (2570)
-#define FUEL_30_PERCENT_ADC_VAL (2480)
-#define FUEL_40_PERCENT_ADC_VAL (2320)
-#define FUEL_50_PERCENT_ADC_VAL (2150)
-#define FUEL_60_PERCENT_ADC_VAL (2020)
-#define FUEL_70_PERCENT_ADC_VAL (1850)
-#define FUEL_80_PERCENT_ADC_VAL (1735)
-#define FUEL_90_PERCENT_ADC_VAL (1335)
-// 油量检测配置
-// ======================================================
 
 // 触摸按键键值定义(检测到短按/持续时，要发送的键值)：
-#define TOUCH_KEY_VAL_MUTE ((u16)0x0040)    // 左2 从左往下数，第二个按键
-#define TOUCH_KEY_VAL_VOL_INC ((u16)0x0041) // 左3 从左往下数，第三个按键
-#define TOUCH_KEY_VAL_VOL_DEC ((u16)0x0042) // 左1 从左往下数，第一个按键
-#define TOUCH_KEY_VAL_MODE ((u16)0x0065)    // 右2 从右往下数，第二个按键
-#define TOUCH_KEY_VAL_PRE ((u16)0x00E3)     // 右1 从右往下数，第一个按键
-#define TOUCH_KEY_VAL_NEXT ((u16)0x00E4)    // 右3 从右往下数，第三个按键
+// #define TOUCH_KEY_VAL_MUTE ((u16)0x0040)    // 左2 从左往下数，第二个按键
+// #define TOUCH_KEY_VAL_VOL_INC ((u16)0x0041) // 左3 从左往下数，第三个按键
+// #define TOUCH_KEY_VAL_VOL_DEC ((u16)0x0042) // 左1 从左往下数，第一个按键
+// #define TOUCH_KEY_VAL_MODE ((u16)0x0065)    // 右2 从右往下数，第二个按键
+// #define TOUCH_KEY_VAL_PRE ((u16)0x00E3)     // 右1 从右往下数，第一个按键
+// #define TOUCH_KEY_VAL_NEXT ((u16)0x00E4)    // 右3 从右往下数，第三个按键
 
-// 检测到长按时要发送的键值：
-#define TOUCH_KEY_VAL_POWER ((u16)0x0046) // 左2 从左往下数，第二个按键
-#define TOUCH_KEY_VAL_MAIN ((u16)0x0011)  // 右2 从右往下数，第二个按键
+// // 检测到长按时要发送的键值：
+// #define TOUCH_KEY_VAL_POWER ((u16)0x0046) // 左2 从左往下数，第二个按键
+// #define TOUCH_KEY_VAL_MAIN ((u16)0x0011)  // 右2 从右往下数，第二个按键
 
 // 注意：只有 TOUCH_KEY_VAL_VOL_INC 和 TOUCH_KEY_VAL_VOL_DEC 需要检测持续按下
 
@@ -119,22 +60,6 @@
 
 // 水温检测配置
 // ======================================================
-
-// ======================================================
-// 电池电量检测配置:
-// 电池电量检测的更新时间(单位：ms，每隔 xx ms更新一次)
-// 注意更新时间不能过长(不超过1min)，否则在求电池电压平均值前，会计数溢出
-#define BATTERY_SCAN_UPDATE_TIME_MS (1000)
-
-// 电池满电时的电压:(例， 电池4.2V满电， MAX_VOLTAGE_OF_BATTERY == 42)
-// 目前外部使用45K上拉，22K下拉
-#define MAX_VOLTAGE_OF_BATTERY (150)
-// 电池放电的截止电压：（例，电池2.3V截止,MIN_VOLTAGE_OF_BATTERY == 23）
-// #define MIN_VOLTAGE_OF_BATTERY (90)
-// 电池满电时，在检测引脚检测到的ad值
-// #define MAX_VOLTAGE_OF_BATTERY_AD_VAL (4034)
-// 电池电量检测配置
-//======================================================
 
 // 里程的配置:
 // 大小里程的更新时间(单位:ms,使用的是 ONE_CYCLE_TIME_MS 作为时基,可以不准时):

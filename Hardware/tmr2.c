@@ -68,8 +68,8 @@ void tmr2_disable(void)
 void TIMR2_IRQHandler(void) interrupt TMR2_IRQn
 {
     // 上升沿检测
-    static volatile bit last_engine_speed_scan_level = 0; // 记录上一次检测到的引脚电平
-    static volatile bit last_speed_scan_level = 0;        // 记录上一次检测到的引脚电平
+    static volatile bit last_engine_speed_scan_level = 0; // 记录上一次检测到的引脚电平（发送机转速检测脚）
+    static volatile bit last_speed_scan_level = 0;        // 记录上一次检测到的引脚电平（时速检测脚）
 
     // 进入中断设置IP，不可删除
     __IRQnIPnPush(TMR2_IRQn);

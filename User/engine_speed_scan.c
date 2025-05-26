@@ -85,6 +85,10 @@ void engine_speed_scan(void)
                 cur_rpm_average = 65535;
             }
 
+            // if (cur_rpm_average != 0)
+            // {
+            //     printf("engine speed %lu rpm\n", cur_rpm_average);
+            // }
 #ifdef USE_MY_DEBUG
 #if USE_MY_DEBUG
 

@@ -143,42 +143,42 @@ void touch_key_handle(void)
     switch (touch_key_event)
     {
     case TOUCH_KEY_EVENT_ID_1_CLICK:
-        printf("touch key 1 click\n");
+        // printf("touch key 1 click\n");
         break;
 
     case TOUCH_KEY_EVENT_ID_1_DOUBLE:
-        printf("touch key 1 double\n");
+        // printf("touch key 1 double\n");
         break;
 
     case TOUCH_KEY_EVENT_ID_1_LONG:
-        printf("touch key 1 long\n");
+        // printf("touch key 1 long\n");
         break;
 
     case TOUCH_KEY_EVENT_ID_1_HOLD:
-        printf("touch key 1 hold\n");
+        // printf("touch key 1 hold\n");
         break;
 
     case TOUCH_KEY_EVENT_ID_1_LOOSE:
-        printf("touch key 1 loose\n");
+        // printf("touch key 1 loose\n");
         break;
     case TOUCH_KEY_EVENT_ID_2_CLICK:
-        printf("touch key 2 click\n");
+        // printf("touch key 2 click\n");
         break;
 
     case TOUCH_KEY_EVENT_ID_2_DOUBLE:
-        printf("touch key 2 double\n");
+        // printf("touch key 2 double\n");
         break;
 
     case TOUCH_KEY_EVENT_ID_2_LONG:
-        printf("touch key 2 long\n");
+        // printf("touch key 2 long\n");
         break;
 
     case TOUCH_KEY_EVENT_ID_2_HOLD:
-        printf("touch key 2 hold\n");
+        // printf("touch key 2 hold\n");
         break;
 
     case TOUCH_KEY_EVENT_ID_2_LOOSE:
-        printf("touch key 2 loose\n");
+        // printf("touch key 2 loose\n");
         break;
 
     default:

@@ -31,12 +31,12 @@ void aip1302_config(void)
     if (ret)
     {
         // 如果时钟芯片aip1302的晶振正在运行
-        printf("aip1302 is running\n");
+        // printf("aip1302 is running\n");
     }
     else
     {
         // 如果时钟芯片aip1302的晶振不在运行
-        printf("aip1302 is sleep\n");
+        // printf("aip1302 is sleep\n");
         // aip1302上电复位后，默认不跑时钟，这里要配置它开始跑时钟
         aip1302_write_byte(AIP1302_YEAR_REG_ADDR, 0);    // 0年
         aip1302_write_byte(AIP1302_MONTH_REG_ADDR, 1);   // 1月
@@ -339,7 +339,7 @@ void aip1302_write_byte(const u8 cmd, u8 byte)
     __aip1302_write_byte(AIP1302_WRITE_PROTECT_REG_ADDR, 0x80);
 }
 
-#if 1 //
+#if 0 //
 void aip1302_test(void)
 {
     // u8 recv_data = 0xFF;

@@ -9,11 +9,14 @@
 
 #define USE_MY_DEBUG 0
 
-#define KEY_UP_VOL_UP       ((u16)209)
-#define KEY_DOWN_VOL_DOWN   ((u16)210)
-#define KEY_LEFT_PRE        ((u16)207)
-#define KEY_RIGHT_NEXT      ((u16)208)
-#define KEY_ENTER_MENU      ((u16)127)
+#define KEY_CLICK_MSG ((u8)0x00) // 按键短按时，要发送的按键状态数据
+#define KEY_HOLD_MSG ((u8)0x01) // 按键长按时，要发送的按键状态数据
+
+#define KEY_UP_VOL_UP ((u16)209) 
+#define KEY_DOWN_VOL_DOWN ((u16)210)
+#define KEY_LEFT_PRE ((u16)207)
+#define KEY_RIGHT_NEXT ((u16)208)
+#define KEY_ENTER_MENU ((u16)127)
 
 // 长度单位（在检测时速和计算里程时使用）
 // USE_INTERNATIONAL -- 国际通用单位

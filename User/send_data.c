@@ -2,7 +2,7 @@
 
 /**
  * @brief 通过串口发送数据
- * 
+ *
  * @param instruct 指令
  * @param send_data 待发送的数据，如果要发送时间，该参数无效，因为时间信息一共7个字节
  */
@@ -36,7 +36,6 @@ void send_data(u8 instruct, u32 send_data)
     else if (SEND_ENGINE_SPEED == instruct ||     /* 发送发动机的转速 */
              SEND_SPEED == instruct ||            /* 发送时速 */
              SEND_SUBTOTAL_MILEAGE == instruct || /* 发送小计里程 */
-             SEND_TOUCH_KEY_STATUS == instruct || /* 发送触摸按键的状态 */
              SEND_VOLTAGE_OF_BATTERY == instruct  /* 发送电池电压 */
              )                                    // 如果指令的总长度为6个字节
     {
@@ -47,8 +46,8 @@ void send_data(u8 instruct, u32 send_data)
 
         check_num += 0x06 + (u8)instruct + (u8)(send_data >> 8) + (u8)(send_data);
     }
-    else if (SEND_TOTAL_MILEAGE == instruct /* 发送大计里程 */
-
+    else if (SEND_TOTAL_MILEAGE == instruct || /* 发送大计里程 */
+             SEND_TOUCH_KEY_STATUS == instruct /* 发送触摸按键的状态 */
              ) // 如果指令的总长度为7个字节
     {
 

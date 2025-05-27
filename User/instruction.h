@@ -21,7 +21,7 @@ enum
 // 定义 MP5向单片机发送的的指令
 enum
 {
-    INSTRUCTION_GET_ALL_STATUS = 0x20,       // 获取所有功能的状态
+    INSTRUCTION_GET_ALL_STATUS = 0x80,       // 获取所有功能的状态
     INSTRUCTION_GET_GEAR = 0x21,             // 获取挡位的状态
     INSTRUCTION_GET_BATTERY = 0x22,          // 获取电池电量的状态
     INSTRUCTION_GET_BARKE = 0x23,            // 获取刹车的状态
@@ -37,11 +37,11 @@ enum
 
     // INSTRUCTION_GET_TOUCH_KEY_STATUS = 0x2D,      // 获取触摸按键状态
     INSTRUCTION_ALTER_DATE = 0x2E,                // 修改日期
-    INSTRUCTION_ALTER_TIME = 0x2F,                // 修改时间
+    INSTRUCTION_ALTER_TIME = 0x8E,                // 修改时间
     INSTRUCTION_GET_BATTERY_VAL = 0x30,           // 获取电池电压
     INSTRUCTION_SET_TEMP_OF_WATER_WARNING = 0x31, // 设置水温报警
-    INSTRUCTION_CLEAR_TOTAL_MILEAGE = 0x32,       // 清除大计里程
-    INSTRUCTION_CLEAR_SUBTOTAL_MILEAGE = 0x33,    // 清除小计里程
+    INSTRUCTION_CLEAR_TOTAL_MILEAGE = 0x98,       // 清除大计里程
+    INSTRUCTION_CLEAR_SUBTOTAL_MILEAGE = 0x99,    // 清除小计里程
 };
 
 // // 定义 水温报警的相关操作

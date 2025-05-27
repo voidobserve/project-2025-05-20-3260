@@ -5,7 +5,7 @@
 #include "my_config.h" // 包含自定义的头文件
 
 #ifndef FORMAT_HEAD // 定义格式头
-#define FORMAT_HEAD 0xA5
+#define FORMAT_HEAD ((u8)0xA5)
 #endif // FORMAT_HEAD
 
 // 定义单片机向MP5发送的带有数据的指令

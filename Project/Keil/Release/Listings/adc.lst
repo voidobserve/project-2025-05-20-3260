@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   ADC                                                               05/26/2025 16:52:37 PAGE 1   
+C51 COMPILER V9.60.7.0   ADC                                                               05/27/2025 16:56:44 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE ADC
@@ -24,67 +24,67 @@ line level    source
   13   1          // 检测油量的引脚：
   14   1          P0_MD0 |= GPIO_P01_MODE_SEL(0x3); // 模拟模式
   15   1          // 检测水温的引脚:
-  16   1          P0_MD0 |= GPIO_P00_MODE_SEL(0x3); // 模拟模式
+  16   1          // P0_MD0 |= GPIO_P00_MODE_SEL(0x3); // 模拟模式
   17   1      
-  18   1          // ADC配置
-  19   1          // ADC_ACON1 &= ~(ADC_VREF_SEL(0x7) | ADC_EXREF_SEL(0x1)); // 清除电压选择，关闭外部参考�
+  18   1          ADC_CFG1 |= (0x0F << 3); // ADC时钟分频为16分频，为系统时钟/16
+  19   1          ADC_CFG2 = 0xFF;         // 通道0采样时间配置为256个采样时钟周期
+  20   1      
+  21   1          // ADC配置
+  22   1          // ADC_ACON1 &= ~(ADC_VREF_SEL(0x7) | ADC_EXREF_SEL(0x1)); // 清除电压选择，关闭外部参考�
              -��压
-  20   1          // ADC_ACON1 &= ~(ADC_INREF_SEL(0x01));                    // 关闭内部参考电压
-  21   1          // ADC_ACON1 |= ADC_VREF_SEL(0x06) | ADC_TEN_SEL(0x3); // 选择内部VCCA作为参考电压（需要�
+  23   1          // ADC_ACON1 &= ~(ADC_INREF_SEL(0x01));                    // 关闭内部参考电压
+  24   1          // ADC_ACON1 |= ADC_VREF_SEL(0x06) | ADC_TEN_SEL(0x3); // 选择内部VCCA作为参考电压（需要�
              -��闭ADC内部和外部的参考选择信号），关闭测试信号
-  22   1      
-  23   1          ADC_ACON1 &= ~((0x01 << 6) | (0x01 << 5) | (0x07 << 0)); // 关闭ADC中内部参考能使信号，关
+  25   1      
+  26   1          ADC_ACON1 &= ~((0x01 << 6) | (0x01 << 5) | (0x07 << 0)); // 关闭ADC中内部参考能使信号，关
              -闭ADC外部参考选择信号，清空ADC内部参考电压的选择配置
-  24   1          ADC_ACON1 |= (0x03 << 3) | (0x06 << 0);                  // 关闭测试信号，选择内部VCCA作�
+  27   1          ADC_ACON1 |= (0x03 << 3) | (0x06 << 0);                  // 关闭测试信号，选择内部VCCA作�
              -�参考电压
-  25   1          ADC_ACON0 = ADC_CMP_EN(0x1) |                            // 打开ADC中的CMP使能信号
-  26   1                      ADC_BIAS_EN(0x1) |                           // 打开ADC偏置电流能使信号
-  27   1                      ADC_BIAS_SEL(0x1);                           // 偏置电流选择：1x
-  28   1      }
-  29          
-  30          // 切换adc扫描的引脚
-  31          // adc_pin--adc引脚，在对应的枚举类型中定义
-  32          void adc_sel_pin(u8 adc_pin)
-  33          {
-  34   1          switch (adc_pin)
-  35   1          {
-  36   2          case ADC_PIN_BATTERY:                          // 检测电池电量
-  37   2              ADC_ACON1 &= ~((0x01 << 5) | (0x07 << 0)); // 关闭ADC外部参考选择信号，清空ADC内部�
-             -��考电压的选择配置
-  38   2              ADC_ACON1 |= (0x01 << 6) | (0x02 << 0);    // 使能ADC内部参考信号，内部参考电压选�
-             -��2.4V
-  39   2              ADC_CHS0 = ADC_ANALOG_CHAN(0x04) |         // P04通路
-  40   2                         ADC_EXT_SEL(0x0);               // 选择外部通路
-  41   2              break;
-  42   2      
-  43   2          // case ADC_PIN_TOUCH:                    // 检测触摸IC传过来的电压
-  44   2          case ADC_PIN_KEY:                                            // 检测ad按键
-  45   2              ADC_ACON1 &= ~((0x01 << 6) | (0x01 << 5) | (0x07 << 0)); // 关闭ADC中内部参考能使信号�
-             -�关闭ADC外部参考选择信号，清空ADC内部参考电压的选择配置
-  46   2              ADC_ACON1 |= (0x03 << 3) | (0x06 << 0);                  // 关闭测试信号，选择内部VCCA�
-C51 COMPILER V9.60.7.0   ADC                                                               05/26/2025 16:52:37 PAGE 2   
+  28   1          ADC_ACON0 = ADC_CMP_EN(0x1) |                            // 打开ADC中的CMP使能信号
+  29   1                      ADC_BIAS_EN(0x1) |                           // 打开ADC偏置电流能使信号
+  30   1                      ADC_BIAS_SEL(0x1);                           // 偏置电流选择：1x
+  31   1      }
+  32          
+  33          // 切换adc扫描的引脚
+  34          // adc_pin--adc引脚，在对应的枚举类型中定义
+  35          void adc_sel_pin(u8 adc_pin)
+  36          {
+  37   1          switch (adc_pin)
+  38   1          {
+  39   2          case ADC_PIN_BATTERY:                                     // 检测电池电量
+  40   2              ADC_ACON1 &= ~((0x01 << 5) | (0x07 << 0));            // 关闭ADC外部参考选择信号，清�
+             -�ADC内部参考电压的选择配置
+  41   2              ADC_ACON1 |= (0x01 << 6) | (0x03 << 3) | (0x02 << 0); // 使能ADC内部参考信号，关闭测�
+             -�信号内部参考电压选择2.4V
+  42   2              ADC_CHS0 = ADC_ANALOG_CHAN(0x04);                     // P04通路
+  43   2              break;
+  44   2      
+  45   2          // case ADC_PIN_TOUCH:                    // 检测触摸IC传过来的电压
+  46   2          case ADC_PIN_KEY:                                            // 检测ad按键
+  47   2              ADC_ACON1 &= ~((0x01 << 6) | (0x01 << 5) | (0x07 << 0)); // 关闭ADC中内部参考能使信号�
+C51 COMPILER V9.60.7.0   ADC                                                               05/27/2025 16:56:44 PAGE 2   
 
+             -�关闭ADC外部参考选择信号，清空ADC内部参考电压的选择配置
+  48   2              ADC_ACON1 |= (0x03 << 3) | (0x06 << 0);                  // 关闭测试信号，选择内部VCCA�
              -��为参考电压
-  47   2              ADC_CHS0 = ADC_ANALOG_CHAN(0x05) |                       // P05通路
-  48   2                         ADC_EXT_SEL(0x0);                             // 选择外部通路
-  49   2              break;
+  49   2              ADC_CHS0 = ADC_ANALOG_CHAN(0x05);                        // P05通路
   50   2      
-  51   2          case ADC_PIN_FUEL:                                           // 检测油量
-  52   2              ADC_ACON1 &= ~((0x01 << 6) | (0x01 << 5) | (0x07 << 0)); // 关闭ADC中内部参考能使信号�
+  51   2              break;
+  52   2      
+  53   2          case ADC_PIN_FUEL:                                           // 检测油量
+  54   2              ADC_ACON1 &= ~((0x01 << 6) | (0x01 << 5) | (0x07 << 0)); // 关闭ADC中内部参考能使信号�
              -�关闭ADC外部参考选择信号，清空ADC内部参考电压的选择配置
-  53   2              ADC_ACON1 |= (0x03 << 3) | (0x06 << 0);                  // 关闭测试信号，选择内部VCCA�
+  55   2              ADC_ACON1 |= (0x03 << 3) | (0x06 << 0);                  // 关闭测试信号，选择内部VCCA�
              -��为参考电压
-  54   2              ADC_CHS0 = ADC_ANALOG_CHAN(0x01) |                       // P01通路
-  55   2                         ADC_EXT_SEL(0x0);                             // 选择外部通路
-  56   2              break;
-  57   2      
-  58   2          case ADC_PIN_TEMP_OF_WATER:                                  // 检测水温的引脚
-  59   2              ADC_ACON1 &= ~((0x01 << 6) | (0x01 << 5) | (0x07 << 0)); // 关闭ADC中内部参考能使信号�
-             -�关闭ADC外部参考选择信号，清空ADC内部参考电压的选择配置
-  60   2              ADC_ACON1 |= (0x03 << 3) | (0x06 << 0);                  // 关闭测试信号，选择内部VCCA�
-             -��为参考电压
-  61   2              ADC_CHS0 = ADC_ANALOG_CHAN(0x00) |                       // P00通路
-  62   2                         ADC_EXT_SEL(0x0);                             // 选择外部通路
+  56   2              ADC_CHS0 = ADC_ANALOG_CHAN(0x01);                        // P01通路
+  57   2              break;
+  58   2      
+  59   2          case ADC_PIN_TEMP_OF_WATER:                                  // 检测水温的引脚
+  60   2              // ADC_ACON1 &= ~((0x01 << 6) | (0x01 << 5) | (0x07 << 0)); // 关闭ADC中内部参考能使信�
+             -�，关闭ADC外部参考选择信号，清空ADC内部参考电压的选择配置
+  61   2              // ADC_ACON1 |= (0x03 << 3) | (0x06 << 0);                  // 关闭测试信号，选择内部VC
+             -CA作为参考电压
+  62   2              // ADC_CHS0 = ADC_ANALOG_CHAN(0x00);                        // P00通路
   63   2              break;
   64   2          }
   65   1      
@@ -126,7 +126,7 @@ line level    source
  101   2          }
  102   1      
  103   1          adc_val_sum -= get_adcmax;        // 去掉一个最大
-C51 COMPILER V9.60.7.0   ADC                                                               05/26/2025 16:52:37 PAGE 3   
+C51 COMPILER V9.60.7.0   ADC                                                               05/27/2025 16:56:44 PAGE 3   
 
  104   1          adc_val_sum -= get_adcmin;        // 去掉一个最小
  105   1          adc_val_tmp = (adc_val_sum >> 4); // 除以16，取平均值
@@ -136,7 +136,7 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    369    ----
+   CODE SIZE        =    363    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =      2      11
    PDATA SIZE       =   ----    ----

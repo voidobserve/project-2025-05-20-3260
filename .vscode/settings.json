@@ -22,9 +22,9 @@
         "key_driver.h": "c",
         "adc.h": "c",
         "mileage.h": "c",
-        "STDIO.H": "cpp"
+        "STDIO.H": "cpp",
+        "uart0.h": "c"
     },
     "clangd.checkUpdates": true,
     "clangd.inactiveRegions.useBackgroundHighlight": true,
-    "C_Cpp.default.compilerPath": "c:\\Keil_v5\\C51\\BIN\\C51.exe"
 }

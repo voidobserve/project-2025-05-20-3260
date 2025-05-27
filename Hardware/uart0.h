@@ -10,9 +10,10 @@
 // #define UART1_BAUDRATE 115200 // 这款芯片（TX3260）不能使用UART1的DMA来接收不定长的数据
 
 // 串口0接收缓冲区的大小（单位：字节）
-#define UART0_RXBUF_LEN (30) // 最大不能超过255，超过之后，串口接收会出错
+#define UART0_RXBUF_LEN (45) // 最大不能超过255，超过之后，串口接收会出错
 // 定义一帧最大的长度
-#define FRAME_MAX_LEN 20 
+#define FRAME_MAX_LEN 15
+// 注意 【UART0_RXBUF_LEN / FRAME_MAX_LEN】 不能小于1
 
 
 

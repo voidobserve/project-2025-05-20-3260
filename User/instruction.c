@@ -200,6 +200,7 @@ void instruction_scan(void)
 
                 case INSTRUCTION_CLEAR_SUBTOTAL_MILEAGE: // 清除小计里程
                     flag_clear_sub_total_mileage = 1;
+                    // printf("clear\n");
                     break;
                 }
 

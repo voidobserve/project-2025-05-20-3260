@@ -172,11 +172,11 @@ void key_driver_scan(void *_scan_para)
                     //     key_event = KEY_EVENT_TRIPLE_CLICK; // 三击
                     // }
                     // else if (scan_para->click_cnt >= 2)
-                    if (scan_para->click_cnt >= 2)
-                    {
-                        key_event = KEY_EVENT_DOUBLE_CLICK; // 双击
-                    }
-                    else
+                    // if (scan_para->click_cnt >= 2)
+                    // {
+                    //     key_event = KEY_EVENT_DOUBLE_CLICK; // 双击
+                    // }
+                    // else
                     {
                         key_event = KEY_EVENT_CLICK; // 单击
                         // printf("click \n");

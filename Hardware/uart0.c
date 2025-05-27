@@ -23,6 +23,7 @@ volatile u8 recv_frame_cnt = 0;      // 接收到的数据帧的个数
 
 static volatile u32 blank_index = 0; // 记录当前存放数据帧的缓冲区的空的地方(缓冲区下标)，准备存放一帧的数据
 
+#if 1  // 将uart0用作串口打印
 // 重写putchar()函数
 extern void uart0_sendbyte(u8 senddata); // 函数声明
 char putchar(char c)
@@ -30,6 +31,7 @@ char putchar(char c)
     uart0_sendbyte(c);
     return c;
 }
+#endif // 将uart0用作串口打印
 
 // uart0初始化
 // 波特率由宏 UART0_BAUDRATE 来决定
@@ -40,7 +42,7 @@ void uart0_config(void)
     P0_MD0 &= ~(GPIO_P00_MODE_SEL(0x03)); // 清空寄存器配置
     P0_MD0 |= GPIO_P03_MODE_SEL(0x01);    // 输出模式
     FOUT_S03 |= GPIO_FOUT_UART0_TX;       // 配置P03为UART0_TX
-    FIN_S0 |= GPIO_FIN_SEL_P00;           // 配置P00为UART0_RX
+    FIN_S7 |= GPIO_FIN_SEL_P00;           // 配置P00为UART0_RX
 
     // // 旧版电路板上，P11为发送引脚，P12为接收引脚
     // P1_MD0 &= (~GPIO_P11_MODE_SEL(0x3) | ~GPIO_P12_MODE_SEL(0x3));
@@ -95,7 +97,7 @@ void UART0_IRQHandler(void) interrupt UART0_IRQn
         }
         // if ((0 == flag_is_recving_data && UART0_DATA == 0xA5) ||
         //     (1 == flag_is_recving_data && UART0_DATA == 0xA5))
-        else if (uart0_tmp_val == 0xA5)
+        else if (uart0_tmp_val == FORMAT_HEAD)
         {
             // 1. 如果是新的一帧数据（以格式头0xA5开始），打开定时器，为超时判断做准备
             // 2. 如果正在接收一帧数据，却又收到了一次格式头，舍弃之前收到的数据，重新接收这一帧
@@ -196,7 +198,7 @@ void uart0_sendbyte(u8 senddata)
         ;
 }
 
-#if 0  // void uart0_send_buff(u8 *buf, u8 len)
+#if 1  // void uart0_send_buff(u8 *buf, u8 len)
 // 通过uart0发送若干数据
 void uart0_send_buff(u8 *buf, u8 len)
 {

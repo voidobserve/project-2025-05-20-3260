@@ -2,10 +2,12 @@
 
 volatile u32 battery_scan_time_cnt = 0; // 电池扫描时间计时（在定时器中累加）
 
-//
-
-// 将ad值转换为对应的电压值
-// arg_adc_val ： ad值
+/**
+ * @brief 将ad值转换为对应的电压值
+ *
+ * @param arg_adc_val 采集到的ad值
+ * @return u8 计算好的电压值，单位0.1V
+ */
 u8 conver_adc_val_to_voltage(u16 arg_adc_val)
 {
     /*
@@ -13,7 +15,8 @@ u8 conver_adc_val_to_voltage(u16 arg_adc_val)
         ad值对应的电压： 0 ~ MAX_VOLTAGE_OF_BATTERY
         那么 每单位ad值对应 MAX_VOLTAGE_OF_BATTERY / 4096
     */
-    return (u32)arg_adc_val * MAX_VOLTAGE_OF_BATTERY / 4096;
+    // return (u32)arg_adc_val * MAX_VOLTAGE_OF_BATTERY / 4096;
+    return (u32)arg_adc_val * 240 / 4096; // 使用2.4V参考电压
 }
 
 // 将电池电压转换为对应的百分比
@@ -22,11 +25,11 @@ u8 conver_voltage_of_battery_to_percentage(u8 voltage)
 {
     // 用电池电压voltage除以MAX_VOLTAGE_OF_BATTERY，得到占比，再乘以100，得到百分比
     u8 tmp = (u16)voltage * 100 / MAX_VOLTAGE_OF_BATTERY;
-    if (tmp >= 98)
-    {
-        // 如果电量百分比大于 98%，当作100%电量处理
-        tmp = 100;
-    }
+    // if (tmp >= 98)
+    // {
+    //     // 如果电量百分比大于 98%，当作100%电量处理
+    //     tmp = 100;
+    // }
 
     return tmp;
 }
@@ -37,8 +40,9 @@ void battery_scan(void)
     u8 cur_percentage_of_battery = 0; // 存放当前电池电量百分比
 
     static volatile u32 battery_scan_cnt = 0; // 记录电池电压扫描次数
-    static volatile u32 battery_val = 0; // 累加每次采集到的ad值，到了电池扫描时间时，直接求平均值
+    static volatile u32 battery_val = 0;      // 累加每次采集到的ad值，到了电池扫描时间时，直接求平均值
 
+#if 1
     adc_sel_pin(ADC_PIN_BATTERY);
     battery_val += adc_getval(); // 可能要防止计数溢出
     battery_scan_cnt++; // 上面采集到一次ad值之后，这里加一表示采集了一次
@@ -60,4 +64,5 @@ void battery_scan(void)
         flag_get_voltage_of_battery = 1;
         flag_get_battery = 1;
     }
+#endif
 }

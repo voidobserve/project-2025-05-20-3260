@@ -304,6 +304,7 @@ void user_init(void)
 
 #endif
 
+    // 控制上电指示灯的引脚：
     P2_MD0 &= ~(GPIO_P23_MODE_SEL(0x03)); // 清空寄存器配置
     P2_MD0 |= GPIO_P23_MODE_SEL(0x01);    // 输出模式
     FOUT_S23 |= GPIO_FOUT_AF_FUNC;
@@ -356,11 +357,11 @@ void main(void)
     // FOUT_S20 |= GPIO_FOUT_AF_FUNC;
     // P20 = 0;
 
-    printf("sys reset\n");
+    // printf("sys reset\n");
 
     // 上电后，需要点亮一下所有的指示灯，再关闭:
     P23 = 1;
-    delay_ms(2000);
+    delay_ms(1000);
     P23 = 0;
 
     // printf("scan_times %bu\n", ad_key_para.scan_times);
@@ -411,8 +412,8 @@ void main(void)
         key_driver_scan(&ad_key_para);
         ad_key_handle(); // ad按键处理函数
 
-        key_driver_scan(&touch_key_para);
-        touch_key_handle(); // 触摸按键处理函数
+        // key_driver_scan(&touch_key_para);
+        // touch_key_handle(); // 触摸按键处理函数
 
         speed_scan();   // 检测时速
         mileage_scan(); // 检测大计里程和小计里程

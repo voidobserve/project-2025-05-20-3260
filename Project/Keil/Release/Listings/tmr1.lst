@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   TMR1                                                              05/26/2025 16:52:36 PAGE 1   
+C51 COMPILER V9.60.7.0   TMR1                                                              05/27/2025 16:56:43 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE TMR1
@@ -62,7 +62,7 @@ line level    source
   50   1      }
   51          
   52          #if 0  // void tmr1_disable(void)
-C51 COMPILER V9.60.7.0   TMR1                                                              05/26/2025 16:52:36 PAGE 2   
+C51 COMPILER V9.60.7.0   TMR1                                                              05/27/2025 16:56:43 PAGE 2   
 
               /**
                * @brief 关闭定时器，清空计数值
@@ -126,7 +126,7 @@ line level    source
  108   3                  speed_scan_time_cnt = 0;
  109   3                  // detect_speed_pulse_cnt[1] += detect_speed_pulse_cnt[0]; // 将另一个定时器中断扫�
              -�到的脉冲更新到[1]
-C51 COMPILER V9.60.7.0   TMR1                                                              05/26/2025 16:52:36 PAGE 3   
+C51 COMPILER V9.60.7.0   TMR1                                                              05/27/2025 16:56:43 PAGE 3   
 
  110   3                  // 不能在定时器中断内累加脉冲计数，主循环执行时间过长，相关的计�
              -��函数就不能定期取到这个值，
@@ -190,7 +190,7 @@ line level    source
  166   3              }
  167   2          }
  168   1      
-C51 COMPILER V9.60.7.0   TMR1                                                              05/26/2025 16:52:36 PAGE 4   
+C51 COMPILER V9.60.7.0   TMR1                                                              05/27/2025 16:56:43 PAGE 4   
 
  169   1          if (mileage_update_time_cnt < 65535)
  170   1          {
@@ -254,7 +254,7 @@ line level    source
  226   3                  //     //     }
  227   3                  //     // }
  228   3                  // }
-C51 COMPILER V9.60.7.0   TMR1                                                              05/26/2025 16:52:36 PAGE 5   
+C51 COMPILER V9.60.7.0   TMR1                                                              05/27/2025 16:56:43 PAGE 5   
 
  229   3      
  230   3                  // 在定时器注册按键扫描：

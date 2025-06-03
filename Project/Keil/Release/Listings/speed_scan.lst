@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   SPEED_SCAN                                                        05/27/2025 16:56:45 PAGE 1   
+C51 COMPILER V9.60.7.0   SPEED_SCAN                                                        06/03/2025 17:12:23 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE SPEED_SCAN
@@ -62,7 +62,7 @@ line level    source
   47   2      
   48   2              detect_speed_pulse_cnt[1] = 0; // 清空脉冲计数
   49   2              distance += cur_speed;         // 存放走过的距离，单位：毫米
-C51 COMPILER V9.60.7.0   SPEED_SCAN                                                        05/27/2025 16:56:45 PAGE 2   
+C51 COMPILER V9.60.7.0   SPEED_SCAN                                                        06/03/2025 17:12:23 PAGE 2   
 
   50   2      
   51   2              /*
@@ -126,7 +126,7 @@ line level    source
  109   1      }
 
 
-C51 COMPILER V9.60.7.0   SPEED_SCAN                                                        05/27/2025 16:56:45 PAGE 3   
+C51 COMPILER V9.60.7.0   SPEED_SCAN                                                        06/03/2025 17:12:23 PAGE 3   
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =    247    ----

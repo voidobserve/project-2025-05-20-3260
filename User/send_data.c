@@ -36,6 +36,7 @@ void send_data(u8 instruct, u32 send_data)
     else if (SEND_ENGINE_SPEED == instruct ||     /* 发送发动机的转速 */
              SEND_SPEED == instruct ||            /* 发送时速 */
              SEND_SUBTOTAL_MILEAGE == instruct || /* 发送小计里程 */
+             SEND_SUBTOTAL_MILEAGE_2 == instruct || /* 发送小计里程2 */
              SEND_VOLTAGE_OF_BATTERY == instruct  /* 发送电池电压 */
              )                                    // 如果指令的总长度为6个字节
     {

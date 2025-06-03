@@ -33,6 +33,7 @@ typedef struct
     // 短距离里程表(单位：m，使用英制单位时，只需要再发送时进行转换)
     // （小计里程，范围：0~999.9 KM）
     u32 subtotal_mileage;
+    u32 subtotal_mileage_2; // 小计里程2
 
     // 日期 4byte 年 月 日
     // u16 year; // 年份

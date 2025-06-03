@@ -32,8 +32,10 @@ enum
     INSTRUCTION_GET_SPEED = 0x28,            // 获取时速
     INSTRUCTION_GET_FUEL = 0x29,             // 获取油量
     INSTRUCTION_GET_TEMP_OF_WATER = 0x2A,    // 获取水温
-    INSTRUCTION_GET_TOTAL_MILEAGE = 0x2B,    // 获取大计里程
-    INSTRUCTION_GET_SUBTOTAL_MILEAGE = 0x2C, // 获取小计里程
+
+    INSTRUCTION_GET_TOTAL_MILEAGE = 0x8B,    // 获取大计里程
+    INSTRUCTION_GET_SUBTOTAL_MILEAGE = 0x8C, // 获取小计里程
+    INSTRUCTION_GET_SUBTOTAL_MILEAGE_2 = 0x94, // 获取小计里程2
 
     // INSTRUCTION_GET_TOUCH_KEY_STATUS = 0x2D,      // 获取触摸按键状态
     INSTRUCTION_ALTER_DATE = 0x2E,                // 修改日期
@@ -42,6 +44,8 @@ enum
     INSTRUCTION_SET_TEMP_OF_WATER_WARNING = 0x31, // 设置水温报警
     INSTRUCTION_CLEAR_TOTAL_MILEAGE = 0x98,       // 清除大计里程
     INSTRUCTION_CLEAR_SUBTOTAL_MILEAGE = 0x99,    // 清除小计里程
+    INSTRUCTION_CLEAR_SUBTOTAL_MILEAGE_2 = 0x9A,    // 清除小计里程2
+
 };
 
 // // 定义 水温报警的相关操作
@@ -69,6 +73,7 @@ extern volatile bit flag_update_abs_status; // 标志位，更新abs的状态
 
 extern volatile bit flag_get_total_mileage;     // 获取大计里程 / 得到了大计里程
 extern volatile bit flag_get_sub_total_mileage; // 获取小计里程 / 得到了小计里程
+extern volatile bit flag_get_sub_total_mileage_2; // 获取小计里程2 / 得到了小计里程2(数据需要更新)
 
 // extern volatile bit flag_get_touch_key_status;      // 获取触摸按键的状态
 extern volatile bit flag_alter_date;                // 修改日期
@@ -77,6 +82,7 @@ extern volatile bit flag_get_voltage_of_battery;    // 获取电池电压
 extern volatile bit flag_set_temp_of_water_warning; // 设置水温报警
 extern volatile bit flag_clear_total_mileage;       // 清除大计里程
 extern volatile bit flag_clear_sub_total_mileage;   // 清除小计里程
+extern volatile bit flag_clear_sub_total_mileage_2; // 清除小计里程2
 
 extern volatile u8 synchronous_request_status;    // 同步请求状态机
 extern volatile u16 synchronous_request_time_cnt; // 同步请求时间计时

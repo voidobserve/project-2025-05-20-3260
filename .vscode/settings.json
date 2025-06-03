@@ -23,7 +23,8 @@
         "adc.h": "c",
         "mileage.h": "c",
         "STDIO.H": "cpp",
-        "uart0.h": "c"
+        "uart0.h": "c",
+        "engine_speed_scan.h": "c"
     },
     "clangd.checkUpdates": true,
     "clangd.inactiveRegions.useBackgroundHighlight": true,

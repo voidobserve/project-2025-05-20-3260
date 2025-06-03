@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   ADC                                                               05/27/2025 16:56:44 PAGE 1   
+C51 COMPILER V9.60.7.0   ADC                                                               06/03/2025 17:12:22 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE ADC
@@ -62,7 +62,7 @@ line level    source
   45   2          // case ADC_PIN_TOUCH:                    // 检测触摸IC传过来的电压
   46   2          case ADC_PIN_KEY:                                            // 检测ad按键
   47   2              ADC_ACON1 &= ~((0x01 << 6) | (0x01 << 5) | (0x07 << 0)); // 关闭ADC中内部参考能使信号�
-C51 COMPILER V9.60.7.0   ADC                                                               05/27/2025 16:56:44 PAGE 2   
+C51 COMPILER V9.60.7.0   ADC                                                               06/03/2025 17:12:22 PAGE 2   
 
              -�关闭ADC外部参考选择信号，清空ADC内部参考电压的选择配置
   48   2              ADC_ACON1 |= (0x03 << 3) | (0x06 << 0);                  // 关闭测试信号，选择内部VCCA�
@@ -126,7 +126,7 @@ line level    source
  101   2          }
  102   1      
  103   1          adc_val_sum -= get_adcmax;        // 去掉一个最大
-C51 COMPILER V9.60.7.0   ADC                                                               05/27/2025 16:56:44 PAGE 3   
+C51 COMPILER V9.60.7.0   ADC                                                               06/03/2025 17:12:22 PAGE 3   
 
  104   1          adc_val_sum -= get_adcmin;        // 去掉一个最小
  105   1          adc_val_tmp = (adc_val_sum >> 4); // 除以16，取平均值

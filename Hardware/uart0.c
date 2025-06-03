@@ -23,7 +23,7 @@ volatile u8 recv_frame_cnt = 0;      // 接收到的数据帧的个数
 
 static volatile u32 blank_index = 0; // 记录当前存放数据帧的缓冲区的空的地方(缓冲区下标)，准备存放一帧的数据
 
-#if 1  // 将uart0用作串口打印
+#if 1 // 将uart0用作串口打印
 // 重写putchar()函数
 extern void uart0_sendbyte(u8 senddata); // 函数声明
 char putchar(char c)
@@ -50,11 +50,15 @@ void uart0_config(void)
     // FOUT_S11 |= GPIO_FOUT_UART0_TX;   // 配置P11为UART0_TX
     // FIN_S7 |= GPIO_FIN_SEL_P12;       // 配置P12为UART0_RX
 
+#if 0
     // 测试时，使用开发板上面的P25来打印输出
-    // P2_MD1 &= ~(GPIO_P25_MODE_SEL(0x03)); // 清空寄存器配置
-    // // P2_MD1 &= ~(GPIO_P00_MODE_SEL(0x03)); // 清空寄存器配置
-    // P2_MD1 |= GPIO_P25_MODE_SEL(0x01); // 输出模式
-    // FOUT_S25 |= GPIO_FOUT_UART0_TX;    // 配置P03为UART0_TX
+    P2_MD1 &= ~(GPIO_P25_MODE_SEL(0x03)); // 清空寄存器配置
+    P2_MD1 |= GPIO_P25_MODE_SEL(0x01);    // 输出模式
+    FOUT_S25 |= GPIO_FOUT_UART0_TX;       // 配置为UART0_TX
+    // 测试时，使用开发板上面的P22来作为接收：
+    P2_MD0 &= ~(GPIO_P22_MODE_SEL(0x03)); // 清空寄存器配置，输入模式
+    FIN_S7 |= GPIO_FIN_SEL_P22;           // 配置为UART0_RX
+#endif
 
     __EnableIRQ(UART0_IRQn); // 打开UART模块中断
     IE_EA = 1;               // 打开总中断
@@ -198,7 +202,7 @@ void uart0_sendbyte(u8 senddata)
         ;
 }
 
-#if 1  // void uart0_send_buff(u8 *buf, u8 len)
+#if 1 // void uart0_send_buff(u8 *buf, u8 len)
 // 通过uart0发送若干数据
 void uart0_send_buff(u8 *buf, u8 len)
 {

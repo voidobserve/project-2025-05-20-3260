@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              05/27/2025 16:56:44 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/03/2025 17:12:23 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -62,7 +62,7 @@ line level    source
               //                 if (fun_info.save_info.time_hour < 23) // 最大加到23h，测试通过
               //                 {
               //                     fun_info.save_info.time_hour++;
-C51 COMPILER V9.60.7.0   MAIN                                                              05/27/2025 16:56:44 PAGE 2   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/03/2025 17:12:23 PAGE 2   
 
               //                 }
               //                 else
@@ -126,7 +126,7 @@ line level    source
               //                 fun_info.brake = 0;
               //             }
               //             else
-C51 COMPILER V9.60.7.0   MAIN                                                              05/27/2025 16:56:44 PAGE 3   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/03/2025 17:12:23 PAGE 3   
 
               //             {
               //                 fun_info.brake = 1;
@@ -190,7 +190,7 @@ line level    source
               //             }
               //             else
               //             {
-C51 COMPILER V9.60.7.0   MAIN                                                              05/27/2025 16:56:44 PAGE 4   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/03/2025 17:12:23 PAGE 4   
 
               //                 fun_info.speed = 0;
               //             }
@@ -254,7 +254,7 @@ line level    source
               //             }
               //             else
               //             {
-C51 COMPILER V9.60.7.0   MAIN                                                              05/27/2025 16:56:44 PAGE 5   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/03/2025 17:12:23 PAGE 5   
 
               //                 fun_info.save_info.total_mileage = 0xFFFF0000;
               //             }
@@ -318,7 +318,7 @@ line level    source
  299          {
  300   1      
  301   1      #if USE_MY_DEBUG
-C51 COMPILER V9.60.7.0   MAIN                                                              05/27/2025 16:56:44 PAGE 6   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/03/2025 17:12:23 PAGE 6   
 
               
                   uart1_config();
@@ -382,7 +382,7 @@ line level    source
  358   1          // P20 = 0;
  359   1      
  360   1          // printf("sys reset\n");
-C51 COMPILER V9.60.7.0   MAIN                                                              05/27/2025 16:56:44 PAGE 7   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/03/2025 17:12:23 PAGE 7   
 
  361   1      
  362   1          // 上电后，需要点亮一下所有的指示灯，再关闭:
@@ -446,7 +446,7 @@ line level    source
  418   2              speed_scan();   // 检测时速
  419   2              mileage_scan(); // 检测大计里程和小计里程
  420   2      
-C51 COMPILER V9.60.7.0   MAIN                                                              05/27/2025 16:56:44 PAGE 8   
+C51 COMPILER V9.60.7.0   MAIN                                                              06/03/2025 17:12:23 PAGE 8   
 
  421   2              engine_speed_scan();  // 检测发动机转速
  422   2              fuel_capacity_scan(); // 油量检测

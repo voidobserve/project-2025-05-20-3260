@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MILEAGE                                                           05/27/2025 16:56:45 PAGE 1   
+C51 COMPILER V9.60.7.0   MILEAGE                                                           06/03/2025 17:12:23 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MILEAGE
@@ -34,45 +34,45 @@ line level    source
   19   1          {
   20   2              mileage_save_time_cnt = 0;
   21   2              fun_info_save(); // 将 fun_info 写回flash
-  22   2              // printf("fun_info_save()");
+  22   2                               // printf("fun_info_save()");
   23   2      
   24   2      #ifdef USE_MY_DEBUG
   25   2      #if USE_MY_DEBUG
                       printf("fun_info_save()");
               #endif // #if USE_MY_DEBUG
   28   2      #endif // #ifdef USE_MY_DEBUG
-  29   2      
-  30   2          }
-  31   1      
-  32   1          if (distance >= 1000) // 1000mm -- 1m
-  33   1          {
-  34   2              // 如果走过的距离超过了1m，再进行保存（保存到变量）
-  35   2      
-  36   2              // // 限制大计里程在 1000000000000 mm(1000,000km)以内
-  37   2              // if (fun_info.save_info.total_mileage < (u32)1000000000000 - 1001)
-  38   2              // {
-  39   2              //     fun_info.save_info.total_mileage += distance / 1000; // 将毫米转换成米，再保存
-  40   2              // }
-  41   2      
-  42   2              // 限制大计里程在 1000,000km(1,000,000,000m)以内
-  43   2              if (fun_info.save_info.total_mileage < (u32)1000000000)
-  44   2              {
-  45   3                  fun_info.save_info.total_mileage++; // +1m
-  46   3              }
-  47   2      
-  48   2              // // 限制小计里程在 1,000,000,000 mm(1000km)以内
-  49   2              // if (fun_info.save_info.subtotal_mileage < (u32)1000000000 - 1001)
-C51 COMPILER V9.60.7.0   MILEAGE                                                           05/27/2025 16:56:45 PAGE 2   
+  29   2          }
+  30   1      
+  31   1          if (distance >= 1000) // 1000mm -- 1m
+  32   1          {
+  33   2              // 如果走过的距离超过了1m，再进行保存（保存到变量）
+  34   2      
+  35   2              // // 限制大计里程在 1000000000000 mm(1000,000km)以内
+  36   2              // if (fun_info.save_info.total_mileage < (u32)1000000000000 - 1001)
+  37   2              // {
+  38   2              //     fun_info.save_info.total_mileage += distance / 1000; // 将毫米转换成米，再保存
+  39   2              // }
+  40   2      
+  41   2              // 限制大计里程在 1000,000km(1,000,000,000m)以内
+  42   2              if (fun_info.save_info.total_mileage < (u32)1000000000)
+  43   2              {
+  44   3                  fun_info.save_info.total_mileage++; // +1m
+  45   3              }
+  46   2      
+  47   2              // // 限制小计里程在 1,000,000,000 mm(1000km)以内
+  48   2              // if (fun_info.save_info.subtotal_mileage < (u32)1000000000 - 1001)
+  49   2              // {
+C51 COMPILER V9.60.7.0   MILEAGE                                                           06/03/2025 17:12:23 PAGE 2   
 
-  50   2              // {
-  51   2              //     fun_info.save_info.subtotal_mileage += distance / 1000; // 将毫米转换成米，再保�
+  50   2              //     fun_info.save_info.subtotal_mileage += distance / 1000; // 将毫米转换成米，再保�
              -�
-  52   2              // }
-  53   2      
-  54   2              // 限制小计里程在 1000km(1,000,000m)以内
-  55   2              if (fun_info.save_info.subtotal_mileage < (u32)1000000)
-  56   2              {
-  57   3                  fun_info.save_info.subtotal_mileage++; // +1m
+  51   2              // }
+  52   2      
+  53   2              // 限制小计里程在 1000km(1,000,000m)以内
+  54   2              if (fun_info.save_info.subtotal_mileage < (u32)1000000)
+  55   2              {
+  56   3                  fun_info.save_info.subtotal_mileage++;   // +1m 
+  57   3                  fun_info.save_info.subtotal_mileage_2++; // +1m 
   58   3              }
   59   2      
   60   2              distance -= 1000; // 剩下的、未保存的、不满1m的数据留到下一次再保存
@@ -117,17 +117,18 @@ line level    source
   98   2              // 因为最后大计里程在999999km,小计里程在999.9km之后，就不更新了，
   99   2              // 要在刷新一次，才会发送1000000km和1000.0km的大小里程
  100   2              mileage_update_time_cnt = 0;
- 101   2              flag_get_total_mileage = 1; // 
+ 101   2              flag_get_total_mileage = 1; //
  102   2              flag_get_sub_total_mileage = 1;
- 103   2          }
- 104   1      }
+ 103   2              flag_get_sub_total_mileage_2 = 1;
+ 104   2          }
+ 105   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    245    ----
-   CONSTANT SIZE    =   ----    ----
-C51 COMPILER V9.60.7.0   MILEAGE                                                           05/27/2025 16:56:45 PAGE 3   
+   CODE SIZE        =    259    ----
+C51 COMPILER V9.60.7.0   MILEAGE                                                           06/03/2025 17:12:23 PAGE 3   
 
+   CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =     18    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----

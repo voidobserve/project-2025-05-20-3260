@@ -112,7 +112,7 @@ static u8 touch_key_get_key_id(void)
  */
 static u8 __touch_key_get_event(const u8 key_val, const u8 key_event)
 {
-    volatile ret_key_event = TOUCH_KEY_EVENT_NONE;
+    volatile u8 ret_key_event = TOUCH_KEY_EVENT_NONE;
     u8 i = 0;
     for (; i < ARRAY_SIZE(touch_key_event_table); i++)
     {

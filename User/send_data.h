@@ -35,6 +35,8 @@ enum
 
     SEND_MALFUNCTION_STATUS = 0x12, // 发送故障的状态
     SEND_ABS_STATUS = 0x13, // 发送ABS的状态
+
+    SEND_SUBTOTAL_MILEAGE_2 = 0x14, // 发送小计里程2
 };
 
 void send_data(u8 instruct, u32 send_data);

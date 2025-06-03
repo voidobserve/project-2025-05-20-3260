@@ -19,8 +19,9 @@ volatile bit flag_get_fuel = 0;         // 获取油量 / 得到了油量（单�
 volatile bit flag_update_malfunction_status; // 标志位，更新故障状态
 volatile bit flag_update_abs_status;         // 标志位，更新abs的状态
 
-volatile bit flag_get_total_mileage = 0;     // 获取大计里程 / 得到了大计里程
-volatile bit flag_get_sub_total_mileage = 0; // 获取小计里程 / 得到了小计里程
+volatile bit flag_get_total_mileage = 0;       // 获取大计里程 / 得到了大计里程(数据需要更新)
+volatile bit flag_get_sub_total_mileage = 0;   // 获取小计里程 / 得到了小计里程(数据需要更新)
+volatile bit flag_get_sub_total_mileage_2 = 0; // 获取小计里程2 / 得到了小计里程2(数据需要更新)
 
 // volatile bit flag_get_touch_key_status = 0; // 获取触摸按键的状态
 // volatile bit flag_alter_date = 0; // 修改日期
@@ -29,8 +30,9 @@ volatile bit flag_alter_time = 0; // 修改时间
 volatile bit flag_get_voltage_of_battery = 0;    // 获取电池电压
 volatile bit flag_set_temp_of_water_warning = 0; // 设置水温报警
 
-volatile bit flag_clear_total_mileage = 0;     // 清除大计里程
-volatile bit flag_clear_sub_total_mileage = 0; // 清除小计里程
+volatile bit flag_clear_total_mileage = 0;       // 清除大计里程
+volatile bit flag_clear_sub_total_mileage = 0;   // 清除小计里程
+volatile bit flag_clear_sub_total_mileage_2 = 0; // 清除小计里程2
 
 volatile u8 synchronous_request_status = 0;    // 同步请求状态机
 volatile u16 synchronous_request_time_cnt = 0; // 同步请求时间计时
@@ -103,13 +105,7 @@ void instruction_scan(void)
                 //     flag_get_temp_of_water = 1;
                 //     break;
 
-                // case INSTRUCTION_GET_TOTAL_MILEAGE: // 获取大计里程
-                //     flag_get_total_mileage = 1;
-                //     break;
 
-                // case INSTRUCTION_GET_SUBTOTAL_MILEAGE: // 获取小计里程
-                //     flag_get_sub_total_mileage = 1;
-                //     break;
 
                 // case INSTRUCTION_GET_TOUCH_KEY_STATUS: // 获取触摸按键的状态
                 //     flag_get_touch_key_status = 1;
@@ -160,6 +156,18 @@ void instruction_scan(void)
                     break;
 #endif // 修改日期
 
+                case INSTRUCTION_GET_TOTAL_MILEAGE: // 获取大计里程
+                    flag_get_total_mileage = 1;
+                    break;
+
+                case INSTRUCTION_GET_SUBTOTAL_MILEAGE: // 获取小计里程
+                    flag_get_sub_total_mileage = 1;
+                    break;
+
+                case INSTRUCTION_GET_SUBTOTAL_MILEAGE_2: // 获取小计里程2
+                    flag_get_sub_total_mileage_2 = 1;
+                    break;
+
                 case INSTRUCTION_ALTER_TIME: // 修改时间
                     flag_alter_time = 1;
 
@@ -202,6 +210,10 @@ void instruction_scan(void)
                     flag_clear_sub_total_mileage = 1;
                     // printf("clear\n");
                     break;
+
+                case INSTRUCTION_CLEAR_SUBTOTAL_MILEAGE_2: // 清除小计里程2
+                    flag_clear_sub_total_mileage_2 = 1;
+                    break;
                 }
 
                 if (recv_frame_cnt > 0) //
@@ -235,20 +247,24 @@ void instruction_handle(void)
             // printf("handle get_all_status\n");// 测试通过，每次收到同步请求，都会等待冷却后，才处理下一次同步请求
             synchronous_request_status = SYN_REQUEST_STATUS_HANDLING;
             // 获取所有功能的状态，需要把这些功能对应的状态都发送出去
-            send_data(SEND_GEAR, fun_info.gear);                                         // 1. 发送当前挡位的状态
-            send_data(SEND_BATTERY, fun_info.battery);                                   // 2. 发送电池电量
-            send_data(SEND_BARKE, fun_info.brake);                                       // 3. 发送当前刹车的状态
-            send_data(SEND_LEFT_TURN, fun_info.left_turn);                               // 4. 发送当前左转向灯的状态
-            send_data(SEND_RIGHT_TURN, fun_info.right_turn);                             // 5. 发送当前右转向灯的状态
-            send_data(SEND_HIGH_BEAM, fun_info.high_beam);                               // 6. 发送当前远光灯的状态
-            send_data(SEND_ENGINE_SPEED, fun_info.engine_speeed);                        // 7. 发送发动机转速
-            send_data(SEND_SPEED, fun_info.speed);                                       // 8. 发送当前采集到的车速（时速）
-            send_data(SEND_FUEL, fun_info.fuel);                                         // 9. 发送当前油量(单位：百分比)
-                                                                                         // send_data(SEND_WATER_TEMP, fun_info.temp_of_water);                          // 10. 发送当前采集的水温
-#ifdef USE_INTERNATIONAL                                                                 // 公制单位
+            send_data(SEND_GEAR, fun_info.gear);                  // 1. 发送当前挡位的状态
+            send_data(SEND_BATTERY, fun_info.battery);            // 2. 发送电池电量
+            send_data(SEND_BARKE, fun_info.brake);                // 3. 发送当前刹车的状态
+            send_data(SEND_LEFT_TURN, fun_info.left_turn);        // 4. 发送当前左转向灯的状态
+            send_data(SEND_RIGHT_TURN, fun_info.right_turn);      // 5. 发送当前右转向灯的状态
+            send_data(SEND_HIGH_BEAM, fun_info.high_beam);        // 6. 发送当前远光灯的状态
+            send_data(SEND_ENGINE_SPEED, fun_info.engine_speeed); // 7. 发送发动机转速
+            send_data(SEND_SPEED, fun_info.speed);                // 8. 发送当前采集到的车速（时速）
+            send_data(SEND_FUEL, fun_info.fuel);                  // 9. 发送当前油量(单位：百分比)
+
+            // send_data(SEND_WATER_TEMP, fun_info.temp_of_water);                          // 10. 发送当前采集的水温
+
+#ifdef USE_INTERNATIONAL // 公制单位
+
             send_data(SEND_TOTAL_MILEAGE, fun_info.save_info.total_mileage / 1000);      // 11. 发送大计里程（只发送千米及以上的数据）
             send_data(SEND_SUBTOTAL_MILEAGE, fun_info.save_info.subtotal_mileage / 100); // 12. 发送小计里程(只发送百米及以上的数据)
-#endif                                                                                   // USE_INTERNATIONAL 公制单位
+
+#endif // USE_INTERNATIONAL 公制单位
 
 #ifdef USE_IMPERIAL // 英制单位
 
@@ -275,6 +291,18 @@ void instruction_handle(void)
             send_data(SEND_VOLTAGE_OF_BATTERY, fun_info.voltage_of_battery);
             // 17. 发送当前的水温报警状态
             send_data(SEND_TEMP_OF_WATER_ALERT, fun_info.flag_is_in_water_temp_warning);
+
+#ifdef USE_INTERNATIONAL // 公制单位
+
+            send_data(SEND_SUBTOTAL_MILEAGE_2, fun_info.save_info.subtotal_mileage_2 / 100); // 发送小计里程2(只发送百米及以上的数据)
+
+#endif // 公制单位
+
+#ifdef USE_IMPERIAL // 英制单位
+
+            send_data(SEND_SUBTOTAL_MILEAGE_2, fun_info.save_info.subtotal_mileage_2 / 161); // 发送小计里程2(只发送0.1英里及以上的数据)
+
+#endif // USE_IMPERIAL 英制单位
         }
     }
 
@@ -466,6 +494,13 @@ void instruction_handle(void)
 #endif // USE_IMPERIAL 英制单位
     } //     if (flag_get_sub_total_mileage) // 如果要获取小计里程 / 得到了小计里程新的数据
 
+    if (flag_get_sub_total_mileage_2) // // 如果要获取小计里程2 / 得到了小计里程2新的数据
+    {
+        flag_get_sub_total_mileage_2 = 0;
+        // 只发送百米及以上的数据
+        send_data(SEND_SUBTOTAL_MILEAGE_2, fun_info.save_info.subtotal_mileage_2 / 100);
+    } // if (flag_get_sub_total_mileage_2) // // 如果要获取小计里程2 / 得到了小计里程2新的数据
+
 #if 0 // 修改日期
     if (flag_alter_date)
     {
@@ -553,5 +588,13 @@ void instruction_handle(void)
 #if USE_MY_DEBUG
         printf(" flag_clear_sub_total_mileage \n");
 #endif
+    }
+
+    if (flag_clear_sub_total_mileage_2) // 如果要清除小计里程2
+    {
+        flag_clear_sub_total_mileage_2 = 0;
+        fun_info.save_info.subtotal_mileage_2 = 0;
+        distance = 0;
+        fun_info_save(); // 将信息写回flash
     }
 }

@@ -242,9 +242,6 @@ void uart0_scan_handle(void)
         //     memset(uart0_recv_buf[blank_index], 0, FRAME_MAX_LEN); // 清空超时的指令对应的接收缓冲区
         // }
 
-#ifdef USE_MY_DEBUG
-#if USE_MY_DEBUG
-
         // printf("recv time out! \n");
 
 #if 0 // 打印串口缓冲区的数据
@@ -265,9 +262,6 @@ void uart0_scan_handle(void)
 
 #endif // 打印串口缓冲区的数据
 
-#endif // #if USE_MY_DEBUG
-#endif // #ifdef USE_MY_DEBUG
-
         return;
     }
 #endif // 接收超时处理
@@ -282,14 +276,12 @@ void uart0_scan_handle(void)
 
             if (uart0_recv_len[i] != uart0_recv_buf[i][1])
             {
-// 如果数据帧的长度不正确
-#ifdef USE_MY_DEBUG
-#if USE_MY_DEBUG
-                printf("format len invalid!\n");
-                printf("%d  %d \n", (u32)uart0_recv_len[i], (u32)uart0_recv_buf[i][1]);
-                __uart_buff_check(); // 打印串口接收缓冲区中的数据
-#endif                               // #if USE_MY_DEBUG
-#endif                               // #ifdef USE_MY_DEBUG
+                // 如果数据帧的长度不正确
+
+                // printf("format len invalid!\n");
+                // printf("%d  %d \n", (u32)uart0_recv_len[i], (u32)uart0_recv_buf[i][1]);
+                // __uart_buff_check(); // 打印串口接收缓冲区中的数据
+
                 recved_flagbuf[i] = 0;
                 recv_frame_cnt--;
                 memset(uart0_recv_buf[i], 0, FRAME_MAX_LEN);
@@ -316,12 +308,9 @@ void uart0_scan_handle(void)
 
             if (__flag_is_crc_or_len_err)
             {
-#ifdef USE_MY_DEBUG
-#if USE_MY_DEBUG
+
+#if 0 // 打印串口缓冲区的数据
                 printf("recv crc or len err! \n");
-
-#if 1 // 打印串口缓冲区的数据
-
                 {
                     u8 i = 0;
                     u8 j = 0;
@@ -338,9 +327,7 @@ void uart0_scan_handle(void)
 
 #endif // 打印串口缓冲区的数据
 
-#endif                                        // #if USE_MY_DEBUG
-#endif                                        // #ifdef USE_MY_DEBUG
-                                              // flag_is_recving_data = 0;
+                // flag_is_recving_data = 0;
                 __flag_is_crc_or_len_err = 0; //
                 recved_flagbuf[i] = 0;
                 recv_frame_cnt--;

@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   SPEED_SCAN                                                        06/03/2025 17:12:23 PAGE 1   
+C51 COMPILER V9.60.7.0   SPEED_SCAN                                                        06/10/2025 18:54:16 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE SPEED_SCAN
@@ -30,82 +30,91 @@ line level    source
   17          void speed_scan_config(void)
   18          {
   19   1      #if 1 // 使用定时器扫描IO电平变化来计算脉冲
-  20   1          
+  20   1      
   21   1          P1_MD1 &= ~GPIO_P15_MODE_SEL(0x3); // 输入模式
   22   1          P1_PU |= GPIO_P15_PULL_UP(0x1);    // 配置为上拉
   23   1      
   24   1      #endif // 使用定时器扫描IO电平变化来计算脉冲
   25   1      }
   26          
-  27          // 速度扫描函数
-  28          void speed_scan(void)
-  29          {
-  30   1          volatile u32 cur_speed = 0;                    // 记录当前采集到的速度
-  31   1          static volatile u32 cur_speed_average_val = 0; // 存放当前速度的平均值(单位：km/h)
-  32   1      
-  33   1          static volatile u8 speed_scan_cnt = 0;
-  34   1      
-  35   1          if (flag_is_update_speed_pulse_cnt) // 如果有数据更新
-  36   1          {
-  37   2              flag_is_update_speed_pulse_cnt = 0;
-  38   2              /*
-  39   2                  计算 xx ms内走过了多少毫米
-  40   2                  xx ms内走过了多少毫米 == 当前扫描时间内检测到的脉冲个数 / 车轮一圈�
+  27          /*
+  28              采用定时检测脉冲的方式来检测速度，但是每段时间内会先计算速度，最后再
+             -求平均值，会有1~2km/h的误差
+  29          */
+  30          #if 0 
+              // 速度扫描函数
+              void speed_scan(void)
+              {
+                  volatile u32 cur_speed = 0;                    // 记录当前采集到的速度
+                  static volatile u32 cur_speed_average_val = 0; // 存放当前速度的平均值(单位：km/h)
+                  static volatile u32 cur_speed_actual_scan_time_cnt = 0; // 存放当前 速度扫描时间
+              
+                  static volatile u8 speed_scan_cnt = 0;
+              
+                  if (flag_is_update_speed_pulse_cnt) // 如果有数据更新
+                  {
+                      flag_is_update_speed_pulse_cnt = 0;
+                      /*
+                          计算 xx ms内走过了多少毫米
+                          xx ms内走过了多少毫米 == 当前扫描时间内检测到的脉冲个数 / 车轮一圈�
              -��应多少个脉冲 * 一圈对应 xx 毫米
-  41   2                  换成单片机可以计算的形式：
-  42   2                  xx ms内走过了多少毫米 == 当前扫描时间内检测到的脉冲个数 * 一圈对应 
+                          换成单片机可以计算的形式：
+                          xx ms内走过了多少毫米 == 当前扫描时间内检测到的脉冲个数 * 一圈对应 
              -xx 毫米 / 车轮一圈对应多少个脉冲
-  43   2              */
-  44   2              cur_speed = detect_speed_pulse_cnt[1] * SPEED_SCAN_MM_PER_TURN / SPEED_SCAN_PULSE_PER_TURN;
-  45   2      
-  46   2              // printf("cur pulse cnt %lu \n", detect_speed_pulse_cnt[1]); // 临时测试用
-  47   2      
-  48   2              detect_speed_pulse_cnt[1] = 0; // 清空脉冲计数
-  49   2              distance += cur_speed;         // 存放走过的距离，单位：毫米
-C51 COMPILER V9.60.7.0   SPEED_SCAN                                                        06/03/2025 17:12:23 PAGE 2   
+                      */
+C51 COMPILER V9.60.7.0   SPEED_SCAN                                                        06/10/2025 18:54:16 PAGE 2   
 
-  50   2      
-  51   2              /*
-  52   2                  已知在扫描时间内走过了xx mm
-  53   2                  时速的计算公式:
-  54   2                  扫描时间内走过的距离 / 1000 * (1 / 扫描时间对1s的占比) * 3.6
-  55   2                      扫描时间内走过的距离 / 1000，转换成 m/扫描时间 的单位
-  56   2                      * (1 / 扫描时间对1s的占比)，转换成以s为单位的速度
-  57   2                      * 3.6，因为 1m/s == 3.6km/h，最后转换成 以km/h的单位
-  58   2                  转换成单片机可以计算的形式：
-  59   2                  时速 == 扫描时间内走过的距离 * 36 * (1 / 扫描时间对1s的占比) / 10000；
-  60   2      
-  61   2                  逐渐变换成单片机可以计算的形式：
-  62   2                  cur_speed = cur_speed * 36 * (1 / (SPEED_SCAN_TIME_MS / 1000)) / 10000;
-  63   2                  cur_speed = cur_speed * 36 * 1000 / SPEED_SCAN_TIME_MS / 10000;
-  64   2                  cur_speed = cur_speed * 36 / SPEED_SCAN_TIME_MS / 10;
-  65   2              */
-  66   2              cur_speed = (cur_speed * 36) / speed_actual_scan_time_cnt / 10;
-  67   2      
-  68   2              // printf("cur speed %lu \n", cur_speed);
-  69   2      
-  70   2              if (speed_scan_cnt < SPEED_SCAN_FILTER_CNT)
-  71   2              {
-  72   3                  // 如果未达到重复检测的次数
-  73   3                  speed_scan_cnt++;
-  74   3                  cur_speed_average_val += cur_speed; // 累加当前得到的时速(单位：km/h)
-  75   3      
-  76   3                  // if (cur_speed)
-  77   3                  // {
-  78   3                  //     printf("ori speed %lu\n", cur_speed);
-  79   3                  // }
-  80   3              }
-  81   2              else
-  82   2              {
-  83   3                  // 如果达到了重复检测的次数
-  84   3                  speed_scan_cnt = 0;
-  85   3                  cur_speed_average_val /= SPEED_SCAN_FILTER_CNT; // 时速取平均值
-  86   3                  fun_info.speed = cur_speed_average_val;         // 存放得到的时速
-  87   3                  cur_speed_average_val = 0;                      // 清空变量的值
-  88   3                  
-  89   3      
-  90   3                  // printf("cur speed %lu km/h\n", fun_info.speed);
-  91   3      #if USE_MY_DEBUG
+                      cur_speed = detect_speed_pulse_cnt[1] * SPEED_SCAN_MM_PER_TURN / SPEED_SCAN_PULSE_PER_TURN;
+              
+                      // printf("cur pulse cnt %lu \n", detect_speed_pulse_cnt[1]); // 临时测试用
+              
+                      detect_speed_pulse_cnt[1] = 0; // 清空脉冲计数
+                      distance += cur_speed;         // 存放走过的距离，单位：毫米
+              
+                      /*
+                          已知在扫描时间内走过了xx mm
+                          时速的计算公式:
+                          扫描时间内走过的距离 / 1000 * (1 / 扫描时间对1s的占比) * 3.6
+                              扫描时间内走过的距离 / 1000，转换成 m/扫描时间 的单位
+                              * (1 / 扫描时间对1s的占比)，转换成以s为单位的速度
+                              * 3.6，因为 1m/s == 3.6km/h，最后转换成 以km/h的单位
+                          转换成单片机可以计算的形式：
+                          时速 == 扫描时间内走过的距离 * 36 * (1 / 扫描时间对1s的占比) / 10000；
+              
+                          逐渐变换成单片机可以计算的形式：
+                          cur_speed = cur_speed * 36 * (1 / (SPEED_SCAN_TIME_MS / 1000)) / 10000;
+                          cur_speed = cur_speed * 36 * 1000 / SPEED_SCAN_TIME_MS / 10000;
+                          cur_speed = cur_speed * 36 / SPEED_SCAN_TIME_MS / 10;
+                      */
+                      // cur_speed = (cur_speed * 36) / speed_actual_scan_time_cnt / 10;
+              
+                      // printf("cur speed %lu \n", cur_speed);
+              
+                      if (speed_scan_cnt < SPEED_SCAN_FILTER_CNT)
+                      {
+                          // 如果未达到重复检测的次数
+                          speed_scan_cnt++;
+                          cur_speed_average_val += cur_speed ; // 累加当前得到的时速(单位：km/h)
+                          cur_speed_actual_scan_time_cnt += speed_actual_scan_time_cnt ; // 累加当前
+              
+                          // if (cur_speed)
+                          // {
+                          //     printf("ori speed %lu\n", cur_speed);
+                          // }
+                      }
+                      else
+                      {
+                          // 如果达到了重复检测的次数
+                          speed_scan_cnt = 0;
+                          cur_speed_average_val = (cur_speed_average_val * 36) / cur_speed_actual_scan_time_cnt / 10 ;
+                          // cur_speed_average_val /= SPEED_SCAN_FILTER_CNT; // 时速取平均值
+                          fun_info.speed = cur_speed_average_val;         // 存放得到的时速
+                          cur_speed_average_val = 0;                      // 清空变量的值
+                          cur_speed_actual_scan_time_cnt = 0;
+                          
+              
+                          // printf("cur speed %lu km/h\n", fun_info.speed);
+              #if USE_MY_DEBUG
               
                           if (fun_info.speed != 0)
                           {
@@ -113,29 +122,172 @@ line level    source
                           }
               
               #endif
-  99   3      
- 100   3                  // 限制要发送的时速:
- 101   3                  if (fun_info.speed > 999)
- 102   3                  {
- 103   4                      fun_info.speed = 999;
- 104   4                  }
- 105   3      
- 106   3                  flag_get_speed = 1; //
- 107   3              }
- 108   2          }
- 109   1      }
+              
+                          // 限制要发送的时速:
+                          if (fun_info.speed > 999)
+                          {
+C51 COMPILER V9.60.7.0   SPEED_SCAN                                                        06/10/2025 18:54:16 PAGE 3   
 
+                              fun_info.speed = 999;
+                          }
+              
+                          flag_get_speed = 1; //
+                      }
+                  }
+              }
+              #endif
+ 119          
+ 120          #if 0
+              // 速度扫描函数
+              void speed_scan(void)
+              {
+                  volatile u32 cur_speed_pulse_cnt = 0;                   // 记录当前采集到的速度
+                  static volatile u32 cur_speed_average_val = 0;          // 存放当前速度的平均值(单位：km/
+             -h)
+                  static volatile u32 cur_speed_actual_scan_time_cnt = 0; // 存放当前 速度扫描时间
+              
+                  static volatile u8 speed_scan_cnt = 0;
+              
+                  if (flag_is_update_speed_pulse_cnt) // 如果有数据更新
+                  {
+                      flag_is_update_speed_pulse_cnt = 0;
+                      /*
+                          计算 xx ms内走过了多少毫米
+                          xx ms内走过了多少毫米 == 当前扫描时间内检测到的脉冲个数 / 车轮一圈�
+             -��应多少个脉冲 * 一圈对应 xx 毫米
+                          换成单片机可以计算的形式：
+                          xx ms内走过了多少毫米 == 当前扫描时间内检测到的脉冲个数 * 一圈对应 
+             -xx 毫米 / 车轮一圈对应多少个脉冲
+                      */
+                      // cur_speed_pulse_cnt = detect_speed_pulse_cnt[1] * SPEED_SCAN_MM_PER_TURN / SPEED_SCAN_PULSE_PER
+             -_TURN;
+                      cur_speed_pulse_cnt = detect_speed_pulse_cnt[1]; // 得到一段时间内采集到的脉冲个数
+              
+                      distance += detect_speed_pulse_cnt[1] * SPEED_SCAN_MM_PER_TURN / SPEED_SCAN_PULSE_PER_TURN; // 存
+             -放走过的距离，单位：毫米
+                      detect_speed_pulse_cnt[1] = 0;                                                              // 清
+             -空脉冲计数
+              
+                      if (speed_scan_cnt < SPEED_SCAN_FILTER_CNT)
+                      {
+                          // 如果未达到重复检测的次数
+                          speed_scan_cnt++;
+                          cur_speed_average_val += cur_speed_pulse_cnt;                 // 累加当前得到的脉冲�
+             -�数
+                          cur_speed_actual_scan_time_cnt += speed_actual_scan_time_cnt; // 累加当前扫描速度所�
+             -�的时间
+                      }
+                      else
+                      {
+                          // 如果达到了重复检测的次数
+                          speed_scan_cnt = 0;
+              
+                          /*
+                              已知在扫描时间内走过了xx mm
+                              时速的计算公式:
+                              扫描时间内走过的距离 / 1000 * (1 / 扫描时间对1s的占比) * 3.6
+                                  扫描时间内走过的距离 / 1000，转换成 m/扫描时间 的单位
+                                  * (1 / 扫描时间对1s的占比)，转换成以s为单位的速度
+                                  * 3.6，因为 1m/s == 3.6km/h，最后转换成 以km/h的单位
+                              转换成单片机可以计算的形式：
+C51 COMPILER V9.60.7.0   SPEED_SCAN                                                        06/10/2025 18:54:16 PAGE 4   
 
-C51 COMPILER V9.60.7.0   SPEED_SCAN                                                        06/03/2025 17:12:23 PAGE 3   
+                              时速 == 扫描时间内走过的距离 * 36 * (1 / 扫描时间对1s的占比) / 10000�
+             -�
+              
+                              逐渐变换成单片机可以计算的形式：
+                          */
+                          cur_speed_average_val = (cur_speed_average_val * 36 * SPEED_SCAN_MM_PER_TURN / SPEED_SCAN_PULS
+             -E_PER_TURN) / 10 / cur_speed_actual_scan_time_cnt;
+                          // cur_speed_average_val /= SPEED_SCAN_FILTER_CNT; // 时速取平均值
+                          fun_info.speed = cur_speed_average_val; // 存放得到的时速
+                          cur_speed_average_val = 0;              // 清空变量的值
+                          cur_speed_actual_scan_time_cnt = 0;
+              
+                          printf("cur speed %lu km/h\n", fun_info.speed);
+              #if USE_MY_DEBUG
+              
+                          if (fun_info.speed != 0)
+                          {
+                              printf("cur speed %lu km/h\n", fun_info.speed);
+                          }
+              
+              #endif
+              
+                          // 限制要发送的时速:
+                          if (fun_info.speed > 999)
+                          {
+                              fun_info.speed = 999;
+                          }
+              
+                          flag_get_speed = 1; //
+                      }
+                  }
+              }
+              #endif
+ 196          
+ 197          volatile bit flag_is_speed_scan_over_time; // 速度检测是否一直没有脉冲到来，导致超时
+ 198          volatile u32 speed_pulse_cnt;
+ 199          volatile u32 speed_scan_time_ms;
+ 200          // static volatile u32 cur_speed_scan_time = 0;
+ 201          static volatile u32 cur_speed_scan_time = 0;
+ 202          static volatile u32 cur_speed_scan_pulse = 0;
+ 203          void update_speed_scan_data(void) // 更新检测时速的数据
+ 204          {
+ 205   1          cur_speed_scan_time += speed_scan_time_ms;
+ 206   1          speed_scan_time_ms = 0;
+ 207   1          cur_speed_scan_pulse += speed_pulse_cnt;
+ 208   1          speed_pulse_cnt = 0;
+ 209   1      }
+ 210          
+ 211          void update_cur_speed_scan_time(void)
+ 212          {
+ 213   1      
+ 214   1          // cur_speed_scan_time += speed_scan_time_ms;
+ 215   1          // // cur_speed_scan_time = 0;
+ 216   1          // cur_speed_scan_pulse = 0;
+ 217   1          // speed_scan_time_ms = 0;
+ 218   1      }
+ 219          
+ 220          void speed_scan(void)
+ 221          {
+ 222   1      
+ 223   1          volatile u32 cur_speed = 0;
+ 224   1      
+C51 COMPILER V9.60.7.0   SPEED_SCAN                                                        06/10/2025 18:54:16 PAGE 5   
+
+ 225   1          if (cur_speed_scan_time >= 500 || flag_is_speed_scan_over_time)
+ 226   1          {
+ 227   2              if (flag_is_speed_scan_over_time) // 超时，采集到的脉冲个数对应一直是0km/h，认�
+             -�时速是0
+ 228   2              {
+ 229   3                  cur_speed = 0;
+ 230   3              }
+ 231   2              else
+ 232   2              {
+ 233   3                  const u32 tmp = (cur_speed_scan_pulse * SPEED_SCAN_MM_PER_TURN / SPEED_SCAN_PULSE_PER_TURN);
+ 234   3                  cur_speed = tmp / 10 / cur_speed_scan_time;
+ 235   3                  distance += tmp;
+ 236   3              }
+ 237   2      
+ 238   2              printf("cur speed %lu km/h\n", cur_speed);
+ 239   2              // printf("distance %lu m\n", distance / 100);
+ 240   2      
+ 241   2              cur_speed_scan_pulse = 0;
+ 242   2              cur_speed_scan_time = 0;
+ 243   2              flag_is_speed_scan_over_time = 0;
+ 244   2          }
+ 245   1      }
+
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    247    ----
-   CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =     17       4
+   CODE SIZE        =    250    ----
+   CONSTANT SIZE    =     20    ----
+   XDATA SIZE       =     28       8
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
-   BIT SIZE         =      1    ----
+   BIT SIZE         =      2    ----
 END OF MODULE INFORMATION.
 
 

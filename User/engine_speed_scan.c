@@ -89,16 +89,15 @@ void engine_speed_scan(void)
             // {
             //     printf("engine speed %lu rpm\n", cur_rpm_average);
             // }
-#ifdef USE_MY_DEBUG
-#if USE_MY_DEBUG
+
+#if 0
 
             if (cur_rpm_average != 0)
             {
                 printf("engine speed %lu rpm\n", cur_rpm_average);
             }
 
-#endif // #if USE_MY_DEBUG
-#endif // #ifdef USE_MY_DEBUG
+#endif // #if 0
 
             fun_info.engine_speeed = cur_rpm_average; // 向全局变量存放发动机转速
             cur_rpm_average = 0;

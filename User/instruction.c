@@ -396,8 +396,8 @@ void instruction_handle(void)
 #ifdef USE_INTERNATIONAL // 使用公制单位
 
         send_data(SEND_SPEED, fun_info.speed); // 发送当前采集到的车速（时速）
-
-#endif // USE_INTERNATIONAL 使用公制单位
+                                               // printf("cur speed %lu km/h\n", fun_info.speed);
+#endif                                         // USE_INTERNATIONAL 使用公制单位
 
 #ifdef USE_IMPERIAL // 使用英制单位
 
@@ -471,6 +471,7 @@ void instruction_handle(void)
     {
 
         flag_get_sub_total_mileage = 0;
+        // printf(" cur subtotal mileage %lu m \n", (u32)fun_info.save_info.subtotal_mileage);
 #if USE_MY_DEBUG
         // printf(" flag_get_sub_total_mileage \n");
         // printf(" cur subtotal mileage %lu m \n", (u32)fun_info.save_info.subtotal_mileage);

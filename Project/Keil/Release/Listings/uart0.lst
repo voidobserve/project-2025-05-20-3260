@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   UART0                                                             06/03/2025 17:12:22 PAGE 1   
+C51 COMPILER V9.60.7.0   UART0                                                             06/10/2025 18:54:15 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE UART0
@@ -62,7 +62,7 @@ line level    source
   45   1          FIN_S7 |= GPIO_FIN_SEL_P00;           // 配置P00为UART0_RX
   46   1      
   47   1          // // 旧版电路板上，P11为发送引脚，P12为接收引脚
-C51 COMPILER V9.60.7.0   UART0                                                             06/03/2025 17:12:22 PAGE 2   
+C51 COMPILER V9.60.7.0   UART0                                                             06/10/2025 18:54:15 PAGE 2   
 
   48   1          // P1_MD0 &= (~GPIO_P11_MODE_SEL(0x3) | ~GPIO_P12_MODE_SEL(0x3));
   49   1          // P1_MD0 |= GPIO_P11_MODE_SEL(0x1); // 输出模式
@@ -126,7 +126,7 @@ line level    source
              -断做准备
  107   3                  // 2. 如果正在接收一帧数据，却又收到了一次格式头，舍弃之前收到的�
              -��据，重新接收这一帧
-C51 COMPILER V9.60.7.0   UART0                                                             06/03/2025 17:12:22 PAGE 3   
+C51 COMPILER V9.60.7.0   UART0                                                             06/10/2025 18:54:15 PAGE 3   
 
  108   3                  flag_is_recving_data = 1;
  109   3                  cur_recv_len = 0;
@@ -190,7 +190,7 @@ line level    source
  166   4      
  167   4                      //         if (0 == recved_flagbuf[blank_index])
  168   4                      //         {
-C51 COMPILER V9.60.7.0   UART0                                                             06/03/2025 17:12:22 PAGE 4   
+C51 COMPILER V9.60.7.0   UART0                                                             06/10/2025 18:54:15 PAGE 4   
 
  169   4                      //             // 如果是空的一处缓冲区，退出，准备给下一次接收数据
              -帧
@@ -254,7 +254,7 @@ line level    source
  225   1      #if 1 // 接收超时处理
  226   1      
  227   1          if (tmr0_cnt > 10) // 一帧内，超过10ms没有收到数据
-C51 COMPILER V9.60.7.0   UART0                                                             06/03/2025 17:12:22 PAGE 5   
+C51 COMPILER V9.60.7.0   UART0                                                             06/10/2025 18:54:15 PAGE 5   
 
  228   1          {
  229   2              // 如果超时
@@ -274,12 +274,9 @@ line level    source
              -收缓冲区
  243   2              // }
  244   2      
- 245   2      #ifdef USE_MY_DEBUG
- 246   2      #if USE_MY_DEBUG
-              
-                      // printf("recv time out! \n");
-              
-              #if 0 // 打印串口缓冲区的数据
+ 245   2              // printf("recv time out! \n");
+ 246   2      
+ 247   2      #if 0 // 打印串口缓冲区的数据
               
                       {
                           u8 i = 0;
@@ -296,66 +293,58 @@ line level    source
                       }
               
               #endif // 打印串口缓冲区的数据
-              
-              #endif // #if USE_MY_DEBUG
- 269   2      #endif // #ifdef USE_MY_DEBUG
- 270   2      
- 271   2              return;
- 272   2          }
- 273   1      #endif // 接收超时处理
- 274   1      
- 275   1          // 对收到的数据帧进行验证
- 276   1          for (i = 0; i < ((UART0_RXBUF_LEN) / (FRAME_MAX_LEN)); i++)
- 277   1          {
- 278   2              if (recved_flagbuf[i])
- 279   2              {
- 280   3                  // 如果对应的位置有完整的数据帧
- 281   3                  // __uart_buff_check(); // 测试用
- 282   3      
- 283   3                  if (uart0_recv_len[i] != uart0_recv_buf[i][1])
- 284   3                  {
- 285   4      // 如果数据帧的长度不正确
- 286   4      #ifdef USE_MY_DEBUG
- 287   4      #if USE_MY_DEBUG
-                              printf("format len invalid!\n");
-C51 COMPILER V9.60.7.0   UART0                                                             06/03/2025 17:12:22 PAGE 6   
+ 264   2      
+ 265   2              return;
+ 266   2          }
+ 267   1      #endif // 接收超时处理
+ 268   1      
+ 269   1          // 对收到的数据帧进行验证
+ 270   1          for (i = 0; i < ((UART0_RXBUF_LEN) / (FRAME_MAX_LEN)); i++)
+ 271   1          {
+ 272   2              if (recved_flagbuf[i])
+ 273   2              {
+ 274   3                  // 如果对应的位置有完整的数据帧
+ 275   3                  // __uart_buff_check(); // 测试用
+ 276   3      
+ 277   3                  if (uart0_recv_len[i] != uart0_recv_buf[i][1])
+ 278   3                  {
+ 279   4                      // 如果数据帧的长度不正确
+ 280   4      
+ 281   4                      // printf("format len invalid!\n");
+ 282   4                      // printf("%d  %d \n", (u32)uart0_recv_len[i], (u32)uart0_recv_buf[i][1]);
+ 283   4                      // __uart_buff_check(); // 打印串口接收缓冲区中的数据
+ 284   4      
+ 285   4                      recved_flagbuf[i] = 0;
+ 286   4                      recv_frame_cnt--;
+ 287   4                      memset(uart0_recv_buf[i], 0, FRAME_MAX_LEN);
+ 288   4      
+C51 COMPILER V9.60.7.0   UART0                                                             06/10/2025 18:54:15 PAGE 6   
 
-                              printf("%d  %d \n", (u32)uart0_recv_len[i], (u32)uart0_recv_buf[i][1]);
-                              __uart_buff_check(); // 打印串口接收缓冲区中的数据
-              #endif                               // #if USE_MY_DEBUG
- 292   4      #endif                               // #ifdef USE_MY_DEBUG
- 293   4                      recved_flagbuf[i] = 0;
- 294   4                      recv_frame_cnt--;
- 295   4                      memset(uart0_recv_buf[i], 0, FRAME_MAX_LEN);
- 296   4      
- 297   4                      return;
- 298   4                  }
- 299   3      
- 300   3                  {                          // 计算校验和
- 301   4                      u8 __loop_crc_cnt = 0; // 用于计算校验和的循环计数值
- 302   4                      checksum = 0;
- 303   4                      for (__loop_crc_cnt = 0; __loop_crc_cnt < (uart0_recv_len[i] - 1); __loop_crc_cnt++)
- 304   4                      {
- 305   5                          checksum += uart0_recv_buf[i][__loop_crc_cnt];
+ 289   4                      return;
+ 290   4                  }
+ 291   3      
+ 292   3                  {                          // 计算校验和
+ 293   4                      u8 __loop_crc_cnt = 0; // 用于计算校验和的循环计数值
+ 294   4                      checksum = 0;
+ 295   4                      for (__loop_crc_cnt = 0; __loop_crc_cnt < (uart0_recv_len[i] - 1); __loop_crc_cnt++)
+ 296   4                      {
+ 297   5                          checksum += uart0_recv_buf[i][__loop_crc_cnt];
+ 298   5                      }
+ 299   4      
+ 300   4                      // checksum &= 0x0F; // 取低4位作为校验
+ 301   4                      checksum &= 0xFF; // 取8位作为校验
+ 302   4                      if (checksum != (uart0_recv_buf[i][uart0_recv_len[i] - 1]))
+ 303   4                      {
+ 304   5                          // 如果计算的校验和与收到的校验和不一致
+ 305   5                          __flag_is_crc_or_len_err = 1;
  306   5                      }
- 307   4      
- 308   4                      // checksum &= 0x0F; // 取低4位作为校验
- 309   4                      checksum &= 0xFF; // 取8位作为校验
- 310   4                      if (checksum != (uart0_recv_buf[i][uart0_recv_len[i] - 1]))
- 311   4                      {
- 312   5                          // 如果计算的校验和与收到的校验和不一致
- 313   5                          __flag_is_crc_or_len_err = 1;
- 314   5                      }
- 315   4                  } // 计算校验和
- 316   3      
- 317   3                  if (__flag_is_crc_or_len_err)
- 318   3                  {
- 319   4      #ifdef USE_MY_DEBUG
- 320   4      #if USE_MY_DEBUG
+ 307   4                  } // 计算校验和
+ 308   3      
+ 309   3                  if (__flag_is_crc_or_len_err)
+ 310   3                  {
+ 311   4      
+ 312   4      #if 0 // 打印串口缓冲区的数据
                               printf("recv crc or len err! \n");
-              
-              #if 1 // 打印串口缓冲区的数据
-              
                               {
                                   u8 i = 0;
                                   u8 j = 0;
@@ -371,39 +360,37 @@ line level    source
                               }
               
               #endif // 打印串口缓冲区的数据
-              
-              #endif                                        // #if USE_MY_DEBUG
- 342   4      #endif                                        // #ifdef USE_MY_DEBUG
- 343   4                                                    // flag_is_recving_data = 0;
- 344   4                      __flag_is_crc_or_len_err = 0; //
- 345   4                      recved_flagbuf[i] = 0;
- 346   4                      recv_frame_cnt--;
- 347   4                      memset(uart0_recv_buf[i], 0, FRAME_MAX_LEN); // 清空校验和错误的指令对应的缓
+ 329   4      
+ 330   4                      // flag_is_recving_data = 0;
+ 331   4                      __flag_is_crc_or_len_err = 0; //
+ 332   4                      recved_flagbuf[i] = 0;
+ 333   4                      recv_frame_cnt--;
+ 334   4                      memset(uart0_recv_buf[i], 0, FRAME_MAX_LEN); // 清空校验和错误的指令对应的缓
              -冲区
- 348   4                  }
- 349   3      
-C51 COMPILER V9.60.7.0   UART0                                                             06/03/2025 17:12:22 PAGE 7   
-
- 350   3                  // 如果运行到这里，数据都正常
- 351   3                  flagbuf_valid_instruction[i] = 1; // 对应的标志位置一，表示收到了合法的指令
- 352   3              } // if (recved_flagbuf[i])
- 353   2          } // for (i = 0; i < ((UART0_RXBUF_LEN) / (FRAME_MAX_LEN)); i++)
- 354   1      }
- 355          
- 356          #if 0
+ 335   4                  }
+ 336   3      
+ 337   3                  // 如果运行到这里，数据都正常
+ 338   3                  flagbuf_valid_instruction[i] = 1; // 对应的标志位置一，表示收到了合法的指令
+ 339   3              } // if (recved_flagbuf[i])
+ 340   2          } // for (i = 0; i < ((UART0_RXBUF_LEN) / (FRAME_MAX_LEN)); i++)
+ 341   1      }
+ 342          
+ 343          #if 0
               // 清除串口接收缓冲区中，单个已经处理好的指令
               void uart_clear_single_instruction(u8 index)
               {
                   flagbuf_valid_instruction[index] = 0;            // 清空缓冲区对应的元素，表示该下标�
              -�指令已经处理
                   uart0_recv_len[index] = 0;                       // 清除缓冲区中指令对应的长度
+C51 COMPILER V9.60.7.0   UART0                                                             06/10/2025 18:54:15 PAGE 7   
+
                   recved_flagbuf[index] = 0;                       // 清除接收到指令的标志位
                   memset(uart0_recv_buf[index], 0, FRAME_MAX_LEN); // 清空缓冲区对应的指令
               }
               #endif
- 366          
- 367          #ifdef USE_MY_DEBUG
- 368          #if USE_MY_DEBUG
+ 353          
+ 354          #ifdef USE_MY_DEBUG
+ 355          #if USE_MY_DEBUG
               // 测试用的程序：
               // 显示串口缓冲区中的数据：
               void __uart_buff_check(void)
@@ -428,9 +415,9 @@ line level    source
                   // }
               }
               #endif
- 393          #endif // void __uart_buff_check(void)
- 394          
- 395          #if 0
+ 380          #endif // void __uart_buff_check(void)
+ 381          
+ 382          #if 0
                           switch (uart0_recv_len[i])
                           {
                           case 4:
@@ -446,8 +433,6 @@ line level    source
                                   // recved_flagbuf[i] = 0;
                                   // recv_frame_cnt--;
                                   // memset(uart0_recv_buf[i], 0, FRAME_MAX_LEN);
-C51 COMPILER V9.60.7.0   UART0                                                             06/03/2025 17:12:22 PAGE 8   
-
                                   __flag_is_crc_or_len_err = 1;
                               }
               
@@ -461,6 +446,8 @@ line level    source
                               if (checksum != uart0_recv_buf[i][4])
                               {
                                   // 如果计算得出的校验和与数据帧中的校验和不一致
+C51 COMPILER V9.60.7.0   UART0                                                             06/10/2025 18:54:15 PAGE 8   
+
                                   // 说明传输的数据有误
                                   // uart0_sendstr("checknum err_5Bytes\n");
                                   // recved_flagbuf[i] = 0;
@@ -510,8 +497,6 @@ line level    source
                                   // 说明传输的数据有误
                                   // recved_flagbuf[i] = 0;
                                   // recv_frame_cnt--;
-C51 COMPILER V9.60.7.0   UART0                                                             06/03/2025 17:12:22 PAGE 9   
-
                                   __flag_is_crc_or_len_err = 1;
                               }
                               break;
@@ -525,6 +510,8 @@ line level    source
               #endif
                               // recved_flagbuf[i] = 0;
                               // recv_frame_cnt--;
+C51 COMPILER V9.60.7.0   UART0                                                             06/10/2025 18:54:15 PAGE 9   
+
                               // memset(uart0_recv_buf[i], 0, FRAME_MAX_LEN);
               
                               break;

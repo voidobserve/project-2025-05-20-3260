@@ -403,6 +403,8 @@ void main(void)
     printf("hour %bu min %bu sec %bu \n", fun_info.aip1302_saveinfo.time_hour, fun_info.aip1302_saveinfo.time_min, fun_info.aip1302_saveinfo.time_sec);
 #endif // 测试发送日期和时间
 
+    // printf("sys reset\n");
+
     /* 系统主循环 */
     while (1)
     {

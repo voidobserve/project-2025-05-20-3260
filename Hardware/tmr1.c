@@ -113,7 +113,7 @@ void heart_beat_handle(void)
             detect_speed_pulse_cnt[1] = detect_speed_pulse_cnt[0]; // 将另一个定时器中断扫描到的脉冲更新到[1]
             detect_speed_pulse_cnt[0] = 0;                         //
             flag_is_update_speed_pulse_cnt = 1;                    // 表示有数据更新
-        }
+        } 
     }
 
     if (mileage_save_time_cnt < 4294967295 - diff_ms_cnt) // 防止计数溢出

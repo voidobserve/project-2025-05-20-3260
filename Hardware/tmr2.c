@@ -64,6 +64,7 @@ void tmr2_disable(void)
 }
 #endif // void tmr2_disable(void)
 
+extern void update_speed_scan_data(void);
 // TMR2中断服务函数
 void TIMR2_IRQHandler(void) interrupt TMR2_IRQn
 {
@@ -100,6 +101,22 @@ void TIMR2_IRQHandler(void) interrupt TMR2_IRQn
             last_engine_speed_scan_level = 0;
         }
 
+        {
+            static u16 cnt = 0;
+            cnt++;
+            if (cnt >= 20) // 每1ms进入一次
+            {
+                cnt = 0;
+                speed_scan_time_ms++; // 每1ms加一
+                if (speed_scan_time_ms >= 600 &&
+                    flag_is_speed_scan_over_time == 0) // 滤掉1Hz的脉冲，认为 1Hz==0km/h
+                {
+                    speed_scan_time_ms = 0;
+                    flag_is_speed_scan_over_time = 1; // 说明超时，脉冲计数一直没有加一
+                }
+            }
+        }
+
         if (SPEED_SCAN_PIN) // 检测时速的引脚
         {
             if (0 == last_speed_scan_level)
@@ -109,6 +126,10 @@ void TIMR2_IRQHandler(void) interrupt TMR2_IRQn
                 {
                     detect_speed_pulse_cnt[0]++;
                 }
+
+                speed_pulse_cnt++;
+
+                update_speed_scan_data();
             }
 
             last_speed_scan_level = 1;

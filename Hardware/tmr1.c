@@ -80,41 +80,45 @@ void heart_beat_handle(void)
         pin_level_scan_time_cnt += diff_ms_cnt;
     }
 
-    if (engine_scan_time_cnt < 65535 - diff_ms_cnt) // 防止计数溢出
-    {
-        // engine_scan_time_cnt++;
-        engine_scan_time_cnt += diff_ms_cnt;
-        if (engine_scan_time_cnt >= ENGINE_SPEED_SCAN_TIME_MS) // 如果已经到了累计的时间
-        {
-            engine_actual_scan_time_cnt = engine_scan_time_cnt; // 更新实际的扫描检测时间
-            engine_scan_time_cnt = 0;
-            // detect_engine_pulse_cnt[1] += detect_engine_pulse_cnt[0]; // 将另一个定时器中断扫描到的脉冲更新到[1]
-            // 不能在定时器中断内累加脉冲计数，主循环执行时间过长，相关的计数函数就不能定期取到这个值，
-            // 会影响计算结果，可能多加了几个脉冲计数
-            // 下面直接让数据覆盖，如果计算函数没有及时取到数值，也不影响计算结果
-            detect_engine_pulse_cnt[1] = detect_engine_pulse_cnt[0]; // 将另一个定时器中断扫描到的脉冲更新到[1]
-            detect_engine_pulse_cnt[0] = 0;
-            flag_is_update_engine_pulse_cnt = 1; // 表示有数据更新
-        }
-    }
+#if 0
 
-    if (speed_scan_time_cnt < 65535 - diff_ms_cnt) // 防止计数溢出
-    {
-        // speed_scan_time_cnt++;
-        speed_scan_time_cnt += diff_ms_cnt;
-        if (speed_scan_time_cnt >= SPEED_SCAN_TIME_MS) // 如果经过了 xx ms
-        {
-            speed_actual_scan_time_cnt = speed_scan_time_cnt; // 更新实际的扫描检测时间
-            speed_scan_time_cnt = 0;
-            // detect_speed_pulse_cnt[1] += detect_speed_pulse_cnt[0]; // 将另一个定时器中断扫描到的脉冲更新到[1]
-            // 不能在定时器中断内累加脉冲计数，主循环执行时间过长，相关的计数函数就不能定期取到这个值，
-            // 会影响计算结果，可能多加了几个脉冲计数
-            // 下面直接让数据覆盖，如果计算函数没有及时取到数值，也不影响计算结果
-            detect_speed_pulse_cnt[1] = detect_speed_pulse_cnt[0]; // 将另一个定时器中断扫描到的脉冲更新到[1]
-            detect_speed_pulse_cnt[0] = 0;                         //
-            flag_is_update_speed_pulse_cnt = 1;                    // 表示有数据更新
-        } 
-    }
+    // if (engine_scan_time_cnt < 65535 - diff_ms_cnt) // 防止计数溢出
+    // {
+    //     // engine_scan_time_cnt++;
+    //     engine_scan_time_cnt += diff_ms_cnt;
+    //     if (engine_scan_time_cnt >= ENGINE_SPEED_SCAN_TIME_MS) // 如果已经到了累计的时间
+    //     {
+    //         engine_actual_scan_time_cnt = engine_scan_time_cnt; // 更新实际的扫描检测时间
+    //         engine_scan_time_cnt = 0;
+    //         // detect_engine_pulse_cnt[1] += detect_engine_pulse_cnt[0]; // 将另一个定时器中断扫描到的脉冲更新到[1]
+    //         // 不能在定时器中断内累加脉冲计数，主循环执行时间过长，相关的计数函数就不能定期取到这个值，
+    //         // 会影响计算结果，可能多加了几个脉冲计数
+    //         // 下面直接让数据覆盖，如果计算函数没有及时取到数值，也不影响计算结果
+    //         detect_engine_pulse_cnt[1] = detect_engine_pulse_cnt[0]; // 将另一个定时器中断扫描到的脉冲更新到[1]
+    //         detect_engine_pulse_cnt[0] = 0;
+    //         flag_is_update_engine_pulse_cnt = 1; // 表示有数据更新
+    //     }
+    // }
+
+    // if (speed_scan_time_cnt < 65535 - diff_ms_cnt) // 防止计数溢出
+    // {
+    //     // speed_scan_time_cnt++;
+    //     speed_scan_time_cnt += diff_ms_cnt;
+    //     if (speed_scan_time_cnt >= SPEED_SCAN_TIME_MS) // 如果经过了 xx ms
+    //     {
+    //         speed_actual_scan_time_cnt = speed_scan_time_cnt; // 更新实际的扫描检测时间
+    //         speed_scan_time_cnt = 0;
+    //         // detect_speed_pulse_cnt[1] += detect_speed_pulse_cnt[0]; // 将另一个定时器中断扫描到的脉冲更新到[1]
+    //         // 不能在定时器中断内累加脉冲计数，主循环执行时间过长，相关的计数函数就不能定期取到这个值，
+    //         // 会影响计算结果，可能多加了几个脉冲计数
+    //         // 下面直接让数据覆盖，如果计算函数没有及时取到数值，也不影响计算结果
+    //         detect_speed_pulse_cnt[1] = detect_speed_pulse_cnt[0]; // 将另一个定时器中断扫描到的脉冲更新到[1]
+    //         detect_speed_pulse_cnt[0] = 0;                         //
+    //         flag_is_update_speed_pulse_cnt = 1;                    // 表示有数据更新
+    //     } 
+    // }
+
+#endif
 
     if (mileage_save_time_cnt < 4294967295 - diff_ms_cnt) // 防止计数溢出
     {

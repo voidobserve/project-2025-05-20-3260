@@ -13,11 +13,24 @@
 // 车轮的一圈对应多少毫米
 // #define SPEED_SCAN_MM_PER_TURN (1795) // 一圈 xx 毫米
 #define SPEED_SCAN_MM_PER_TURN (1070) // 一圈 xx 毫米
+
+#if 0 // 使用定时检测时速的方式
 // 累计检测多久的时速：(单位：ms)
 #define SPEED_SCAN_TIME_MS (100)
 // 重复检测多少次时速，才更新：(不能为0，也不能太大)
 // 例如 5次，  5(次) *  SPEED_SCAN_TIME_MS 之后，才更新速度
 #define SPEED_SCAN_FILTER_CNT (200)
+#endif // 
+
+/*
+    时速扫描的超时时间，单位：ms
+    如果超过这个时间还没有检测到脉冲个数，则认为时速为0
+
+    600ms，为了滤掉1Hz的pwm，因为客户的样机对1Hz的pwm也认为是0km/h
+*/ 
+#define SPEED_SCAN_OVER_TIME (600)
+// 时速的更新时间，单位：ms
+#define SPEED_SCAN_UPDATE_TIME (500)
 
 // 检测时速所需的配置
 // ======================================================

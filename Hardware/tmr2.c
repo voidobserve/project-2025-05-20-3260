@@ -64,6 +64,7 @@ void tmr2_disable(void)
 }
 #endif // void tmr2_disable(void)
 
+extern void update_engine_speed_scan_data(void); // 更新检测发动机转速的数据
 extern void update_speed_scan_data(void);
 // TMR2中断服务函数
 void TIMR2_IRQHandler(void) interrupt TMR2_IRQn
@@ -82,15 +83,34 @@ void TIMR2_IRQHandler(void) interrupt TMR2_IRQn
     {
         TMR2_CONH |= TMR_PRD_PND(0x1); // 清除pending
 
+        { // 记录发动机转速扫描的时间
+            static u8 cnt = 0;
+            cnt++;
+            if (cnt >= 20) // 每1ms进入一次
+            {
+                cnt = 0;
+                engine_speed_scan_ms++;
+                
+                if (engine_speed_scan_ms >= ENGINE_SPEED_SCAN_OVER_TIME &&
+                    flag_is_engine_speed_scan_over_time == 0)
+                {
+                    engine_speed_scan_ms = 0;
+                    flag_is_engine_speed_scan_over_time = 1; // 说明超时，脉冲计数一直没有加一
+                }
+            }
+        }
+
         if (ENGINE_SPEED_SCAN_PIN) // 检测发动机转速的引脚
         {
             if (0 == last_engine_speed_scan_level)
             {
                 // 如果之前检测到低电平，现在检测到高电平，说明有上升沿，对脉冲计数加一
-                if (detect_engine_pulse_cnt[0] < 4294967295) // 防止计数溢出
-                {
-                    detect_engine_pulse_cnt[0]++;
-                }
+                // if (detect_engine_pulse_cnt[0] < 4294967295) // 防止计数溢出
+                // {
+                //     detect_engine_pulse_cnt[0]++;
+                // }
+                engine_speed_scan_cnt++;
+                update_engine_speed_scan_data();
             }
 
             last_engine_speed_scan_level = 1;
@@ -101,34 +121,37 @@ void TIMR2_IRQHandler(void) interrupt TMR2_IRQn
             last_engine_speed_scan_level = 0;
         }
 
-        {
+        { // 记录时速扫描的时间
             static u16 cnt = 0;
             cnt++;
             if (cnt >= 20) // 每1ms进入一次
             {
                 cnt = 0;
                 speed_scan_time_ms++; // 每1ms加一
-                if (speed_scan_time_ms >= 600 &&
-                    flag_is_speed_scan_over_time == 0) // 滤掉1Hz的脉冲，认为 1Hz==0km/h
+
+                // 600ms，为了滤掉1Hz的脉冲，认为 1Hz==0km/h 
+                if (speed_scan_time_ms >= SPEED_SCAN_OVER_TIME &&
+                    flag_is_speed_scan_over_time == 0)
                 {
                     speed_scan_time_ms = 0;
                     flag_is_speed_scan_over_time = 1; // 说明超时，脉冲计数一直没有加一
                 }
             }
-        }
+        } // 记录时速扫描的时间
 
         if (SPEED_SCAN_PIN) // 检测时速的引脚
         {
             if (0 == last_speed_scan_level)
             {
-                // 如果之前检测到低电平，现在检测到高电平，说明有上升沿，对脉冲计数加一
+#if 0  // 定时扫描脉冲个数来计算时速的方式
+       // 如果之前检测到低电平，现在检测到高电平，说明有上升沿，对脉冲计数加一
                 if (detect_speed_pulse_cnt[0] < 4294967295) // 防止计数溢出
                 {
                     detect_speed_pulse_cnt[0]++;
                 }
+#endif // 定时扫描脉冲个数来计算时速的方式
 
                 speed_pulse_cnt++;
-
                 update_speed_scan_data();
             }
 

@@ -7,7 +7,8 @@ volatile u32 fuel_adc_scan_cnt = 0; // 在更新时间到来前，记录adc扫�
 volatile u8 fuel_percent = 0xFF;
 
 // static volatile u8 last_fuel_percent = 0xFF; // 记录上一次检测到的油量百分比
-
+// 旧版到的油量检测程序：
+#if 0
 void fuel_capacity_scan(void)
 {
     adc_sel_pin(ADC_PIN_FUEL); // 内部至少占用1ms
@@ -26,7 +27,6 @@ void fuel_capacity_scan(void)
         fuel_adc_val /= fuel_adc_scan_cnt; // 求出扫描时间内得到的ad平均值
         fuel_adc_scan_cnt = 0;
         // printf("fuel adc val %lu \n", fuel_adc_val);
-
 
 #ifdef USE_MY_DEBUG
 #if USE_MY_DEBUG
@@ -170,4 +170,87 @@ void fuel_capacity_scan(void)
         fuel_adc_val = 0xFF;
         flag_get_fuel = 1;
     } // if (fuel_capacity_scan_cnt >= FUEL_CAPACITY_SCAN_TIME_MS)
+}
+#endif
+
+// 将油量检测对应的ad值转换成百分比值
+u8 convert_fuel_adc_to_percent(u16 fuel_adc_val)
+{
+    u8 ret = 0;
+
+    if (fuel_adc_val >= FUEL_MAX_ADC_VAL) // 如果比最大油量的ad值还要大，说明没有接油量检测
+    {
+        ret = 0xFF; // 根据协议，0xFF对应没有接油量检测
+    }
+    else
+    {
+        if (fuel_adc_val < FUEL_MIN_ADC_VAL) // 如果检测到的ad值比最小油量对应的ad值还要小
+        {
+            ret = 0; // 0% 油量
+        }
+        else
+        {
+            u16 tmp_val = (FUEL_MAX_ADC_VAL - FUEL_MIN_ADC_VAL) / 100; /* 将油量最大的ad值和油量最小对应的ad值 划成100份 */
+            ret = (fuel_adc_val - FUEL_MIN_ADC_VAL) / tmp_val;
+        }
+    }
+
+    return ret;
+}
+
+enum
+{
+    STATUS_JUST_POWER_ON = 0, // 刚上电
+    STATUS_IN_SERVICE,        // 运行中
+};
+
+void fuel_capacity_scan(void)
+{
+    adc_sel_pin(ADC_PIN_FUEL); // 内部至少占用1ms
+    adc_val = adc_getval();
+    // printf("fuel adc %u \n", adc_val);
+
+    if (fuel_adc_val <= 4294967295 - 4095) // 防止计数溢出
+    {
+        fuel_adc_val += adc_val;
+        fuel_adc_scan_cnt++;
+    }
+
+    /*
+        刚上电直接获取一次，作为油量的状态
+    */
+    {
+        static u8 status = STATUS_JUST_POWER_ON;
+        if (STATUS_JUST_POWER_ON == status) // 如果是第一次上电
+        {
+            if (fuel_capacity_scan_cnt >= FUEL_UPDATE_TIME_WHEN_POWER_ON)
+            {
+                fuel_capacity_scan_cnt = 0;
+                fuel_adc_val /= fuel_adc_scan_cnt; // 求出扫描时间内得到的ad平均值
+
+                fuel_percent = convert_fuel_adc_to_percent(fuel_adc_val);
+
+                fun_info.fuel = fuel_percent;
+                fuel_adc_scan_cnt = 0;
+                fuel_adc_val = 0;
+                flag_get_fuel = 1;
+
+                status = STATUS_IN_SERVICE;
+            }
+        }
+    }
+
+    if (fuel_capacity_scan_cnt >= FUEL_UPDATE_TIME)
+    {
+        // 如果到了扫描更新时间
+        fuel_capacity_scan_cnt = 0;
+        fuel_adc_val /= fuel_adc_scan_cnt; // 求出扫描时间内得到的ad平均值
+
+        fuel_percent = convert_fuel_adc_to_percent(fuel_adc_val);
+
+        fun_info.fuel = fuel_percent;
+        fuel_adc_scan_cnt = 0;
+        fuel_adc_val = 0;
+        flag_get_fuel = 1;
+    } //  if (fuel_capacity_scan_cnt >= FUEL_UPDATE_TIME)
 }

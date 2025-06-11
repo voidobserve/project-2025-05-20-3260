@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   BATTERY                                                           06/10/2025 18:54:17 PAGE 1   
+C51 COMPILER V9.60.7.0   BATTERY                                                           06/11/2025 15:14:21 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE BATTERY
@@ -62,7 +62,7 @@ line level    source
              -�更新/发送电池数据的时间）
   50   1          {
   51   2              battery_val /= battery_scan_cnt; // 取平均数
-C51 COMPILER V9.60.7.0   BATTERY                                                           06/10/2025 18:54:17 PAGE 2   
+C51 COMPILER V9.60.7.0   BATTERY                                                           06/11/2025 15:14:21 PAGE 2   
 
   52   2              voltage_of_battery = conver_adc_val_to_voltage(battery_val);
   53   2              cur_percentage_of_battery = conver_voltage_of_battery_to_percentage(voltage_of_battery);

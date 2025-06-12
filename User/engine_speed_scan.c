@@ -157,7 +157,7 @@ void engine_speed_scan(void)
             rpm = (u32)cur_engine_speed_scan_cnt * ((u32)CONVER_ONE_MINUTE_TO_MS / ENGINE_SPEED_SCAN_PULSE_PER_TURN) / cur_engine_speed_scan_ms;
         }
 
-        printf("cur engine speed pulse cnt:%lu\n",cur_engine_speed_scan_cnt);
+        // printf("cur engine speed pulse cnt:%lu\n",cur_engine_speed_scan_cnt);
 
         
         cur_engine_speed_scan_cnt = 0;
@@ -170,7 +170,7 @@ void engine_speed_scan(void)
             rpm = 65535;
         }
 
-        printf("cur rpm %lu\n", rpm);
+        // printf("cur rpm %lu\n", rpm);
 
         fun_info.engine_speeed = rpm; // 向全局变量存放发动机转速
         flag_get_engine_speed = 1;    // 发送发动机转速

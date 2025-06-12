@@ -27,9 +27,9 @@
 
 
 // 油量最大时，对应的ad值
-#define FUEL_MAX_ADC_VAL (600)
+#define FUEL_MAX_ADC_VAL (950) 
 // 油量最小时，对应的ad值
-#define FUEL_MIN_ADC_VAL (2700)
+#define FUEL_MIN_ADC_VAL (2000) 
 
 // 刚上电时，更新油量的时间，单位：ms
 #define FUEL_UPDATE_TIME_WHEN_POWER_ON (500)

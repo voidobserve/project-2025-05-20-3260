@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  STARTUP                                                              06/11/2025 14:54:53 PAGE     1
+A51 MACRO ASSEMBLER  STARTUP                                                              06/16/2025 18:32:29 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.2.7.0
@@ -41,11 +41,11 @@ LOC  OBJ            LINE     SOURCE
                       31     ;
                       32     ; <o> XDATASTART: XDATA memory start address <0x0-0xFFFF> 
                       33     ;     <i> The absolute start address of XDATA memory
-  0000                34     XDATASTART      EQU     0     
+  6000                34     XDATASTART      EQU     0x6000     
                       35     ;
                       36     ; <o> XDATALEN: XDATA memory size <0x0-0xFFFF> 
                       37     ;     <i> The length of XDATA memory in bytes.
-  0000                38     XDATALEN        EQU     0      
+  0700                38     XDATALEN        EQU     0x0700      
                       39     ;
                       40     ; <o> PDATASTART: PDATA memory start address <0x0-0xFFFF> 
                       41     ;     <i> The absolute start address of PDATA memory
@@ -65,7 +65,7 @@ LOC  OBJ            LINE     SOURCE
                       55     ;
                       56     ; <h> Stack Space for reentrant functions in the SMALL model.
                       57     ;  <q> IBPSTACK: Enable SMALL model reentrant stack
-A51 MACRO ASSEMBLER  STARTUP                                                              06/11/2025 14:54:53 PAGE     2
+A51 MACRO ASSEMBLER  STARTUP                                                              06/16/2025 18:32:29 PAGE     2
 
                       58     ;     <i> Stack space for reentrant functions in the SMALL model.
   0000                59     IBPSTACK        EQU     0       ; set to 1 if small reentrant is used.
@@ -133,7 +133,7 @@ LOC  OBJ            LINE     SOURCE
                      121     
                      122                     EXTRN CODE (?C_START)
                      123                     PUBLIC  ?C_STARTUP
-A51 MACRO ASSEMBLER  STARTUP                                                              06/11/2025 14:54:53 PAGE     3
+A51 MACRO ASSEMBLER  STARTUP                                                              06/16/2025 18:32:29 PAGE     3
 
                      124     
 ----                 125                     CSEG    AT      0000H
@@ -151,19 +151,19 @@ LOC  OBJ            LINE     SOURCE
                      137     ENDIF
                      138     
                      139     IF XDATALEN <> 0
-                                             MOV     DPTR,#XDATASTART
-                                             MOV     R7,#LOW (XDATALEN)
-                               IF (LOW (XDATALEN)) <> 0
+0006 906000          140                     MOV     DPTR,#XDATASTART
+0009 7F00            141                     MOV     R7,#LOW (XDATALEN)
+                     142       IF (LOW (XDATALEN)) <> 0
                                              MOV     R6,#(HIGH (XDATALEN)) +1
                                ELSE
-                                             MOV     R6,#HIGH (XDATALEN)
-                               ENDIF
-                                             CLR     A
-                             XDATALOOP:      MOVX    @DPTR,A
-                                             INC     DPTR
-                                             DJNZ    R7,XDATALOOP
-                                             DJNZ    R6,XDATALOOP
-                             ENDIF
+000B 7E07            145                     MOV     R6,#HIGH (XDATALEN)
+                     146       ENDIF
+000D E4              147                     CLR     A
+000E F0              148     XDATALOOP:      MOVX    @DPTR,A
+000F A3              149                     INC     DPTR
+0010 DFFC            150                     DJNZ    R7,XDATALOOP
+0012 DEFA            151                     DJNZ    R6,XDATALOOP
+                     152     ENDIF
                      153     
                      154     IF PPAGEENABLE <> 0
                                              MOV     PPAGE_SFR,#PPAGE
@@ -196,12 +196,12 @@ LOC  OBJ            LINE     SOURCE
                                              MOV     ?C_PBP,#LOW PBPSTACKTOP
                              ENDIF
                      184     
-0006 758100   F      185                     MOV     SP,#?STACK-1
+0014 758100   F      185                     MOV     SP,#?STACK-1
                      186     
                      187     ; This code is required if you use L51_BANK.A51 with Banking Mode 4
                      188     ;<h> Code Banking
                      189     ; <q> Select Bank 0 for L51_BANK.A51 Mode 4
-A51 MACRO ASSEMBLER  STARTUP                                                              06/11/2025 14:54:53 PAGE     4
+A51 MACRO ASSEMBLER  STARTUP                                                              06/16/2025 18:32:29 PAGE     4
 
                      190     
                              
@@ -209,7 +209,7 @@ LOC  OBJ            LINE     SOURCE
                                              
                              
                      195     ;</h>
-0009 020000   F      196                     LJMP    ?C_START
+0017 020000   F      196                     LJMP    ?C_START
                      197                     
 ----                 198                     CSEG    AT      0003H
 0003 0000            199                     DW      00H
@@ -220,7 +220,7 @@ LOC  OBJ            LINE     SOURCE
 000D 0000            204                     DW      00H
                      205     
                      206                     END
-A51 MACRO ASSEMBLER  STARTUP                                                              06/11/2025 14:54:53 PAGE     5
+A51 MACRO ASSEMBLER  STARTUP                                                              06/16/2025 18:32:29 PAGE     5
 
 SYMBOL TABLE LISTING
 ------ ----- -------
@@ -228,7 +228,7 @@ SYMBOL TABLE LISTING
 
 N A M E             T Y P E  V A L U E   ATTRIBUTES
 
-?C_C51STARTUP. . .  C SEG    000CH       REL=UNIT
+?C_C51STARTUP. . .  C SEG    001AH       REL=UNIT
 ?C_START . . . . .  C ADDR   -----       EXT
 ?C_STARTUP . . . .  C ADDR   0000H   A   
 ?STACK . . . . . .  I SEG    0001H       REL=UNIT
@@ -251,8 +251,9 @@ SP . . . . . . . .  D ADDR   0081H   A
 STARTUP1 . . . . .  C ADDR   0000H   R   SEG=?C_C51STARTUP
 XBPSTACK . . . . .  N NUMB   0000H   A   
 XBPSTACKTOP. . . .  N NUMB   0000H   A   
-XDATALEN . . . . .  N NUMB   0000H   A   
-XDATASTART . . . .  N NUMB   0000H   A   
+XDATALEN . . . . .  N NUMB   0700H   A   
+XDATALOOP. . . . .  C ADDR   000EH   R   SEG=?C_C51STARTUP
+XDATASTART . . . .  N NUMB   6000H   A   
 
 
 REGISTER BANK(S) USED: 0 

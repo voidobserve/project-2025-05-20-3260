@@ -41,11 +41,11 @@
 #include "tk_config.h"
 // #include "tk_debug.h"
 #include "tk_set.h"
+// #include "tk_user.h"
 #include "tk_simplify_algorithm.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/

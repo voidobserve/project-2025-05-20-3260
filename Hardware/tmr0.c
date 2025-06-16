@@ -21,9 +21,9 @@ void tmr0_config(void)
     TMR0_CNTH = 0;
 
     TMR0_CONL &= ~TMR_PRESCALE_SEL(0x07); // 清除TMR0的预分频配置寄存器
-    TMR0_CONL |= TMR_PRESCALE_SEL(0x07); // 配置预分频寄存器,128分频
-    TMR0_CONL &= ~TMR_MODE_SEL(0x03); // 清除TMR0的模式配置寄存器
-    TMR0_CONL |= TMR_MODE_SEL(0x01);  // 配置TMR0的模式为计数器模式，最后对系统时钟的脉冲进行计数
+    TMR0_CONL |= TMR_PRESCALE_SEL(0x07);  // 配置预分频寄存器,128分频
+    TMR0_CONL &= ~TMR_MODE_SEL(0x03);     // 清除TMR0的模式配置寄存器
+    TMR0_CONL |= TMR_MODE_SEL(0x01);      // 配置TMR0的模式为计数器模式，最后对系统时钟的脉冲进行计数
 
     TMR0_CONH &= ~TMR_PRD_PND(0x01); // 清除TMR0的计数标志位，表示未完成计数
     TMR0_CONH |= TMR_PRD_IRQ_EN(1);  // 使能TMR0的计数中断
@@ -32,7 +32,7 @@ void tmr0_config(void)
     TMR0_PRL = TMR_PERIOD_VAL_L((TMR0_PERIOD >> 0) & 0xFF);
 
     TMR0_CONL &= ~(TMR_SOURCE_SEL(0x07)); // 清除TMR0的时钟源配置寄存器
-    TMR0_CONL |= TMR_SOURCE_SEL(0x05); // 配置TMR0的时钟源，不用任何时钟
+    TMR0_CONL |= TMR_SOURCE_SEL(0x05);    // 配置TMR0的时钟源，不用任何时钟
 }
 
 /**
@@ -77,9 +77,13 @@ void TIMR0_IRQHandler(void) interrupt TMR0_IRQn
     if (TMR0_CONH & TMR_PRD_PND(0x1))
     {
         TMR0_CONH |= TMR_PRD_PND(0x1); // 清除pending
-        tmr0_cnt++;
+        if (tmr0_cnt < 4294967295)
+        {
+            tmr0_cnt++;
+        }
+
         // P11 = ~P11; // 测试用，看看中断触发周期是否正确
-    }   
+    }
 
     // P20 = 0; // 测试中断持续时间
     // 退出中断设置IP，不可删除

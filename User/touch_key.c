@@ -78,29 +78,58 @@ volatile struct key_driver_para touch_key_para = {
 
 static u8 touch_key_get_key_id(void)
 {
+    unsigned long tk_key_val = 0;
+    u8 ret = NO_KEY;
+
     WDT_KEY = WDT_KEY_VAL(0xAA); // 喂狗并清除 wdt_pending
     /* 按键扫描函数 */
-    __tk_scan(); // 使用了库里面的接口（闭源库）
+    __tk_scan();                 // 使用了库里面的接口（闭源库）
     WDT_KEY = WDT_KEY_VAL(0xAA); // 喂狗并清除 wdt_pending
     // delay_ms(1); // 延时并不能解决刚上点就检测到长按的问题
 
     // printf("touch key scan\n");
 
+    tk_key_val = __tk_key_flag;
+#if 1
     if (TK_CH9_VALIB == __tk_key_flag)
     {
-        return TOUCH_KEY_ID_1;
+        ret = TOUCH_KEY_ID_1;
+        // return TOUCH_KEY_ID_1;
     }
     else if (TK_CH10_VALIB == __tk_key_flag)
     {
-        return TOUCH_KEY_ID_2;
+        ret = TOUCH_KEY_ID_2;
+        // return TOUCH_KEY_ID_2;
     }
     else
     {
         // return TOUCH_KEY_ID_NONE;
-        return NO_KEY;
+        // return NO_KEY;
     }
+#endif
+
+#if 0
+    if (TK_CH10_VALIB == __tk_key_flag)
+    {
+        ret = TOUCH_KEY_ID_2;
+        // return TOUCH_KEY_ID_1;
+    }
+    else if (TK_CH9_VALIB == __tk_key_flag)
+    {
+        ret = TOUCH_KEY_ID_1;
+        // return TOUCH_KEY_ID_2;
+    }
+    else
+    {
+        // return TOUCH_KEY_ID_NONE;
+        // return NO_KEY;
+    }
+#endif
+
+    tk_key_val = 0;
 
     // return __tk_key_flag;        // __tk_key_flag 单次按键标志
+    return ret;
 }
 
 /**
@@ -143,7 +172,8 @@ void touch_key_handle(void)
     switch (touch_key_event)
     {
     case TOUCH_KEY_EVENT_ID_1_CLICK:
-        // printf("touch key 1 click\n");
+        printf("touch key 1 click\n");
+        send_data(SEND_TOUCH_KEY_STATUS, (u32)KEY_CLICK_MSG << 16 | TOUCH_KEY_SEND_INFO_1);
         break;
 
     case TOUCH_KEY_EVENT_ID_1_DOUBLE:
@@ -152,17 +182,21 @@ void touch_key_handle(void)
 
     case TOUCH_KEY_EVENT_ID_1_LONG:
         // printf("touch key 1 long\n");
+
         break;
 
     case TOUCH_KEY_EVENT_ID_1_HOLD:
-        // printf("touch key 1 hold\n");
+        printf("touch key 1 hold\n");
+        send_data(SEND_TOUCH_KEY_STATUS, (u32)KEY_HOLD_MSG << 16 | TOUCH_KEY_SEND_INFO_1);
         break;
 
     case TOUCH_KEY_EVENT_ID_1_LOOSE:
-        // printf("touch key 1 loose\n");
+        printf("touch key 1 loose\n");
+        send_data(SEND_TOUCH_KEY_STATUS, (u32)KEY_LOOSE_MSG << 16 | TOUCH_KEY_SEND_INFO_1);
         break;
     case TOUCH_KEY_EVENT_ID_2_CLICK:
-        // printf("touch key 2 click\n");
+        printf("touch key 2 click\n");
+        send_data(SEND_TOUCH_KEY_STATUS, (u32)KEY_CLICK_MSG << 16 | TOUCH_KEY_SEND_INFO_2);
         break;
 
     case TOUCH_KEY_EVENT_ID_2_DOUBLE:
@@ -171,14 +205,17 @@ void touch_key_handle(void)
 
     case TOUCH_KEY_EVENT_ID_2_LONG:
         // printf("touch key 2 long\n");
+
         break;
 
     case TOUCH_KEY_EVENT_ID_2_HOLD:
-        // printf("touch key 2 hold\n");
+        printf("touch key 2 hold\n");
+        send_data(SEND_TOUCH_KEY_STATUS, (u32)KEY_HOLD_MSG << 16 | TOUCH_KEY_SEND_INFO_2);
         break;
 
     case TOUCH_KEY_EVENT_ID_2_LOOSE:
-        // printf("touch key 2 loose\n");
+        printf("touch key 2 loose\n");
+        send_data(SEND_TOUCH_KEY_STATUS, (u32)KEY_LOOSE_MSG << 16 | TOUCH_KEY_SEND_INFO_2);
         break;
 
     default:

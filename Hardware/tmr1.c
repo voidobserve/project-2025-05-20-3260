@@ -210,7 +210,10 @@ void TIMR1_IRQHandler(void) interrupt TMR1_IRQn
     {
         TMR1_CONH |= TMR_PRD_PND(0x1); // 清除pending
 
-        tmr1_cnt++;
+        if (tmr1_cnt < 4294967295)
+        {
+            tmr1_cnt++;
+        }
 
         {
             // static u8 cnt = 0;

@@ -7,7 +7,7 @@ void pin_level_scan_config(void)
     p21_input_config(); // 远光灯状态对应的引脚
     p22_input_config(); // 右转向灯状态对应的引脚
     // p23_input_config(); // 刹车状态对应的引脚
-    p25_input_config(); // 左转向灯状态对应的引脚
+    // p25_input_config(); // 左转向灯状态对应的引脚
 
     p27_input_config(); // 6档对应的引脚
     p30_input_config(); // 5档对应的引脚

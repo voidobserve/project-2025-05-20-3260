@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   TMR1                                                              06/12/2025 11:16:48 PAGE 1   
+C51 COMPILER V9.60.7.0   TMR1                                                              06/16/2025 18:35:26 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE TMR1
@@ -62,7 +62,7 @@ line level    source
   50   1      }
   51          
   52          #if 0  // void tmr1_disable(void)
-C51 COMPILER V9.60.7.0   TMR1                                                              06/12/2025 11:16:48 PAGE 2   
+C51 COMPILER V9.60.7.0   TMR1                                                              06/16/2025 18:35:26 PAGE 2   
 
               /**
                * @brief 关闭定时器，清空计数值
@@ -126,7 +126,7 @@ line level    source
                   //     {
                   //         speed_actual_scan_time_cnt = speed_scan_time_cnt; // 更新实际的扫描检测时间
                   //         speed_scan_time_cnt = 0;
-C51 COMPILER V9.60.7.0   TMR1                                                              06/12/2025 11:16:48 PAGE 3   
+C51 COMPILER V9.60.7.0   TMR1                                                              06/16/2025 18:35:26 PAGE 3   
 
                   //         // detect_speed_pulse_cnt[1] += detect_speed_pulse_cnt[0]; // 将另一个定时器中断�
              -�描到的脉冲更新到[1]
@@ -190,7 +190,7 @@ line level    source
  166   2              {
  167   3                  // 过了冷却时间，退出冷却状态
  168   3                  update_time_cooling_cnt = 0;
-C51 COMPILER V9.60.7.0   TMR1                                                              06/12/2025 11:16:48 PAGE 4   
+C51 COMPILER V9.60.7.0   TMR1                                                              06/16/2025 18:35:26 PAGE 4   
 
  169   3                  update_time_status = UPDATE_STATUS_NONE;
  170   3              }
@@ -237,51 +237,54 @@ line level    source
  210   1          {
  211   2              TMR1_CONH |= TMR_PRD_PND(0x1); // 清除pending
  212   2      
- 213   2              tmr1_cnt++;
- 214   2      
- 215   2              {
- 216   3                  // static u8 cnt = 0;
- 217   3                  // cnt++;
- 218   3                  // if (cnt >= TOUCH_KEY_SCAN_CIRCLE_TIMES) // xx ms
- 219   3                  // {
- 220   3                  //     cnt = 0;
- 221   3                  //     // flag_is_touch_key_scan_circle_arrived = 1; // 表示扫描周期到来，执行一�
+ 213   2              if (tmr1_cnt < 4294967295)
+ 214   2              {
+ 215   3                  tmr1_cnt++;
+ 216   3              }
+ 217   2      
+ 218   2              {
+ 219   3                  // static u8 cnt = 0;
+ 220   3                  // cnt++;
+ 221   3                  // if (cnt >= TOUCH_KEY_SCAN_CIRCLE_TIMES) // xx ms
+ 222   3                  // {
+ 223   3                  //     cnt = 0;
+ 224   3                  //     // flag_is_touch_key_scan_circle_arrived = 1; // 表示扫描周期到来，执行一�
              -�按键扫描
- 222   3      
- 223   3                  //     // {
- 224   3                  //     //     static u8 send_cnt = 0;
- 225   3                  //     //     send_cnt++;
- 226   3                  //     //     if (send_cnt >= 100)
- 227   3                  //     //     {
- 228   3                  //     //         send_cnt = 0;
-C51 COMPILER V9.60.7.0   TMR1                                                              06/12/2025 11:16:48 PAGE 5   
+ 225   3      
+ 226   3                  //     // {
+ 227   3                  //     //     static u8 send_cnt = 0;
+ 228   3                  //     //     send_cnt++;
+C51 COMPILER V9.60.7.0   TMR1                                                              06/16/2025 18:35:26 PAGE 5   
 
- 229   3                  //     //         printf("touch key scan\n");
- 230   3                  //     //     }
- 231   3                  //     // }
- 232   3                  // }
- 233   3      
- 234   3                  // 在定时器注册按键扫描：
- 235   3                  if (ad_key_para.cur_scan_times < 255)
- 236   3                  {
- 237   4                      ad_key_para.cur_scan_times++;
- 238   4                  }
- 239   3      
- 240   3                  if (touch_key_para.cur_scan_times < 255)
- 241   3                  {
- 242   4                      touch_key_para.cur_scan_times++;
- 243   4                  }
- 244   3              }
- 245   2          }
- 246   1      
- 247   1          // P20 = 0;// 测试中断持续时间
- 248   1          // 退出中断设置IP，不可删除
- 249   1          __IRQnIPnPop(TMR1_IRQn);
- 250   1      }
+ 229   3                  //     //     if (send_cnt >= 100)
+ 230   3                  //     //     {
+ 231   3                  //     //         send_cnt = 0;
+ 232   3                  //     //         printf("touch key scan\n");
+ 233   3                  //     //     }
+ 234   3                  //     // }
+ 235   3                  // }
+ 236   3      
+ 237   3                  // 在定时器注册按键扫描：
+ 238   3                  if (ad_key_para.cur_scan_times < 255)
+ 239   3                  {
+ 240   4                      ad_key_para.cur_scan_times++;
+ 241   4                  }
+ 242   3      
+ 243   3                  if (touch_key_para.cur_scan_times < 255)
+ 244   3                  {
+ 245   4                      touch_key_para.cur_scan_times++;
+ 246   4                  }
+ 247   3              }
+ 248   2          }
+ 249   1      
+ 250   1          // P20 = 0;// 测试中断持续时间
+ 251   1          // 退出中断设置IP，不可删除
+ 252   1          __IRQnIPnPop(TMR1_IRQn);
+ 253   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    546    ----
+   CODE SIZE        =    572    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =      8       8
    PDATA SIZE       =   ----    ----

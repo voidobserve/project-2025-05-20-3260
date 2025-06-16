@@ -322,14 +322,17 @@ void user_init(void)
 
     adc_config();
 
-    // tk_param_init();  // 触摸按键模块初始化
+    tk_param_init();  // 触摸按键模块初始化
     aip1302_config(); // 初始化时钟ic，函数内部会读取时间信息，并存放到全局变量中
     tmr2_config();    // 扫描脉冲(电平变化)的定时器
 
     tmr1_enable(); // 打开 检测引脚电平、检测时速、发动机转速、更新里程、定时检测油量 使用的定时器
     tmr2_enable(); // 打开定时检测脉冲的定时器
 
+    // delay_ms(10); // 等待系统稳定
+    // tk_param_init();  // 触摸按键模块初始化
     delay_ms(1); // 等待系统稳定
+    // delay_ms(2000); // 等待系统稳定
 }
 
 void main(void)
@@ -403,7 +406,7 @@ void main(void)
     printf("hour %bu min %bu sec %bu \n", fun_info.aip1302_saveinfo.time_hour, fun_info.aip1302_saveinfo.time_min, fun_info.aip1302_saveinfo.time_sec);
 #endif // 测试发送日期和时间
 
-    // printf("sys reset\n");
+    printf("sys reset\n");
 
     /* 系统主循环 */
     while (1)
@@ -411,11 +414,12 @@ void main(void)
         // printf("main circle\n");
 
 #if 1
+
         key_driver_scan(&ad_key_para);
         ad_key_handle(); // ad按键处理函数
 
-        // key_driver_scan(&touch_key_para);
-        // touch_key_handle(); // 触摸按键处理函数
+        key_driver_scan(&touch_key_para);
+        touch_key_handle(); // 触摸按键处理函数
 
         speed_scan();   // 检测时速
         mileage_scan(); // 检测大计里程和小计里程
@@ -428,6 +432,7 @@ void main(void)
         uart0_scan_handle();  // 检查串口接收缓冲区的数据是否符合协议,如果有正确的指令，会存到另一个缓冲区中（接下来让instruction_scan()函数来处理）
         instruction_scan();   // 扫描是否有合法的指令
         instruction_handle(); // 扫描是否有对应的获取/状态更新操作(最占用时间,因为要等待串口的数据发送完成)
+
 #endif //
 
         // aip1302_test();

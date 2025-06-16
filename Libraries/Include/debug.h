@@ -60,7 +60,7 @@
   * @{
   */
   
-#if 0 // 不参与编译的程序
+#if 0
 /**
   * @brief  Debug puchar function
   * @param  uart_data : Data that needs to be sent
@@ -81,8 +81,7 @@ void debug_init(void);
   * @retval None
   */
 void user_printf(char *p_data);
-#endif // 不参与编译的程序
-
+#endif
 
 /**
   * @}

@@ -95,6 +95,8 @@
  * TK9 通道灵敏度
  */
 #define TK9_CH_EN                       (1)
+// #define TK9_THR_DATA                    (1) // 
+// #define TK9_THR_DATA                    (50) // 
 #define TK9_THR_DATA                    (100) // 
 // #define TK9_THR_DATA                    (1500) // 这里调节到900，刚上电还是会一直触发长按
 // #define TK9_THR_DATA                    (2000) // 还是会有概率触发长按
@@ -103,6 +105,8 @@
  * TK10 通道灵敏度
  */
 #define TK10_CH_EN                      (1)
+// #define TK10_THR_DATA                   (1)
+// #define TK10_THR_DATA                   (50)
 #define TK10_THR_DATA                   (100)
 // #define TK10_THR_DATA                   (1500) 
 // #define TK10_THR_DATA                   (2000) // 还是会有概率触发长按

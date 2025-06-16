@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   SYSTEM                                                            06/12/2025 11:16:47 PAGE 1   
+C51 COMPILER V9.60.7.0   SYSTEM                                                            06/16/2025 18:35:26 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE SYSTEM
@@ -47,9 +47,9 @@ line level    source
   36           */
   37          void delay(u16 cnt)
   38          {
-  39   1          while (cnt--)
-  40   1          {
-  41   2          }
+  39   1        while (cnt--)
+  40   1        {
+  41   2        }
   42   1      }
   43          
   44          /**
@@ -59,50 +59,47 @@ line level    source
   48           */
   49          void delay_ms(u16 ms)
   50          {
-  51   1          while (ms--)
-  52   1          {
-  53   2              WDT_KEY = WDT_KEY_VAL(0xAA); // 喂狗操作
-C51 COMPILER V9.60.7.0   SYSTEM                                                            06/12/2025 11:16:47 PAGE 2   
+  51   1        while (ms--)
+  52   1        {
+  53   2          delay(1450);
+C51 COMPILER V9.60.7.0   SYSTEM                                                            06/16/2025 18:35:26 PAGE 2   
 
-  54   2              // delay(1140); // 调试得出的数值（由于这里加了喂狗操作，数值需要重新调�
-             -��，不用原来的1450）
-  55   2      
-  56   2              delay(1450);
-  57   2          }
-  58   1      }
-  59          
-  60          /**
-  61           * @brief  System initialization function
-  62           * @param  None
-  63           * @retval None
-  64           */
-  65          void system_init(void)
-  66          {
-  67   1          u8 i;
-  68   1      
-  69   1          CLK_ACON0 |= CLK_AIP_HRC_EN(0x1); // 使能 HIRC
-  70   1          __HIRC_DELAY;                     // 该延迟不可删除,等待HIRC稳定并能保证烧录稳定性
-  71   1          FLASH_TIMEREG0 = 0x55;
-  72   1          /* 如果系统时钟配置为48mhz，则FLASH_TIMEREG1 = 0x54 */
-  73   1          /* 如果系统时钟配置为24mhz-12mhz，则FLASH_TIMEREG1 = 0x50 */
-  74   1          FLASH_TIMEREG1 = 0x5C;              // FLASH访问速度 = 系统时钟/4
-  75   1          CLK_CON2 = 0x50 | CLK_SYS_DIV(0x0); // 系统时钟不分频 HIRC48M
-  76   1          CLK_CON0 = CLK_SYSCLK_SEL(0x3);     // 系统时钟选择
-  77   1          CLK_CON6 = CLK_FLASH_DIV(47);       // FLASH烧写时钟48分频：1M
-  78   1          LVD_CON2 = 3;                       // 滤波周期
-  79   1          LVD_CON1 &= ~(0x3);                 // VCC\VDD 低电滤波去抖功能
-  80   1      
-  81   1          // 初始化寄存器
-  82   1          // FOUT_S00 ~ FOUT_SEL
-  83   1          for (i = 0x18; i <= 0x32; i++)
-  84   1          {
-  85   2              *(unsigned char volatile xdata *)(IOFUNC_BASE + i) = 0x0;
-  86   2          }
-  87   1      
-  88   1          __LOADER_CHIP_TRIM; // 装载芯片各个模块校准值
-  89   1      }
-  90          
-  91          /*************************** (C) COPYRIGHT 2021 HUGE-IC ***** END OF FILE *****/
+  54   2          WDT_KEY = WDT_KEY_VAL(0xAA); // ι������� wdt_pending
+  55   2        }
+  56   1      }
+  57          
+  58          /**
+  59           * @brief  System initialization function
+  60           * @param  None
+  61           * @retval None
+  62           */
+  63          void system_init(void)
+  64          {
+  65   1        u8 i;
+  66   1      
+  67   1        CLK_ACON0 |= CLK_AIP_HRC_EN(0x1); // ʹ�� HIRC
+  68   1        __HIRC_DELAY;                     // ���ӳٲ���ɾ��,�ȴ�HIRC�ȶ����ܱ�֤��¼�ȶ���
+  69   1        FLASH_TIMEREG0 = 0x55;
+  70   1        /* ���ϵͳʱ������Ϊ48mhz����FLASH_TIMEREG1 = 0x54 */
+  71   1        /* ���ϵͳʱ������Ϊ24mhz-12mhz����FLASH_TIMEREG1 = 0x50 */
+  72   1        FLASH_TIMEREG1 = 0x5C;              // FLASH�����ٶ� = ϵͳʱ��/4
+  73   1        CLK_CON2 = 0x50 | CLK_SYS_DIV(0x0); // ϵͳʱ�Ӳ���Ƶ HIRC48M
+  74   1        CLK_CON0 = CLK_SYSCLK_SEL(0x3);     // ϵͳʱ��ѡ��
+  75   1        CLK_CON6 = CLK_FLASH_DIV(47);       // FLASH��дʱ��48��Ƶ��1M
+  76   1        LVD_CON2 = 3;                       // �˲�����
+  77   1        LVD_CON1 &= ~(0x3);                 // VCC\VDD �͵��˲�ȥ������
+  78   1      
+  79   1        // ��ʼ���Ĵ���
+  80   1        // FOUT_S00 ~ FOUT_SEL
+  81   1        for (i = 0x18; i <= 0x32; i++)
+  82   1        {
+  83   2          *(unsigned char volatile xdata *)(IOFUNC_BASE + i) = 0x0;
+  84   2        }
+  85   1      
+  86   1        __LOADER_CHIP_TRIM; // װ��оƬ����ģ��У׼ֵ
+  87   1      }
+  88          
+  89          /*************************** (C) COPYRIGHT 2021 HUGE-IC ***** END OF FILE *****/
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         06/16/2025 18:35:28 PAGE 1   
+C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         06/19/2025 16:47:01 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE TOUCH_KEY
@@ -62,7 +62,7 @@ line level    source
   45              // // .click_cnt = 0,
   46              // .click_delay_time = 20, // 按键抬起后，等待连击的数量，与扫描频率有关
   47              // // .notify_value = 0,
-C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         06/16/2025 18:35:28 PAGE 2   
+C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         06/19/2025 16:47:01 PAGE 2   
 
   48              // .key_type = KEY_TYPE_AD, // 按键类型为ad按键
   49              // .get_value = ad_key_get_key_id,
@@ -79,8 +79,9 @@ line level    source
   60              0,
   61              3,
   62          
-  63              LONG_PRESS_TIME_THRESHOLD_MS / TOUCH_KEY_SCAN_CIRCLE_TIMES,
-  64              (LONG_PRESS_TIME_THRESHOLD_MS + HOLD_PRESS_TIME_THRESHOLD_MS) / TOUCH_KEY_SCAN_CIRCLE_TIMES,
+  63              TOUCH_KEY_LONG_PRESS_TIME_THRESHOLD_MS / TOUCH_KEY_SCAN_CIRCLE_TIMES,
+  64              (TOUCH_KEY_LONG_PRESS_TIME_THRESHOLD_MS + TOUCH_KEY_HOLD_PRESS_TIME_THRESHOLD_MS) / TOUCH_KEY_SCAN_CIR
+             -CLE_TIMES,
   65              0,
   66          
   67              0,
@@ -100,36 +101,33 @@ line level    source
   81   1          unsigned long tk_key_val = 0;
   82   1          u8 ret = NO_KEY;
   83   1      
-  84   1          WDT_KEY = WDT_KEY_VAL(0xAA); // 喂狗并清除 wdt_pending
-  85   1          /* 按键扫描函数 */
-  86   1          __tk_scan();                 // 使用了库里面的接口（闭源库）
-  87   1          WDT_KEY = WDT_KEY_VAL(0xAA); // 喂狗并清除 wdt_pending
-  88   1          // delay_ms(1); // 延时并不能解决刚上点就检测到长按的问题
-  89   1      
-  90   1          // printf("touch key scan\n");
-  91   1      
-  92   1          tk_key_val = __tk_key_flag;
-  93   1      #if 1
-  94   1          if (TK_CH9_VALIB == __tk_key_flag)
-  95   1          {
-  96   2              ret = TOUCH_KEY_ID_1;
-  97   2              // return TOUCH_KEY_ID_1;
-  98   2          }
-  99   1          else if (TK_CH10_VALIB == __tk_key_flag)
- 100   1          {
- 101   2              ret = TOUCH_KEY_ID_2;
- 102   2              // return TOUCH_KEY_ID_2;
- 103   2          }
- 104   1          else
- 105   1          {
- 106   2              // return TOUCH_KEY_ID_NONE;
- 107   2              // return NO_KEY;
- 108   2          }
- 109   1      #endif
-C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         06/16/2025 18:35:28 PAGE 3   
+  84   1      
+  85   1          // delay_ms(1); // 延时并不能解决刚上点就检测到长按的问题
+  86   1      
+  87   1          // printf("touch key scan\n");
+  88   1      
+  89   1          tk_key_val = __tk_key_flag;
+  90   1      #if 1
+  91   1          if (TK_CH9_VALIB == __tk_key_flag)
+  92   1          {
+  93   2              ret = TOUCH_KEY_ID_1;
+  94   2              // return TOUCH_KEY_ID_1;
+  95   2          }
+  96   1          else if (TK_CH10_VALIB == __tk_key_flag)
+  97   1          {
+  98   2              ret = TOUCH_KEY_ID_2;
+  99   2              // return TOUCH_KEY_ID_2;
+ 100   2          }
+ 101   1          else
+ 102   1          {
+ 103   2              // return TOUCH_KEY_ID_NONE;
+ 104   2              // return NO_KEY;
+ 105   2          }
+ 106   1      #endif
+ 107   1      
+ 108   1      #if 0
+C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         06/19/2025 16:47:01 PAGE 3   
 
- 110   1      
- 111   1      #if 0
                   if (TK_CH10_VALIB == __tk_key_flag)
                   {
                       ret = TOUCH_KEY_ID_2;
@@ -146,410 +144,410 @@ line level    source
                       // return NO_KEY;
                   }
               #endif
- 128   1      
- 129   1          tk_key_val = 0;
- 130   1      
- 131   1          // return __tk_key_flag;        // __tk_key_flag 单次按键标志
- 132   1          return ret;
- 133   1      }
- 134          
- 135          /**
- 136           * @brief 将按键值和key_driver_scan得到的按键事件转换成触摸按键的事件
- 137           *
- 138           * @param key_val 触摸按键键值
- 139           * @param key_event 在key_driver_scan得到的按键事件 KEY_EVENT
- 140           * @return u8 在touch_key_event_table中找到的对应的按键事件，如果没有则返回 TOUCH_KEY_
+ 125   1      
+ 126   1          tk_key_val = 0;
+ 127   1      
+ 128   1          // return __tk_key_flag;        // __tk_key_flag 单次按键标志
+ 129   1          return ret;
+ 130   1      }
+ 131          
+ 132          /**
+ 133           * @brief 将按键值和key_driver_scan得到的按键事件转换成触摸按键的事件
+ 134           *
+ 135           * @param key_val 触摸按键键值
+ 136           * @param key_event 在key_driver_scan得到的按键事件 KEY_EVENT
+ 137           * @return u8 在touch_key_event_table中找到的对应的按键事件，如果没有则返回 TOUCH_KEY_
              -EVENT_NONE
- 141           */
- 142          static u8 __touch_key_get_event(const u8 key_val, const u8 key_event)
- 143          {
- 144   1          volatile u8 ret_key_event = TOUCH_KEY_EVENT_NONE;
- 145   1          u8 i = 0;
- 146   1          for (; i < ARRAY_SIZE(touch_key_event_table); i++)
- 147   1          {
- 148   2              // 如果往 KEY_EVENT 枚举中添加了新的按键事件，这里查表的方法就会失效，
+ 138           */
+ 139          static u8 __touch_key_get_event(const u8 key_val, const u8 key_event)
+ 140          {
+ 141   1          volatile u8 ret_key_event = TOUCH_KEY_EVENT_NONE;
+ 142   1          u8 i = 0;
+ 143   1          for (; i < ARRAY_SIZE(touch_key_event_table); i++)
+ 144   1          {
+ 145   2              // 如果往 KEY_EVENT 枚举中添加了新的按键事件，这里查表的方法就会失效，
              -需要手动修改
- 149   2              if (key_val == touch_key_event_table[i][0])
- 150   2              {
- 151   3                  ret_key_event = touch_key_event_table[i][key_event];
- 152   3                  break;
- 153   3              }
- 154   2          }
- 155   1      
- 156   1          return ret_key_event;
- 157   1      }
- 158          
- 159          void touch_key_handle(void)
- 160          {
- 161   1          u8 touch_key_event = TOUCH_KEY_EVENT_NONE;
- 162   1      
- 163   1          if (touch_key_para.latest_key_val == TOUCH_KEY_ID_NONE)
- 164   1          {
- 165   2              return;
- 166   2          }
- 167   1      
- 168   1          touch_key_event = __touch_key_get_event(touch_key_para.latest_key_val, touch_key_para.latest_key_event
+ 146   2              if (key_val == touch_key_event_table[i][0])
+ 147   2              {
+ 148   3                  ret_key_event = touch_key_event_table[i][key_event];
+ 149   3                  break;
+ 150   3              }
+ 151   2          }
+ 152   1      
+ 153   1          return ret_key_event;
+ 154   1      }
+ 155          
+ 156          void touch_key_handle(void)
+ 157          {
+ 158   1          u8 touch_key_event = TOUCH_KEY_EVENT_NONE;
+ 159   1      
+ 160   1          if (touch_key_para.latest_key_val == TOUCH_KEY_ID_NONE)
+ 161   1          {
+ 162   2              return;
+ 163   2          }
+ 164   1      
+ 165   1          touch_key_event = __touch_key_get_event(touch_key_para.latest_key_val, touch_key_para.latest_key_event
              -);
-C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         06/16/2025 18:35:28 PAGE 4   
+ 166   1          touch_key_para.latest_key_val = TOUCH_KEY_ID_NONE;
+ 167   1          touch_key_para.latest_key_event = KEY_EVENT_NONE;
+C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         06/19/2025 16:47:01 PAGE 4   
 
- 169   1          touch_key_para.latest_key_val = TOUCH_KEY_ID_NONE;
- 170   1          touch_key_para.latest_key_event = KEY_EVENT_NONE;
- 171   1      
- 172   1          switch (touch_key_event)
- 173   1          {
- 174   2          case TOUCH_KEY_EVENT_ID_1_CLICK:
- 175   2              printf("touch key 1 click\n");
- 176   2              send_data(SEND_TOUCH_KEY_STATUS, (u32)KEY_CLICK_MSG << 16 | TOUCH_KEY_SEND_INFO_1);
- 177   2              break;
- 178   2      
- 179   2          case TOUCH_KEY_EVENT_ID_1_DOUBLE:
- 180   2              // printf("touch key 1 double\n");
- 181   2              break;
- 182   2      
- 183   2          case TOUCH_KEY_EVENT_ID_1_LONG:
- 184   2              // printf("touch key 1 long\n");
- 185   2      
- 186   2              break;
- 187   2      
- 188   2          case TOUCH_KEY_EVENT_ID_1_HOLD:
- 189   2              printf("touch key 1 hold\n");
- 190   2              send_data(SEND_TOUCH_KEY_STATUS, (u32)KEY_HOLD_MSG << 16 | TOUCH_KEY_SEND_INFO_1);
- 191   2              break;
- 192   2      
- 193   2          case TOUCH_KEY_EVENT_ID_1_LOOSE:
- 194   2              printf("touch key 1 loose\n");
- 195   2              send_data(SEND_TOUCH_KEY_STATUS, (u32)KEY_LOOSE_MSG << 16 | TOUCH_KEY_SEND_INFO_1);
- 196   2              break;
- 197   2          case TOUCH_KEY_EVENT_ID_2_CLICK:
- 198   2              printf("touch key 2 click\n");
- 199   2              send_data(SEND_TOUCH_KEY_STATUS, (u32)KEY_CLICK_MSG << 16 | TOUCH_KEY_SEND_INFO_2);
- 200   2              break;
- 201   2      
- 202   2          case TOUCH_KEY_EVENT_ID_2_DOUBLE:
- 203   2              // printf("touch key 2 double\n");
- 204   2              break;
- 205   2      
- 206   2          case TOUCH_KEY_EVENT_ID_2_LONG:
- 207   2              // printf("touch key 2 long\n");
- 208   2      
- 209   2              break;
- 210   2      
- 211   2          case TOUCH_KEY_EVENT_ID_2_HOLD:
- 212   2              printf("touch key 2 hold\n");
- 213   2              send_data(SEND_TOUCH_KEY_STATUS, (u32)KEY_HOLD_MSG << 16 | TOUCH_KEY_SEND_INFO_2);
- 214   2              break;
- 215   2      
- 216   2          case TOUCH_KEY_EVENT_ID_2_LOOSE:
- 217   2              printf("touch key 2 loose\n");
- 218   2              send_data(SEND_TOUCH_KEY_STATUS, (u32)KEY_LOOSE_MSG << 16 | TOUCH_KEY_SEND_INFO_2);
+ 168   1      
+ 169   1          switch (touch_key_event)
+ 170   1          {
+ 171   2          case TOUCH_KEY_EVENT_ID_1_CLICK:
+ 172   2              // printf("touch key 1 click\n");
+ 173   2              send_data(SEND_TOUCH_KEY_STATUS, (u32)TOUCH_KEY_CLICK_MSG << 16 | TOUCH_KEY_SEND_INFO_1);
+ 174   2              break;
+ 175   2      
+ 176   2          case TOUCH_KEY_EVENT_ID_1_DOUBLE:
+ 177   2              // printf("touch key 1 double\n");
+ 178   2              break;
+ 179   2      
+ 180   2          case TOUCH_KEY_EVENT_ID_1_LONG:
+ 181   2              // printf("touch key 1 long\n");
+ 182   2              send_data(SEND_TOUCH_KEY_STATUS, (u32)TOUCH_KEY_LONG_MSG << 16 | TOUCH_KEY_SEND_INFO_1);
+ 183   2              break;
+ 184   2      
+ 185   2          case TOUCH_KEY_EVENT_ID_1_HOLD:
+ 186   2              // printf("touch key 1 hold\n");
+ 187   2              send_data(SEND_TOUCH_KEY_STATUS, (u32)TOUCH_KEY_HOLD_MSG << 16 | TOUCH_KEY_SEND_INFO_1);
+ 188   2              break;
+ 189   2      
+ 190   2          case TOUCH_KEY_EVENT_ID_1_LOOSE:
+ 191   2              // printf("touch key 1 loose\n");
+ 192   2              send_data(SEND_TOUCH_KEY_STATUS, (u32)TOUCH_KEY_LOOSE_MSG << 16 | TOUCH_KEY_SEND_INFO_1);
+ 193   2              break;
+ 194   2          case TOUCH_KEY_EVENT_ID_2_CLICK:
+ 195   2              // printf("touch key 2 click\n");
+ 196   2              send_data(SEND_TOUCH_KEY_STATUS, (u32)TOUCH_KEY_CLICK_MSG << 16 | TOUCH_KEY_SEND_INFO_2);
+ 197   2              break;
+ 198   2      
+ 199   2          case TOUCH_KEY_EVENT_ID_2_DOUBLE:
+ 200   2              // printf("touch key 2 double\n");
+ 201   2              break;
+ 202   2      
+ 203   2          case TOUCH_KEY_EVENT_ID_2_LONG:
+ 204   2              // printf("touch key 2 long\n");
+ 205   2              send_data(SEND_TOUCH_KEY_STATUS, (u32)TOUCH_KEY_LONG_MSG << 16 | TOUCH_KEY_SEND_INFO_2);
+ 206   2              break;
+ 207   2      
+ 208   2          case TOUCH_KEY_EVENT_ID_2_HOLD:
+ 209   2              // printf("touch key 2 hold\n");
+ 210   2              send_data(SEND_TOUCH_KEY_STATUS, (u32)TOUCH_KEY_HOLD_MSG << 16 | TOUCH_KEY_SEND_INFO_2);
+ 211   2              break;
+ 212   2      
+ 213   2          case TOUCH_KEY_EVENT_ID_2_LOOSE:
+ 214   2              // printf("touch key 2 loose\n");
+ 215   2              send_data(SEND_TOUCH_KEY_STATUS, (u32)TOUCH_KEY_LOOSE_MSG << 16 | TOUCH_KEY_SEND_INFO_2);
+ 216   2              break;
+ 217   2      
+ 218   2          default:
  219   2              break;
- 220   2      
- 221   2          default:
- 222   2              break;
- 223   2          }
- 224   1      }
- 225          
- 226          /**
- 227           * @brief __is_double_click() 判断是否有双击同一个触摸按键,内部最长延时时间：DETECT
+ 220   2          }
+ 221   1      }
+ 222          
+ 223          /**
+ 224           * @brief __is_double_click() 判断是否有双击同一个触摸按键,内部最长延时时间：DETECT
              -_DOUBLE_CLICK_INTERVAL
- 228           *
- 229           * @param touch_key_id_const
-C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         06/16/2025 18:35:28 PAGE 5   
+ 225           *
+ 226           * @param touch_key_id_const
+ 227           * @return u8 0--没有双击同一个触摸按键，1--双击了同一个触摸按键
+ 228           */
+C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         06/19/2025 16:47:01 PAGE 5   
 
- 230           * @return u8 0--没有双击同一个触摸按键，1--双击了同一个触摸按键
- 231           */
- 232          // u8 __is_double_click(const u32 touch_key_id_const)
- 233          // {
- 234          //     u8 i = 0;                   // 循环计数值
- 235          //     volatile u32 touch_key = 0; // 存放每次检测到的按键
- 236          
- 237          //     for (; i < DETECT_DOUBLE_CLICK_INTERVAL; i++)
- 238          //     {
- 239          //         delay_ms(1);
- 240          //         __tk_scan();
- 241          //         touch_key = __tk_key_flag;
- 242          
- 243          //         if (touch_key_id_const == touch_key)
- 244          //         {
- 245          //             // 如果检测到是同一个按键按下，说明是双击
- 246          //             return 1; // 双击了同一个触摸按键，返回1
- 247          //         }
- 248          //     }
+ 229          // u8 __is_double_click(const u32 touch_key_id_const)
+ 230          // {
+ 231          //     u8 i = 0;                   // 循环计数值
+ 232          //     volatile u32 touch_key = 0; // 存放每次检测到的按键
+ 233          
+ 234          //     for (; i < DETECT_DOUBLE_CLICK_INTERVAL; i++)
+ 235          //     {
+ 236          //         delay_ms(1);
+ 237          //         __tk_scan();
+ 238          //         touch_key = __tk_key_flag;
+ 239          
+ 240          //         if (touch_key_id_const == touch_key)
+ 241          //         {
+ 242          //             // 如果检测到是同一个按键按下，说明是双击
+ 243          //             return 1; // 双击了同一个触摸按键，返回1
+ 244          //         }
+ 245          //     }
+ 246          
+ 247          //     return 0; // 没有双击同一个触摸按键，返回0
+ 248          // }
  249          
- 250          //     return 0; // 没有双击同一个触摸按键，返回0
- 251          // }
- 252          
- 253          // 使用touch_key之前，先调用官方提供的触摸模块的初始化函数 tk_param_init();
- 254          // void touch_key_scan(void)
- 255          // {
- 256          
- 257          // #if 0
- 258          //     // static volatile u8 filter_cnt = 0; // 按键消抖使用到的变量
- 259          //     volatile u32 touch_key = 0;                   // __tk_key_flag 单次按键标志
- 260          //     static volatile u32 touch_key_last = 0;                // 用于存放长按时，对应的按键
- 261          //     static volatile u32 touch_time_cnt = 0;       // 长按计数值
- 262          //     static volatile u8 touch_key_scan_status = 0; // 非阻塞的按键扫描函数中，使用的状�
+ 250          // 使用touch_key之前，先调用官方提供的触摸模块的初始化函数 tk_param_init();
+ 251          // void touch_key_scan(void)
+ 252          // {
+ 253          
+ 254          // #if 0
+ 255          //     // static volatile u8 filter_cnt = 0; // 按键消抖使用到的变量
+ 256          //     volatile u32 touch_key = 0;                   // __tk_key_flag 单次按键标志
+ 257          //     static volatile u32 touch_key_last = 0;                // 用于存放长按时，对应的按键
+ 258          //     static volatile u32 touch_time_cnt = 0;       // 长按计数值
+ 259          //     static volatile u8 touch_key_scan_status = 0; // 非阻塞的按键扫描函数中，使用的状�
              -�机
- 263          
- 264          //     if (0 == flag_is_touch_key_scan_circle_arrived)
- 265          //     {
- 266          //         // 如果扫描周期没有到来，不执行按键扫描
- 267          //         return;
- 268          //     }
- 269          
- 270          //     flag_is_touch_key_scan_circle_arrived = 0;
- 271          
+ 260          
+ 261          //     if (0 == flag_is_touch_key_scan_circle_arrived)
+ 262          //     {
+ 263          //         // 如果扫描周期没有到来，不执行按键扫描
+ 264          //         return;
+ 265          //     }
+ 266          
+ 267          //     flag_is_touch_key_scan_circle_arrived = 0;
+ 268          
+ 269          //     WDT_KEY = WDT_KEY_VAL(0xAA); // 喂狗并清除 wdt_pending
+ 270          //     /* 按键扫描函数 */
+ 271          //     __tk_scan();                 // 使用了库里面的接口（闭源库）
  272          //     WDT_KEY = WDT_KEY_VAL(0xAA); // 喂狗并清除 wdt_pending
- 273          //     /* 按键扫描函数 */
- 274          //     __tk_scan();                 // 使用了库里面的接口（闭源库）
- 275          //     WDT_KEY = WDT_KEY_VAL(0xAA); // 喂狗并清除 wdt_pending
- 276          //     touch_key = __tk_key_flag;   // __tk_key_flag 单次按键标志
- 277          
- 278          //     if (TOUCH_KEY_SCAN_STATUS_NONE == touch_key_scan_status) // 未检测到按键时
- 279          //     {
- 280          //         // 如果有按键按下（并且之前扫描到的不是长按）
- 281          
- 282          //         // 判断是否为长按：
- 283          
- 284          //         if (touch_key_last == 0) // 如果之前未检测到按键
- 285          //         {
- 286          //             touch_key_last = touch_key;
- 287          //         }
- 288          //         else if (touch_key_last == touch_key)
- 289          //         {
- 290          //             // 如果上次检测到的按键与此次的按键相等，说明按键还未松开
-C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         06/16/2025 18:35:28 PAGE 6   
+ 273          //     touch_key = __tk_key_flag;   // __tk_key_flag 单次按键标志
+ 274          
+ 275          //     if (TOUCH_KEY_SCAN_STATUS_NONE == touch_key_scan_status) // 未检测到按键时
+ 276          //     {
+ 277          //         // 如果有按键按下（并且之前扫描到的不是长按）
+ 278          
+ 279          //         // 判断是否为长按：
+ 280          
+ 281          //         if (touch_key_last == 0) // 如果之前未检测到按键
+ 282          //         {
+ 283          //             touch_key_last = touch_key;
+ 284          //         }
+ 285          //         else if (touch_key_last == touch_key)
+ 286          //         {
+ 287          //             // 如果上次检测到的按键与此次的按键相等，说明按键还未松开
+ 288          //             touch_time_cnt += (TOUCH_KEY_SCAN_CIRCLE_TIMES);
+ 289          
+C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         06/19/2025 16:47:01 PAGE 6   
 
- 291          //             touch_time_cnt += (TOUCH_KEY_SCAN_CIRCLE_TIMES);
- 292          
- 293          //             if (touch_time_cnt >= LONG_PRESS_TIME_THRESHOLD_MS)
- 294          //             {
- 295          //                 // 如果长按超过了设置的长按时间
- 296          //                 // 跳转到长按处理
- 297          //                 touch_time_cnt = 0; // 清除长按时间计数
- 298          //                 // printf("long press\n");
- 299          //                 touch_key_scan_status = TOUCH_KEY_SCAN_STATUS_IS_HANDLE_LONG_PRESS;
- 300          //             }
- 301          //         }
- 302          //         else
- 303          //         {
- 304          //             // 如果上次检测到的按键与此次的按键不相等，并且上次检测到的按�
+ 290          //             if (touch_time_cnt >= LONG_PRESS_TIME_THRESHOLD_MS)
+ 291          //             {
+ 292          //                 // 如果长按超过了设置的长按时间
+ 293          //                 // 跳转到长按处理
+ 294          //                 touch_time_cnt = 0; // 清除长按时间计数
+ 295          //                 // printf("long press\n");
+ 296          //                 touch_key_scan_status = TOUCH_KEY_SCAN_STATUS_IS_HANDLE_LONG_PRESS;
+ 297          //             }
+ 298          //         }
+ 299          //         else
+ 300          //         {
+ 301          //             // 如果上次检测到的按键与此次的按键不相等，并且上次检测到的按�
              -��不等于0
- 305          //             // touch_time_cnt = 0; // 清除长按时间计数（可以留到收尾处理）
+ 302          //             // touch_time_cnt = 0; // 清除长按时间计数（可以留到收尾处理）
+ 303          
+ 304          //             // 跳转到短按处理
+ 305          //             touch_key_scan_status = TOUCH_KEY_SCAN_STATUS_IS_HANDLE_SHORT_PRESS;
  306          
- 307          //             // 跳转到短按处理
- 308          //             touch_key_scan_status = TOUCH_KEY_SCAN_STATUS_IS_HANDLE_SHORT_PRESS;
+ 307          //             // printf("short press\n");
+ 308          //         }
  309          
- 310          //             // printf("short press\n");
- 311          //         }
+ 310          //         // delay_ms(1); //
+ 311          //     }
  312          
- 313          //         // delay_ms(1); //
- 314          //     }
- 315          
- 316          //     if (TOUCH_KEY_SCAN_STATUS_IS_HANDLE_SHORT_PRESS == touch_key_scan_status)
- 317          //     {
- 318          //         // 如果是正在处理短按
- 319          //         bit flag_is_double_click = 0; // 标志位，是否有按键双击
- 320          
- 321          //         if (TOUCH_KEY_ID_1 == touch_key_last)
- 322          //         {
- 323          //             // 如果KEY1被触摸
- 324          //             flag_is_double_click = __is_double_click(touch_key_last);
- 325          //             if (flag_is_double_click)
- 326          //             {
- 327          //                 // 如果有按键双击
- 328          //                 printf("k1 double press\n");
- 329          // #if USE_MY_DEBUG
- 330          //                 printf("k1 double press\n");
- 331          // #endif
- 332          //                 // send_status_keyval(KEY_PRESS_DOUBLECLICK, TOUCH_KEY1); // 发送带有状态的键�
+ 313          //     if (TOUCH_KEY_SCAN_STATUS_IS_HANDLE_SHORT_PRESS == touch_key_scan_status)
+ 314          //     {
+ 315          //         // 如果是正在处理短按
+ 316          //         bit flag_is_double_click = 0; // 标志位，是否有按键双击
+ 317          
+ 318          //         if (TOUCH_KEY_ID_1 == touch_key_last)
+ 319          //         {
+ 320          //             // 如果KEY1被触摸
+ 321          //             flag_is_double_click = __is_double_click(touch_key_last);
+ 322          //             if (flag_is_double_click)
+ 323          //             {
+ 324          //                 // 如果有按键双击
+ 325          //                 printf("k1 double press\n");
+ 326          // #if USE_MY_DEBUG
+ 327          //                 printf("k1 double press\n");
+ 328          // #endif
+ 329          //                 // send_status_keyval(KEY_PRESS_DOUBLECLICK, TOUCH_KEY1); // 发送带有状态的键�
              -�
- 333          //             }
- 334          //             else
- 335          //             {
- 336          //                 // 如果没有按键双击，说明是短按
- 337          //                 printf("k1 press\n");
- 338          // #if USE_MY_DEBUG
- 339          //                 printf("k1 press\n");
- 340          // #endif
- 341          //                 // send_status_keyval(KEY_PRESS_SHORT, TOUCH_KEY1); // 发送带有状态的键值
- 342          //             }
- 343          
- 344          //             touch_key_scan_status = TOUCH_KEY_SCAN_STATUS_IS_WAIT_SHORT_PRESS_RELEASE; // 等待按键�
+ 330          //             }
+ 331          //             else
+ 332          //             {
+ 333          //                 // 如果没有按键双击，说明是短按
+ 334          //                 printf("k1 press\n");
+ 335          // #if USE_MY_DEBUG
+ 336          //                 printf("k1 press\n");
+ 337          // #endif
+ 338          //                 // send_status_keyval(KEY_PRESS_SHORT, TOUCH_KEY1); // 发送带有状态的键值
+ 339          //             }
+ 340          
+ 341          //             touch_key_scan_status = TOUCH_KEY_SCAN_STATUS_IS_WAIT_SHORT_PRESS_RELEASE; // 等待按键�
              -��开
- 345          //         }
- 346          //         else if (TOUCH_KEY_ID_2 == touch_key_last)
- 347          //         {
- 348          //             // 如果KEY2被触摸
- 349          //             flag_is_double_click = __is_double_click(touch_key_last);
-C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         06/16/2025 18:35:28 PAGE 7   
+ 342          //         }
+ 343          //         else if (TOUCH_KEY_ID_2 == touch_key_last)
+ 344          //         {
+ 345          //             // 如果KEY2被触摸
+ 346          //             flag_is_double_click = __is_double_click(touch_key_last);
+ 347          //             if (flag_is_double_click)
+ 348          //             {
+C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         06/19/2025 16:47:01 PAGE 7   
 
- 350          //             if (flag_is_double_click)
- 351          //             {
- 352          //                 // 如果有按键双击
- 353          //                 printf("k2 double press\n");
- 354          // #if USE_MY_DEBUG
- 355          //                 printf("k2 double press\n");
- 356          // #endif
- 357          //                 // send_status_keyval(KEY_PRESS_DOUBLECLICK, TOUCH_KEY2); // 发送带有状态的键�
+ 349          //                 // 如果有按键双击
+ 350          //                 printf("k2 double press\n");
+ 351          // #if USE_MY_DEBUG
+ 352          //                 printf("k2 double press\n");
+ 353          // #endif
+ 354          //                 // send_status_keyval(KEY_PRESS_DOUBLECLICK, TOUCH_KEY2); // 发送带有状态的键�
              -�
- 358          //             }
- 359          //             else
- 360          //             {
- 361          //                 // 如果没有按键双击，说明是短按
- 362          //                 printf("k2 press\n");
- 363          // #if USE_MY_DEBUG
- 364          //                 printf("k2 press\n");
- 365          // #endif
- 366          //                 // send_status_keyval(KEY_PRESS_SHORT, TOUCH_KEY2); // 发送带有状态的键值
- 367          //             }
- 368          
- 369          //             touch_key_scan_status = TOUCH_KEY_SCAN_STATUS_IS_WAIT_SHORT_PRESS_RELEASE; // 等待按键�
+ 355          //             }
+ 356          //             else
+ 357          //             {
+ 358          //                 // 如果没有按键双击，说明是短按
+ 359          //                 printf("k2 press\n");
+ 360          // #if USE_MY_DEBUG
+ 361          //                 printf("k2 press\n");
+ 362          // #endif
+ 363          //                 // send_status_keyval(KEY_PRESS_SHORT, TOUCH_KEY2); // 发送带有状态的键值
+ 364          //             }
+ 365          
+ 366          //             touch_key_scan_status = TOUCH_KEY_SCAN_STATUS_IS_WAIT_SHORT_PRESS_RELEASE; // 等待按键�
              -��开
- 370          //         }
- 371          //     }
- 372          
- 373          //     if (TOUCH_KEY_SCAN_STATUS_IS_HANDLE_LONG_PRESS == touch_key_scan_status)
- 374          //     {
- 375          //         // 处理长按
- 376          //         if (TOUCH_KEY_ID_1 == touch_key)
- 377          //         {
- 378          //             // 如果KEY1被触摸
- 379          //             printf("k1 long press\n");
- 380          // #if USE_MY_DEBUG
- 381          //             printf("k1 long press\n");
- 382          // #endif
- 383          //             // send_status_keyval(KEY_PRESS_LONG, TOUCH_KEY1);
- 384          //         }
- 385          //         else if (TOUCH_KEY_ID_2 == touch_key)
- 386          //         {
- 387          //             // 如果KEY2被触摸
- 388          //             printf("k2 long press\n");
- 389          // #if USE_MY_DEBUG
- 390          //             printf("k2 long press\n");
- 391          // #endif
- 392          //             // send_status_keyval(KEY_PRESS_LONG, TOUCH_KEY2);
- 393          //         }
+ 367          //         }
+ 368          //     }
+ 369          
+ 370          //     if (TOUCH_KEY_SCAN_STATUS_IS_HANDLE_LONG_PRESS == touch_key_scan_status)
+ 371          //     {
+ 372          //         // 处理长按
+ 373          //         if (TOUCH_KEY_ID_1 == touch_key)
+ 374          //         {
+ 375          //             // 如果KEY1被触摸
+ 376          //             printf("k1 long press\n");
+ 377          // #if USE_MY_DEBUG
+ 378          //             printf("k1 long press\n");
+ 379          // #endif
+ 380          //             // send_status_keyval(KEY_PRESS_LONG, TOUCH_KEY1);
+ 381          //         }
+ 382          //         else if (TOUCH_KEY_ID_2 == touch_key)
+ 383          //         {
+ 384          //             // 如果KEY2被触摸
+ 385          //             printf("k2 long press\n");
+ 386          // #if USE_MY_DEBUG
+ 387          //             printf("k2 long press\n");
+ 388          // #endif
+ 389          //             // send_status_keyval(KEY_PRESS_LONG, TOUCH_KEY2);
+ 390          //         }
+ 391          
+ 392          //         touch_key_scan_status = TOUCH_KEY_SCAN_STATUS_IS_HANDLE_HOLD_PRESS; // 跳转到长按持续
+ 393          //     }
  394          
- 395          //         touch_key_scan_status = TOUCH_KEY_SCAN_STATUS_IS_HANDLE_HOLD_PRESS; // 跳转到长按持续
- 396          //     }
- 397          
- 398          //     if (TOUCH_KEY_SCAN_STATUS_IS_HANDLE_HOLD_PRESS == touch_key_scan_status)
- 399          //     {
- 400          //         // 处理长按持续
- 401          
- 402          //         if (touch_key_last == touch_key)
- 403          //         {
- 404          //             touch_time_cnt += TOUCH_KEY_SCAN_CIRCLE_TIMES;
- 405          //             if (TOUCH_KEY_ID_1 == touch_key)
- 406          //             {
- 407          //                 if (touch_time_cnt >= HOLD_PRESS_TIME_THRESHOLD_MS)
- 408          //                 {
- 409          //                     touch_time_cnt = 0;
-C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         06/16/2025 18:35:28 PAGE 8   
+ 395          //     if (TOUCH_KEY_SCAN_STATUS_IS_HANDLE_HOLD_PRESS == touch_key_scan_status)
+ 396          //     {
+ 397          //         // 处理长按持续
+ 398          
+ 399          //         if (touch_key_last == touch_key)
+ 400          //         {
+ 401          //             touch_time_cnt += TOUCH_KEY_SCAN_CIRCLE_TIMES;
+ 402          //             if (TOUCH_KEY_ID_1 == touch_key)
+ 403          //             {
+ 404          //                 if (touch_time_cnt >= HOLD_PRESS_TIME_THRESHOLD_MS)
+ 405          //                 {
+ 406          //                     touch_time_cnt = 0;
+ 407          //                     printf("k1 continue press\n");
+ 408          // #if USE_MY_DEBUG
+C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         06/19/2025 16:47:01 PAGE 8   
 
- 410          //                     printf("k1 continue press\n");
- 411          // #if USE_MY_DEBUG
- 412          //                     printf("k1 continue press\n");
- 413          // #endif
- 414          //                     // send_status_keyval(KEY_PRESS_CONTINUE, TOUCH_KEY1);
- 415          //                 }
- 416          //             }
- 417          //             else if (TOUCH_KEY_ID_2 == touch_key)
- 418          //             {
- 419          //                 if (touch_time_cnt >= HOLD_PRESS_TIME_THRESHOLD_MS)
- 420          //                 {
- 421          //                     touch_time_cnt = 0;
- 422          //                     printf("k2 continue press\n");
- 423          // #if USE_MY_DEBUG
- 424          //                     printf("k2 continue press\n");
- 425          // #endif
- 426          //                     // send_status_keyval(KEY_PRESS_CONTINUE, TOUCH_KEY2);
- 427          //                 }
- 428          //             }
- 429          
- 430          //             // delay_ms(1);
- 431          //         }
- 432          //         else
- 433          //         {
- 434          //             // 如果之前检测到的按键与当前检测到的按键不一致，
- 435          //             // 说明 可能松开了手 或是 一只手按住了原来的按键另一只手按了其�
+ 409          //                     printf("k1 continue press\n");
+ 410          // #endif
+ 411          //                     // send_status_keyval(KEY_PRESS_CONTINUE, TOUCH_KEY1);
+ 412          //                 }
+ 413          //             }
+ 414          //             else if (TOUCH_KEY_ID_2 == touch_key)
+ 415          //             {
+ 416          //                 if (touch_time_cnt >= HOLD_PRESS_TIME_THRESHOLD_MS)
+ 417          //                 {
+ 418          //                     touch_time_cnt = 0;
+ 419          //                     printf("k2 continue press\n");
+ 420          // #if USE_MY_DEBUG
+ 421          //                     printf("k2 continue press\n");
+ 422          // #endif
+ 423          //                     // send_status_keyval(KEY_PRESS_CONTINUE, TOUCH_KEY2);
+ 424          //                 }
+ 425          //             }
+ 426          
+ 427          //             // delay_ms(1);
+ 428          //         }
+ 429          //         else
+ 430          //         {
+ 431          //             // 如果之前检测到的按键与当前检测到的按键不一致，
+ 432          //             // 说明 可能松开了手 或是 一只手按住了原来的按键另一只手按了其�
              -��按键
- 436          
- 437          //             // 跳转到等待长按松开
- 438          //             touch_key_scan_status = TOUCH_KEY_SCAN_STATUS_IS_WAIT_LONG_PRESS_RELEASE;
- 439          //         }
- 440          //     }
- 441          
- 442          //     if ((TOUCH_KEY_SCAN_STATUS_IS_WAIT_LONG_PRESS_RELEASE == touch_key_scan_status) ||
- 443          //         (TOUCH_KEY_SCAN_STATUS_IS_WAIT_SHORT_PRESS_RELEASE == touch_key_scan_status))
- 444          //     {
- 445          //         // 如果是等待按键松开
- 446          //         static volatile u16 loose_cnt = 0; // 存放松手计数值
- 447          
- 448          //         if (touch_key == 0)
- 449          //         {
- 450          //             loose_cnt += TOUCH_KEY_SCAN_CIRCLE_TIMES;
- 451          //             delay_ms(1);
- 452          //         }
- 453          //         else
- 454          //         {
- 455          //             // 只要有一次检测到按键，说明没有松开手
- 456          //             loose_cnt = 0;
- 457          //         }
- 458          
- 459          //         if (loose_cnt >= LOOSE_PRESS_CNT_MS) // 这里的比较值需要注意，不能大于变量类�
+ 433          
+ 434          //             // 跳转到等待长按松开
+ 435          //             touch_key_scan_status = TOUCH_KEY_SCAN_STATUS_IS_WAIT_LONG_PRESS_RELEASE;
+ 436          //         }
+ 437          //     }
+ 438          
+ 439          //     if ((TOUCH_KEY_SCAN_STATUS_IS_WAIT_LONG_PRESS_RELEASE == touch_key_scan_status) ||
+ 440          //         (TOUCH_KEY_SCAN_STATUS_IS_WAIT_SHORT_PRESS_RELEASE == touch_key_scan_status))
+ 441          //     {
+ 442          //         // 如果是等待按键松开
+ 443          //         static volatile u16 loose_cnt = 0; // 存放松手计数值
+ 444          
+ 445          //         if (touch_key == 0)
+ 446          //         {
+ 447          //             loose_cnt += TOUCH_KEY_SCAN_CIRCLE_TIMES;
+ 448          //             delay_ms(1);
+ 449          //         }
+ 450          //         else
+ 451          //         {
+ 452          //             // 只要有一次检测到按键，说明没有松开手
+ 453          //             loose_cnt = 0;
+ 454          //         }
+ 455          
+ 456          //         if (loose_cnt >= LOOSE_PRESS_CNT_MS) // 这里的比较值需要注意，不能大于变量类�
              -��对应的最大值
- 460          //         {
- 461          //             loose_cnt = 0; // 清空松手计数
- 462          //             // 如果 xx ms内没有检测到按键按下，说明已经松开手
- 463          
- 464          //             if (TOUCH_KEY_SCAN_STATUS_IS_WAIT_LONG_PRESS_RELEASE == touch_key_scan_status)
- 465          //             {
- 466          //                 if (TOUCH_KEY_ID_1 == touch_key_last)
- 467          //                 {
- 468          //                     printf("k1 long press loose\n");
- 469          // #if USE_MY_DEBUG
-C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         06/16/2025 18:35:28 PAGE 9   
+ 457          //         {
+ 458          //             loose_cnt = 0; // 清空松手计数
+ 459          //             // 如果 xx ms内没有检测到按键按下，说明已经松开手
+ 460          
+ 461          //             if (TOUCH_KEY_SCAN_STATUS_IS_WAIT_LONG_PRESS_RELEASE == touch_key_scan_status)
+ 462          //             {
+ 463          //                 if (TOUCH_KEY_ID_1 == touch_key_last)
+ 464          //                 {
+ 465          //                     printf("k1 long press loose\n");
+ 466          // #if USE_MY_DEBUG
+ 467          //                     printf("k1 long press loose\n");
+ 468          // #endif
+C51 COMPILER V9.60.7.0   TOUCH_KEY                                                         06/19/2025 16:47:01 PAGE 9   
 
- 470          //                     printf("k1 long press loose\n");
- 471          // #endif
- 472          //                     // send_status_keyval(KEY_PRESS_LOOSE, TOUCH_KEY1);
- 473          //                 }
- 474          //                 else if (TOUCH_KEY_ID_2 == touch_key_last)
- 475          //                 {
- 476          //                     printf("k2 long press loose\n");
- 477          // #if USE_MY_DEBUG
- 478          //                     printf("k2 long press loose\n");
- 479          // #endif
- 480          //                     // send_status_keyval(KEY_PRESS_LOOSE, TOUCH_KEY2);
- 481          //                 }
- 482          //             }
- 483          
- 484          //             touch_key_scan_status = TOUCH_KEY_SCAN_STATUS_IS_END; // 跳转到收尾处理
- 485          //         }
- 486          //     }
- 487          
- 488          //     if (TOUCH_KEY_SCAN_STATUS_IS_END == touch_key_scan_status)
- 489          //     {
- 490          //         // 收尾处理
- 491          //         touch_key = 0;
- 492          //         touch_key_last = 0;
- 493          //         touch_time_cnt = 0;
- 494          
- 495          //         touch_key_scan_status = TOUCH_KEY_SCAN_STATUS_NONE;
- 496          //     }
- 497          // #endif
- 498          // }
- 499          
- 500          // void touch_key_handle(void)
- 501          // {
- 502          // }
+ 469          //                     // send_status_keyval(KEY_PRESS_LOOSE, TOUCH_KEY1);
+ 470          //                 }
+ 471          //                 else if (TOUCH_KEY_ID_2 == touch_key_last)
+ 472          //                 {
+ 473          //                     printf("k2 long press loose\n");
+ 474          // #if USE_MY_DEBUG
+ 475          //                     printf("k2 long press loose\n");
+ 476          // #endif
+ 477          //                     // send_status_keyval(KEY_PRESS_LOOSE, TOUCH_KEY2);
+ 478          //                 }
+ 479          //             }
+ 480          
+ 481          //             touch_key_scan_status = TOUCH_KEY_SCAN_STATUS_IS_END; // 跳转到收尾处理
+ 482          //         }
+ 483          //     }
+ 484          
+ 485          //     if (TOUCH_KEY_SCAN_STATUS_IS_END == touch_key_scan_status)
+ 486          //     {
+ 487          //         // 收尾处理
+ 488          //         touch_key = 0;
+ 489          //         touch_key_last = 0;
+ 490          //         touch_time_cnt = 0;
+ 491          
+ 492          //         touch_key_scan_status = TOUCH_KEY_SCAN_STATUS_NONE;
+ 493          //     }
+ 494          // #endif
+ 495          // }
+ 496          
+ 497          // void touch_key_handle(void)
+ 498          // {
+ 499          // }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    331    ----
-   CONSTANT SIZE    =    112    ----
+   CODE SIZE        =    304    ----
+   CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =     31       6
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----

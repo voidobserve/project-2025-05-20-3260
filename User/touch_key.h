@@ -8,12 +8,20 @@
     用在定时器中断，注意不能超过变量的最大值
 */
 #define TOUCH_KEY_SCAN_CIRCLE_TIMES (10)
+// #define TOUCH_KEY_SCAN_CIRCLE_TIMES (20)
+// #define TOUCH_KEY_SCAN_CIRCLE_TIMES (30)
+// #define TOUCH_KEY_SCAN_CIRCLE_TIMES (50) // 加上外壳，会连短按也检测不到
 #define TOUCH_KEY_FILTER_TIMES (3)         // 触摸按键消抖次数
-#define DETECT_DOUBLE_CLICK_INTERVAL (150) // 检测双击的时间间隔(单位：ms)
-#define LONG_PRESS_TIME_THRESHOLD_MS (500) // 长按时间阈值（单位：ms）
+// #define DETECT_DOUBLE_CLICK_INTERVAL (150) // 检测双击的时间间隔(单位：ms)
+#define TOUCH_KEY_LONG_PRESS_TIME_THRESHOLD_MS (1000) // 长按时间阈值（单位：ms）
 // #define HOLD_PRESS_TIME_THRESHOLD_MS (25) // 长按持续(不松手)的时间阈值(单位：ms)，每隔 xx 时间认为有一次长按持续事件
-#define HOLD_PRESS_TIME_THRESHOLD_MS (150) // 长按持续(不松手)的时间阈值(单位：ms)，每隔 xx 时间认为有一次长按持续事件
-#define LOOSE_PRESS_CNT_MS (30)            // 松手计时，松开手多久，才认为是真的松手了
+#define TOUCH_KEY_HOLD_PRESS_TIME_THRESHOLD_MS (750) // 长按持续(不松手)的时间阈值(单位：ms)，每隔 xx 时间认为有一次长按持续事件
+// #define LOOSE_PRESS_CNT_MS (30)            // 松手计时，松开手多久，才认为是真的松手了
+
+#define TOUCH_KEY_CLICK_MSG ((u8)0x00) // 按键短按时，要发送的按键状态数据
+#define TOUCH_KEY_LONG_MSG ((u8)0x01)  // 检测到按键长按时，要发送的按键状态数据
+#define TOUCH_KEY_HOLD_MSG ((u8)0x02)  // 检测到按键长按一直未松手时，要发送的按键状态数据
+#define TOUCH_KEY_LOOSE_MSG ((u8)0x03) // 按键长按后松手时，要发送的按键状态数据
 
 // 定义待发送的、触摸按键对应的数据
 enum

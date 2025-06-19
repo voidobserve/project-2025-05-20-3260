@@ -110,7 +110,7 @@ volatile struct key_driver_para ad_key_para = {
     // .latest_key_val = AD_KEY_ID_NONE,
     // .latest_key_event = KEY_EVENT_NONE,
 
-    TOUCH_KEY_SCAN_CIRCLE_TIMES,
+    AD_KEY_SCAN_CIRCLE_TIMES,
     0,
     // NO_KEY,
     0,
@@ -119,13 +119,13 @@ volatile struct key_driver_para ad_key_para = {
     0,
     3,
 
-    LONG_PRESS_TIME_THRESHOLD_MS / TOUCH_KEY_SCAN_CIRCLE_TIMES,
-    (LONG_PRESS_TIME_THRESHOLD_MS + HOLD_PRESS_TIME_THRESHOLD_MS) / TOUCH_KEY_SCAN_CIRCLE_TIMES,
+    AD_KEY_LONG_PRESS_TIME_THRESHOLD_MS / AD_KEY_SCAN_CIRCLE_TIMES,
+    (AD_KEY_LONG_PRESS_TIME_THRESHOLD_MS + AD_KEY_HOLD_PRESS_TIME_THRESHOLD_MS) / AD_KEY_SCAN_CIRCLE_TIMES,
     0,
 
     0,
     0,
-    200 / TOUCH_KEY_SCAN_CIRCLE_TIMES,
+    200 / AD_KEY_SCAN_CIRCLE_TIMES,
     // NO_KEY,
     0,
     KEY_TYPE_AD,
@@ -235,7 +235,7 @@ void ad_key_handle(void)
 
     case AD_KEY_EVENT_ID_1_CLICK:
         // printf("key 1 click\n");
-        send_data(SEND_TOUCH_KEY_STATUS, (u32)KEY_CLICK_MSG << 16 | KEY_LEFT_PRE);
+        send_data(SEND_TOUCH_KEY_STATUS, (u32)AD_KEY_CLICK_MSG << 16 | KEY_LEFT_PRE);
         break;
 
     case AD_KEY_EVENT_ID_1_DOUBLE:
@@ -248,7 +248,7 @@ void ad_key_handle(void)
 
     case AD_KEY_EVENT_ID_1_HOLD:
         // printf("key 1 hold\n");
-        send_data(SEND_TOUCH_KEY_STATUS, (u32)KEY_HOLD_MSG << 16 | KEY_LEFT_PRE);
+        send_data(SEND_TOUCH_KEY_STATUS, (u32)AD_KEY_LONG_MSG << 16 | KEY_LEFT_PRE);
         break;
 
     case AD_KEY_EVENT_ID_1_LOOSE:
@@ -256,7 +256,7 @@ void ad_key_handle(void)
         break;
     case AD_KEY_EVENT_ID_2_CLICK:
         // printf("key 2 click\n");
-        send_data(SEND_TOUCH_KEY_STATUS, (u32)KEY_CLICK_MSG << 16 | KEY_DOWN_VOL_DOWN);
+        send_data(SEND_TOUCH_KEY_STATUS, (u32)AD_KEY_CLICK_MSG << 16 | KEY_DOWN_VOL_DOWN);
         break;
 
     case AD_KEY_EVENT_ID_2_DOUBLE:
@@ -269,7 +269,7 @@ void ad_key_handle(void)
 
     case AD_KEY_EVENT_ID_2_HOLD:
         // printf("key 2 hold\n");
-        send_data(SEND_TOUCH_KEY_STATUS, (u32)KEY_HOLD_MSG << 16 | KEY_DOWN_VOL_DOWN);
+        send_data(SEND_TOUCH_KEY_STATUS, (u32)AD_KEY_LONG_MSG << 16 | KEY_DOWN_VOL_DOWN);
         break;
 
     case AD_KEY_EVENT_ID_2_LOOSE:
@@ -278,7 +278,7 @@ void ad_key_handle(void)
     case AD_KEY_EVENT_ID_3_CLICK:
         // printf("key 3 click\n");
 
-        send_data(SEND_TOUCH_KEY_STATUS, (u32)KEY_CLICK_MSG << 16 | KEY_UP_VOL_UP);
+        send_data(SEND_TOUCH_KEY_STATUS, (u32)AD_KEY_CLICK_MSG << 16 | KEY_UP_VOL_UP);
         break;
 
     case AD_KEY_EVENT_ID_3_DOUBLE:
@@ -291,7 +291,7 @@ void ad_key_handle(void)
 
     case AD_KEY_EVENT_ID_3_HOLD:
         // printf("key 3 hold\n");
-        send_data(SEND_TOUCH_KEY_STATUS, (u32)KEY_HOLD_MSG << 16 | KEY_UP_VOL_UP);
+        send_data(SEND_TOUCH_KEY_STATUS, (u32)AD_KEY_LONG_MSG << 16 | KEY_UP_VOL_UP);
         break;
 
     case AD_KEY_EVENT_ID_3_LOOSE:
@@ -299,7 +299,7 @@ void ad_key_handle(void)
         break;
     case AD_KEY_EVENT_ID_4_CLICK:
         // printf("key 4 click\n");
-        send_data(SEND_TOUCH_KEY_STATUS, (u32)KEY_CLICK_MSG << 16 | KEY_ENTER_MENU);
+        send_data(SEND_TOUCH_KEY_STATUS, (u32)AD_KEY_CLICK_MSG << 16 | KEY_ENTER_MENU);
         break;
 
     case AD_KEY_EVENT_ID_4_DOUBLE:
@@ -312,7 +312,7 @@ void ad_key_handle(void)
 
     case AD_KEY_EVENT_ID_4_HOLD:
         // printf("key 4 hold\n");
-        send_data(SEND_TOUCH_KEY_STATUS, (u32)KEY_HOLD_MSG << 16 | KEY_ENTER_MENU);
+        send_data(SEND_TOUCH_KEY_STATUS, (u32)AD_KEY_LONG_MSG << 16 | KEY_ENTER_MENU);
         break;
 
     case AD_KEY_EVENT_ID_4_LOOSE:
@@ -320,7 +320,7 @@ void ad_key_handle(void)
         break;
     case AD_KEY_EVENT_ID_5_CLICK:
         // printf("key 5 click\n");
-        send_data(SEND_TOUCH_KEY_STATUS, (u32)KEY_CLICK_MSG << 16 | KEY_RIGHT_NEXT);
+        send_data(SEND_TOUCH_KEY_STATUS, (u32)AD_KEY_CLICK_MSG << 16 | KEY_RIGHT_NEXT);
         break;
 
     case AD_KEY_EVENT_ID_5_DOUBLE:
@@ -333,7 +333,7 @@ void ad_key_handle(void)
 
     case AD_KEY_EVENT_ID_5_HOLD:
         // printf("key 5 hold\n");
-        send_data(SEND_TOUCH_KEY_STATUS, (u32)KEY_HOLD_MSG << 16 | KEY_RIGHT_NEXT);
+        send_data(SEND_TOUCH_KEY_STATUS, (u32)AD_KEY_LONG_MSG << 16 | KEY_RIGHT_NEXT);
         break;
 
     case AD_KEY_EVENT_ID_5_LOOSE:

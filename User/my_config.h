@@ -9,47 +9,21 @@
 
 #define USE_MY_DEBUG 0
 
-#define KEY_CLICK_MSG ((u8)0x00) // 按键短按时，要发送的按键状态数据
-#define KEY_HOLD_MSG ((u8)0x01) // 按键长按时，要发送的按键状态数据
-#define KEY_LOOSE_MSG ((u8)0x02 ) // 按键长按后松手时，要发送的按键状态数据
 
-#define KEY_UP_VOL_UP ((u16)209) 
+
+#define KEY_UP_VOL_UP ((u16)209)
 #define KEY_DOWN_VOL_DOWN ((u16)210)
 #define KEY_LEFT_PRE ((u16)207)
 #define KEY_RIGHT_NEXT ((u16)208)
 #define KEY_ENTER_MENU ((u16)127)
 
-// #define 
+// #define
 
 // 长度单位（在检测时速和计算里程时使用）
 // USE_INTERNATIONAL -- 国际通用单位
 // USE_IMPERIAL -- 英制单位
 #define USE_INTERNATIONAL
-
-// 触摸按键键值定义(检测到短按/持续时，要发送的键值)：
-// #define TOUCH_KEY_VAL_MUTE ((u16)0x0040)    // 左2 从左往下数，第二个按键
-// #define TOUCH_KEY_VAL_VOL_INC ((u16)0x0041) // 左3 从左往下数，第三个按键
-// #define TOUCH_KEY_VAL_VOL_DEC ((u16)0x0042) // 左1 从左往下数，第一个按键
-// #define TOUCH_KEY_VAL_MODE ((u16)0x0065)    // 右2 从右往下数，第二个按键
-// #define TOUCH_KEY_VAL_PRE ((u16)0x00E3)     // 右1 从右往下数，第一个按键
-// #define TOUCH_KEY_VAL_NEXT ((u16)0x00E4)    // 右3 从右往下数，第三个按键
-
-// // 检测到长按时要发送的键值：
-// #define TOUCH_KEY_VAL_POWER ((u16)0x0046) // 左2 从左往下数，第二个按键
-// #define TOUCH_KEY_VAL_MAIN ((u16)0x0011)  // 右2 从右往下数，第二个按键
-
-// 注意：只有 TOUCH_KEY_VAL_VOL_INC 和 TOUCH_KEY_VAL_VOL_DEC 需要检测持续按下
-
-// 扫描时间配置：
-// #define DETECT_DOUBLE_CLICK_INTERVAL (100) // 检测双击的时间间隔(单位：ms)(没有用到双击操作)
-
-// #define LONG_PRESS_TIME_THRESHOLD_MS (500) // 长按时间阈值(单位：ms)(注意不能大于变量类型的大小)
-// #define HOLD_PRESS_TIME_THRESHOLD_MS (25)  // 长按持续(不松手)的时间阈值(单位：ms)，每隔 xx 时间认为有一次长按持续事件(注意不能大于变量类型的大小)
-// #define LOOSE_PRESS_CNT_MS (0)             // 松手计时，松开手多久，才认为是真的松手了(注意不能大于变量类型的大小)
-
-// 触摸按键配置
-// ======================================================
-
+  
 // ======================================================
 // 水温检测配置:
 // 发送水温报警/解除水温报警的时间:(单位：ms，每隔xxms发送一次当前水温报警的状态)

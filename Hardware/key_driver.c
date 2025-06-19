@@ -12,7 +12,8 @@ static volatile u8 is_key_active = 0; // 按键是否有效的计数值
 //=======================================================//
 // 按键扫描函数: 扫描所有注册的按键驱动
 //=======================================================//
-xdata volatile struct key_driver_para *scan_para; // 要让指针指向xdata区域的全局变量，需要同样将指针变为全局变量
+// xdata volatile struct key_driver_para *scan_para; // 要让指针指向xdata区域的全局变量，需要同样将指针变为全局变量
+volatile struct key_driver_para *scan_para; // 要让指针指向xdata区域的全局变量，需要同样将指针变为全局变量
 void key_driver_scan(void *_scan_para)
 // struct key_driver_para key_driver_scan(struct key_driver_para scan_para)
 {

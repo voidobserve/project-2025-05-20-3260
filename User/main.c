@@ -389,7 +389,7 @@ void main(void)
     // printf("size %bu\n", (u8)sizeof(struct key_driver_para_t *));
     // printf("addr %p\n", (void *)&ad_key_para);
 
-#if 0 // 测试发送日期和时间
+#if 0  // 测试发送日期和时间
     // 当前日期
     fun_info.aip1302_saveinfo.year = 2024;
     fun_info.aip1302_saveinfo.month = 12;
@@ -406,7 +406,7 @@ void main(void)
     printf("hour %bu min %bu sec %bu \n", fun_info.aip1302_saveinfo.time_hour, fun_info.aip1302_saveinfo.time_min, fun_info.aip1302_saveinfo.time_sec);
 #endif // 测试发送日期和时间
 
-    printf("sys reset\n");
+    // printf("sys reset\n");
 
     /* 系统主循环 */
     while (1)
@@ -414,6 +414,10 @@ void main(void)
         // printf("main circle\n");
 
 #if 1
+        WDT_KEY = WDT_KEY_VAL(0xAA); // 喂狗并清除 wdt_pending
+        /* 按键扫描函数 */
+        __tk_scan();                 // 使用了库里面的接口（闭源库）
+        WDT_KEY = WDT_KEY_VAL(0xAA); // 喂狗并清除 wdt_pending
 
         key_driver_scan(&ad_key_para);
         ad_key_handle(); // ad按键处理函数

@@ -33,6 +33,20 @@
 #define AD_KEY_ID_4_VAL (((u16)__AD_KEY_4_VAL + (u16)__AD_KEY_5_VAL) / 2)
 #define AD_KEY_ID_5_VAL (((u16)__AD_KEY_5_VAL + (u16)__AD_KEY_6_VAL) / 2)
 
+
+#define AD_KEY_SCAN_CIRCLE_TIMES (10)
+#define AD_KEY_FILTER_TIMES (3)         // 触摸按键消抖次数
+// #define AD_KEY_DETECT_DOUBLE_CLICK_INTERVAL (150) // 检测双击的时间间隔(单位：ms)
+#define AD_KEY_LONG_PRESS_TIME_THRESHOLD_MS (500) // 长按时间阈值（单位：ms）
+#define AD_KEY_HOLD_PRESS_TIME_THRESHOLD_MS (150) // 长按持续(不松手)的时间阈值(单位：ms)，每隔 xx 时间认为有一次长按持续事件
+// #define AD_KEY_LOOSE_PRESS_CNT_MS (30)            // 松手计时，松开手多久，才认为是真的松手了(单位：ms)
+
+#define AD_KEY_CLICK_MSG ((u8)0x00) // 按键短按时，要发送的按键状态数据
+#define AD_KEY_LONG_MSG ((u8)0x01)  // 检测到按键长按时，要发送的按键状态数据
+#define AD_KEY_HOLD_MSG ((u8)0x02)  // 检测到按键长按一直未松手时，要发送的按键状态数据
+#define AD_KEY_LOOSE_MSG ((u8)0x03) // 按键长按后松手时，要发送的按键状态数据
+
+
 enum
 {
     AD_KEY_ID_NONE = 0,

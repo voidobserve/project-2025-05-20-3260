@@ -234,16 +234,20 @@ void TIMR1_IRQHandler(void) interrupt TMR1_IRQn
             //     // }
             // }
 
+#if AD_KEY_ENABLE
             // 在定时器注册按键扫描：
             if (ad_key_para.cur_scan_times < 255)
             {
                 ad_key_para.cur_scan_times++;
             }
+#endif // AD_KEY_ENABLE
 
+#if TOUCH_KEY_ENABLE
             if (touch_key_para.cur_scan_times < 255)
             {
                 touch_key_para.cur_scan_times++;
             }
+#endif // TOUCH_KEY_ENABLE
         }
     }
 

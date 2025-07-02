@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   MAIN                                                              06/19/2025 16:46:59 PAGE 1   
+C51 COMPILER V9.60.7.0   MAIN                                                              07/02/2025 15:11:51 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
@@ -62,7 +62,7 @@ line level    source
               //                 if (fun_info.save_info.time_hour < 23) // 最大加到23h，测试通过
               //                 {
               //                     fun_info.save_info.time_hour++;
-C51 COMPILER V9.60.7.0   MAIN                                                              06/19/2025 16:46:59 PAGE 2   
+C51 COMPILER V9.60.7.0   MAIN                                                              07/02/2025 15:11:51 PAGE 2   
 
               //                 }
               //                 else
@@ -126,7 +126,7 @@ line level    source
               //                 fun_info.brake = 0;
               //             }
               //             else
-C51 COMPILER V9.60.7.0   MAIN                                                              06/19/2025 16:46:59 PAGE 3   
+C51 COMPILER V9.60.7.0   MAIN                                                              07/02/2025 15:11:51 PAGE 3   
 
               //             {
               //                 fun_info.brake = 1;
@@ -190,7 +190,7 @@ line level    source
               //             }
               //             else
               //             {
-C51 COMPILER V9.60.7.0   MAIN                                                              06/19/2025 16:46:59 PAGE 4   
+C51 COMPILER V9.60.7.0   MAIN                                                              07/02/2025 15:11:51 PAGE 4   
 
               //                 fun_info.speed = 0;
               //             }
@@ -254,7 +254,7 @@ line level    source
               //             }
               //             else
               //             {
-C51 COMPILER V9.60.7.0   MAIN                                                              06/19/2025 16:46:59 PAGE 5   
+C51 COMPILER V9.60.7.0   MAIN                                                              07/02/2025 15:11:51 PAGE 5   
 
               //                 fun_info.save_info.total_mileage = 0xFFFF0000;
               //             }
@@ -318,7 +318,7 @@ line level    source
  299          {
  300   1      
  301   1      #if USE_MY_DEBUG
-C51 COMPILER V9.60.7.0   MAIN                                                              06/19/2025 16:46:59 PAGE 6   
+C51 COMPILER V9.60.7.0   MAIN                                                              07/02/2025 15:11:51 PAGE 6   
 
               
                   uart1_config();
@@ -382,7 +382,7 @@ line level    source
  358   1          // P2_MD0 &= ~GPIO_P20_MODE_SEL(0x3); // 清空对应的配置
  359   1          // P2_MD0 |= GPIO_P20_MODE_SEL(0x1);  // 输出模式
  360   1          // FOUT_S20 |= GPIO_FOUT_AF_FUNC;
-C51 COMPILER V9.60.7.0   MAIN                                                              06/19/2025 16:46:59 PAGE 7   
+C51 COMPILER V9.60.7.0   MAIN                                                              07/02/2025 15:11:51 PAGE 7   
 
  361   1          // P20 = 0;
  362   1      
@@ -436,82 +436,87 @@ line level    source
  408   1      
  409   1          // printf("sys reset\n");
  410   1      
- 411   1          /* 系统主循环 */
- 412   1          while (1)
- 413   1          {
- 414   2              // printf("main circle\n");
- 415   2      
- 416   2      #if 1
- 417   2              WDT_KEY = WDT_KEY_VAL(0xAA); // 喂狗并清除 wdt_pending
- 418   2              /* 按键扫描函数 */
- 419   2              __tk_scan();                 // 使用了库里面的接口（闭源库）
- 420   2              WDT_KEY = WDT_KEY_VAL(0xAA); // 喂狗并清除 wdt_pending
-C51 COMPILER V9.60.7.0   MAIN                                                              06/19/2025 16:46:59 PAGE 8   
+ 411   1          // fun_info.save_info.total_mileage = (u32)999970 * 1000;
+ 412   1          // fun_info.save_info.subtotal_mileage = (u32)999970 * 100;
+ 413   1          // fun_info.save_info.subtotal_mileage_2 = (u32)999970 * 100;
+ 414   1      
+ 415   1      
+ 416   1          /* 系统主循环 */
+ 417   1          while (1)
+ 418   1          {
+ 419   2              // printf("main circle\n");
+ 420   2      
+C51 COMPILER V9.60.7.0   MAIN                                                              07/02/2025 15:11:51 PAGE 8   
 
- 421   2      
- 422   2              key_driver_scan(&ad_key_para);
- 423   2              ad_key_handle(); // ad按键处理函数
- 424   2      
- 425   2              key_driver_scan(&touch_key_para);
- 426   2              touch_key_handle(); // 触摸按键处理函数
- 427   2      
- 428   2              speed_scan();   // 检测时速
- 429   2              mileage_scan(); // 检测大计里程和小计里程
- 430   2      
- 431   2              engine_speed_scan();  // 检测发动机转速
- 432   2              fuel_capacity_scan(); // 油量检测
- 433   2      
- 434   2              battery_scan(); // 电池电量检测
+ 421   2      #if 1
+ 422   2              WDT_KEY = WDT_KEY_VAL(0xAA); // 喂狗并清除 wdt_pending
+ 423   2              /* 按键扫描函数 */
+ 424   2              __tk_scan();                 // 使用了库里面的接口（闭源库）
+ 425   2              WDT_KEY = WDT_KEY_VAL(0xAA); // 喂狗并清除 wdt_pending
+ 426   2      
+ 427   2              key_driver_scan(&ad_key_para);
+ 428   2              ad_key_handle(); // ad按键处理函数
+ 429   2      
+ 430   2              key_driver_scan(&touch_key_para);
+ 431   2              touch_key_handle(); // 触摸按键处理函数
+ 432   2      
+ 433   2              speed_scan();   // 检测时速
+ 434   2              mileage_scan(); // 检测大计里程和小计里程
  435   2      
- 436   2              uart0_scan_handle();  // 检查串口接收缓冲区的数据是否符合协议,如果有正确的
+ 436   2              engine_speed_scan();  // 检测发动机转速
+ 437   2              fuel_capacity_scan(); // 油量检测
+ 438   2      
+ 439   2              battery_scan(); // 电池电量检测
+ 440   2      
+ 441   2              uart0_scan_handle();  // 检查串口接收缓冲区的数据是否符合协议,如果有正确的
              -指令，会存到另一个缓冲区中（接下来让instruction_scan()函数来处理）
- 437   2              instruction_scan();   // 扫描是否有合法的指令
- 438   2              instruction_handle(); // 扫描是否有对应的获取/状态更新操作(最占用时间,因为�
+ 442   2              instruction_scan();   // 扫描是否有合法的指令
+ 443   2              instruction_handle(); // 扫描是否有对应的获取/状态更新操作(最占用时间,因为�
              -��等待串口的数据发送完成)
- 439   2      
- 440   2      #endif //
- 441   2      
- 442   2              // aip1302_test();
- 443   2              // {
- 444   2              //     u8 ret = 0;
- 445   2              //     ret = aip1302_is_running();
- 446   2              //     if (ret)
- 447   2              //     {
- 448   2              //         // 如果时钟芯片aip1302的晶振正在运行
- 449   2              //         printf("aip1302 is running\n");
- 450   2              //     }
- 451   2              //     else
+ 444   2      
+ 445   2      #endif //
+ 446   2      
+ 447   2              // aip1302_test();
+ 448   2              // {
+ 449   2              //     u8 ret = 0;
+ 450   2              //     ret = aip1302_is_running();
+ 451   2              //     if (ret)
  452   2              //     {
- 453   2              //         // 如果时钟芯片aip1302的晶振不在运行
- 454   2              //         printf("aip1302 is sleep\n");
+ 453   2              //         // 如果时钟芯片aip1302的晶振正在运行
+ 454   2              //         printf("aip1302 is running\n");
  455   2              //     }
- 456   2              // }
- 457   2      
- 458   2              // AIP1302_CE_PIN = 1;
- 459   2              // delay_ms(500);
- 460   2              // AIP1302_CE_PIN = 0;
- 461   2              // delay_ms(500);
+ 456   2              //     else
+ 457   2              //     {
+ 458   2              //         // 如果时钟芯片aip1302的晶振不在运行
+ 459   2              //         printf("aip1302 is sleep\n");
+ 460   2              //     }
+ 461   2              // }
  462   2      
- 463   2              heart_beat_handle(); //
- 464   2      
- 465   2              WDT_KEY = WDT_KEY_VAL(0xAA); // 喂狗并清除 wdt_pending
- 466   2          }
- 467   1      }
- 468          
- 469          /**
- 470           * @}
- 471           */
- 472          
- 473          /*************************** (C) COPYRIGHT 2022 HUGE-IC ***** END OF FILE *****/
+ 463   2              // AIP1302_CE_PIN = 1;
+ 464   2              // delay_ms(500);
+ 465   2              // AIP1302_CE_PIN = 0;
+ 466   2              // delay_ms(500);
+ 467   2      
+ 468   2              heart_beat_handle(); //
+ 469   2      
+ 470   2              WDT_KEY = WDT_KEY_VAL(0xAA); // 喂狗并清除 wdt_pending
+ 471   2          }
+ 472   1      }
+ 473          
+ 474          /**
+ 475           * @}
+ 476           */
+ 477          
+ 478          /*************************** (C) COPYRIGHT 2022 HUGE-IC ***** END OF FILE *****/
 
+
+C51 COMPILER V9.60.7.0   MAIN                                                              07/02/2025 15:11:51 PAGE 9   
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =    156    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-C51 COMPILER V9.60.7.0   MAIN                                                              06/19/2025 16:46:59 PAGE 9   
-
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----

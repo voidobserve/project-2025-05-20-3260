@@ -9,7 +9,8 @@
 
 #define USE_MY_DEBUG 0
 
-
+#define TOUCH_KEY_ENABLE 1 // 是否使能触摸按键检测功能
+#define AD_KEY_ENABLE 1 // 是否使能ad按键检测功能
 
 #define KEY_UP_VOL_UP ((u16)209)
 #define KEY_DOWN_VOL_DOWN ((u16)210)

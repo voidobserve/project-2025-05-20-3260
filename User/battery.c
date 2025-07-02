@@ -16,11 +16,9 @@ u16 conver_adc_val_to_voltage(u16 arg_adc_val)
         那么 每单位ad值对应 MAX_VOLTAGE_OF_BATTERY / 4096
     */
     // return (u32)arg_adc_val * MAX_VOLTAGE_OF_BATTERY / 4096;
-    
-    // return (u32)arg_adc_val * 240 / 4096; // 使用2.4V参考电压
-
+   
+    // 使用2.4V参考电压，12位精度
     // 电池电压是 1/11 分压： 
-    // 1860 
     return (u32)arg_adc_val * 240 * 11 / 10 / 4096; 
 }
 

@@ -357,27 +357,27 @@ void uart_clear_single_instruction(u8 index)
 #if USE_MY_DEBUG
 // 测试用的程序：
 // 显示串口缓冲区中的数据：
-void __uart_buff_check(void)
-{
-    u8 i = 0;
+// void __uart_buff_check(void)
+// {
+//     u8 i = 0;
 
-    u8 k = 0;
-    // if (test_bit)
-    // {
-    //     test_bit = 0;
-    for (i = 0; i < (UART0_RXBUF_LEN) / (FRAME_MAX_LEN); i++)
-    {
-        uart0_sendbyte(i + '0');
-        uart0_sendbyte('\n');
-        for (k = 0; k < FRAME_MAX_LEN; k++)
-        {
-            printf("%2x ", (u16)uart0_recv_buf[i][k]);
-        }
+//     u8 k = 0;
+//     // if (test_bit)
+//     // {
+//     //     test_bit = 0;
+//     for (i = 0; i < (UART0_RXBUF_LEN) / (FRAME_MAX_LEN); i++)
+//     {
+//         uart0_sendbyte(i + '0');
+//         uart0_sendbyte('\n');
+//         for (k = 0; k < FRAME_MAX_LEN; k++)
+//         {
+//             printf("%2x ", (u16)uart0_recv_buf[i][k]);
+//         }
 
-        printf("\n==========================\n");
-    }
-    // }
-}
+//         printf("\n==========================\n");
+//     }
+//     // }
+// }
 #endif
 #endif // void __uart_buff_check(void)
 

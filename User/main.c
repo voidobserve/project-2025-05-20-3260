@@ -408,6 +408,11 @@ void main(void)
 
     // printf("sys reset\n");
 
+    // fun_info.save_info.total_mileage = (u32)999970 * 1000;
+    // fun_info.save_info.subtotal_mileage = (u32)999970 * 100;
+    // fun_info.save_info.subtotal_mileage_2 = (u32)999970 * 100;
+
+
     /* 系统主循环 */
     while (1)
     {

@@ -3,6 +3,7 @@
 
 #include "my_config.h"
 
+#if TOUCH_KEY_ENABLE
 /*
     触摸按键的扫描周期，单位：ms
     用在定时器中断，注意不能超过变量的最大值
@@ -48,5 +49,7 @@ extern volatile struct key_driver_para touch_key_para;
 // extern void touch_key_scan(void);
 
 extern void touch_key_handle(void);
+
+#endif // TOUCH_KEY_ENABLE
 
 #endif

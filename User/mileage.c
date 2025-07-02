@@ -15,7 +15,7 @@ void mileage_scan(void)
     // static u16 mileage_update_time_cnt = 0; // 里程更新的时间计数,每隔一段时间更新一次当前里程（负责控制发送里程的周期）
     // mileage_update_time_cnt += ONE_CYCLE_TIME_MS;
 
-    if (mileage_save_time_cnt >= 30000) // 30000 ms -- 30s
+    if (mileage_save_time_cnt >= 30000) // 30 000 ms -- 30s
     {
         mileage_save_time_cnt = 0;
         fun_info_save(); // 将 fun_info 写回flash
@@ -23,7 +23,7 @@ void mileage_scan(void)
 
 #ifdef USE_MY_DEBUG
 #if USE_MY_DEBUG
-        printf("fun_info_save()");
+        // printf("fun_info_save()");
 #endif // #if USE_MY_DEBUG
 #endif // #ifdef USE_MY_DEBUG
     }
@@ -39,7 +39,9 @@ void mileage_scan(void)
         // }
 
         // 限制大计里程在 1000,000km(1,000,000,000m)以内
-        if (fun_info.save_info.total_mileage < (u32)1000000000)
+        // if (fun_info.save_info.total_mileage < (u32)1000000000)
+        // if (fun_info.save_info.total_mileage < (u32)(0xFFFFFFFF)) 
+        if (fun_info.save_info.total_mileage < (u32)(999999 * 1000))  // 99 9999 KM
         {
             fun_info.save_info.total_mileage++; // +1m
         }
@@ -51,10 +53,12 @@ void mileage_scan(void)
         // }
 
         // 限制小计里程在 1000km(1,000,000m)以内
-        if (fun_info.save_info.subtotal_mileage < (u32)1000000)
+        // if (fun_info.save_info.subtotal_mileage < (u32)1000000)
+        // if (fun_info.save_info.subtotal_mileage < (u32)65535000) // 发送出去最大是 0xFFFF，单位百米
+        if (fun_info.save_info.subtotal_mileage < (u32)(9999999)) // 9999.9KM， 9999 999 m
         {
-            fun_info.save_info.subtotal_mileage++;   // +1m 
-            fun_info.save_info.subtotal_mileage_2++; // +1m 
+            fun_info.save_info.subtotal_mileage++;   // +1m
+            fun_info.save_info.subtotal_mileage_2++; // +1m
         }
 
         distance -= 1000; // 剩下的、未保存的、不满1m的数据留到下一次再保存

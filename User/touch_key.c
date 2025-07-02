@@ -1,5 +1,6 @@
 #include "touch_key.h"
 
+#if TOUCH_KEY_ENABLE
 /*
     标志位，触摸按键的扫描周期是否到来
     由定时器中断置位，扫描函数中判断该标志位的状态，再决定是否要进行按键扫描
@@ -497,3 +498,6 @@ void touch_key_handle(void)
 // void touch_key_handle(void)
 // {
 // }
+
+
+#endif

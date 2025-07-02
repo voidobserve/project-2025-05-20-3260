@@ -19,6 +19,8 @@
 #define AIP1302_YEAR_REG_ADDR ((u8)0x8C)          // 年
 #define AIP1302_WRITE_PROTECT_REG_ADDR ((u8)0x8E) // 写保护位读地址
 
+#define AIP1302_RAM_START_ADDR ((u8)0xC0) // RAM起始地址
+
 #define AIP1302_DELAY() delay(4)
 
 u8 __aip1302_read_byte(const u8 cmd);

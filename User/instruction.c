@@ -181,7 +181,7 @@ void instruction_scan(void)
                     fun_info.aip1302_saveinfo.time_sec = uart0_recv_buf[i][9];
 
 #if USE_MY_DEBUG
-#if 1 // 打印串口缓冲区的数据
+#if 0 // 打印串口缓冲区的数据
 
                     {
                         u8 i = 0;
@@ -239,7 +239,7 @@ void instruction_handle(void)
         flag_get_all_status = 0; // 清除标志位
 
 #if USE_MY_DEBUG
-        printf(" flag_get_all_status\n");
+        // printf(" flag_get_all_status\n");
 #endif
 
         if (synchronous_request_status == SYN_REQUEST_STATUS_NONE)
@@ -450,7 +450,7 @@ void instruction_handle(void)
 #ifdef USE_INTERNATIONAL // 公制单位
 
         // 只发送千米及以上的数据
-        send_data(SEND_TOTAL_MILEAGE, fun_info.save_info.total_mileage / 1000);
+        send_data(SEND_TOTAL_MILEAGE, (fun_info.save_info.total_mileage / 1000));
 
 #endif // USE_INTERNATIONAL 公制单位
 
@@ -531,8 +531,8 @@ void instruction_handle(void)
         flag_alter_time = 0;
 
 #if USE_MY_DEBUG
-        printf(" flag_alter_time \n");
-        printf("hour %bu min %bu sec %bu \n", fun_info.aip1302_saveinfo.time_hour, fun_info.aip1302_saveinfo.time_min, fun_info.aip1302_saveinfo.time_sec);
+        // printf(" flag_alter_time \n");
+        // printf("hour %bu min %bu sec %bu \n", fun_info.aip1302_saveinfo.time_hour, fun_info.aip1302_saveinfo.time_min, fun_info.aip1302_saveinfo.time_sec);
 #endif
 
         if (update_time_status == UPDATE_STATUS_NONE)
@@ -575,7 +575,7 @@ void instruction_handle(void)
         distance = 0;    //
         fun_info_save(); // 将信息写回flash
 #if USE_MY_DEBUG
-        printf(" flag_clear_total_mileage \n");
+        // printf(" flag_clear_total_mileage \n");
 #endif
     }
 
@@ -587,7 +587,7 @@ void instruction_handle(void)
         distance = 0;
         fun_info_save(); // 将信息写回flash
 #if USE_MY_DEBUG
-        printf(" flag_clear_sub_total_mileage \n");
+        // printf(" flag_clear_sub_total_mileage \n");
 #endif
     }
 

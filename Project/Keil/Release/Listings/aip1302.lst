@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   AIP1302                                                           06/19/2025 16:46:59 PAGE 1   
+C51 COMPILER V9.60.7.0   AIP1302                                                           07/02/2025 15:11:51 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE AIP1302
@@ -35,338 +35,393 @@ line level    source
   24   1          AIP1302_CE_PIN = 0;   // 空闲时为低电平
   25   1          AIP1302_SCLK_PIN = 0; // 时钟脚空间时为低电平
   26   1      
-  27   1          // 判断时钟芯片aip1302的晶振是否正在运行，
-  28   1          // 如果在运行，不做任何处理
-  29   1          // 如果不在运行，将时钟芯片内部的数据配置为 2000.01.01--00:00:00,最后打开晶�
+  27   1      #if 1
+  28   1          // 判断时钟芯片aip1302的晶振是否正在运行，
+  29   1          // 如果在运行，不做任何处理
+  30   1          // 如果不在运行，将时钟芯片内部的数据配置为 2000.01.01--00:00:00,最后打开晶�
              -�
-  30   1          ret = aip1302_is_running();
-  31   1          if (ret)
-  32   1          {
-  33   2              // 如果时钟芯片aip1302的晶振正在运行
-  34   2              // printf("aip1302 is running\n");
-  35   2          }
-  36   1          else
-  37   1          {
-  38   2              // 如果时钟芯片aip1302的晶振不在运行
-  39   2              // printf("aip1302 is sleep\n");
-  40   2              // aip1302上电复位后，默认不跑时钟，这里要配置它开始跑时钟
-  41   2              aip1302_write_byte(AIP1302_YEAR_REG_ADDR, 0);    // 0年
-  42   2              aip1302_write_byte(AIP1302_MONTH_REG_ADDR, 1);   // 1月
-  43   2              aip1302_write_byte(AIP1302_DATE_REG_ADDR, 1);    // 1日
-  44   2              aip1302_write_byte(AIP1302_WEEKDAY_REG_ADDR, 1); // 星期1
-  45   2              aip1302_write_byte(AIP1302_MIN_REG_ADDR, 0);     // 0分
-  46   2              aip1302_write_byte(AIP1302_HOUR_REG_ADDR, 0);    // 最高位清零,对应24小时制
-  47   2              aip1302_write_byte(AIP1302_SEC_REG_ADDR, 0);     // 函数内部也会把最高位清零，秒寄�
+  31   1          ret = aip1302_is_running(); // 函数内部调用了 aip1302_read_all();
+  32   1          if (ret)
+  33   1          {
+  34   2              // 如果时钟芯片aip1302的晶振正在运行
+  35   2              // printf("aip1302 is running\n");
+  36   2      
+  37   2              // 如果不是第一次上电
+  38   2              // printf("1302 is not first power on\n");
+  39   2          }
+  40   1          else
+  41   1          {
+  42   2              // 如果时钟芯片aip1302的晶振不在运行
+  43   2              // printf("aip1302 is sleep\n");
+  44   2      
+  45   2              // 如果不是第一次上电
+  46   2              // printf("1302 is first power on\n");
+  47   2              // aip1302上电复位后，默认不跑时钟，这里要配置它开始跑时钟
+  48   2              aip1302_write_byte(AIP1302_YEAR_REG_ADDR, 0);    // 0年
+  49   2              aip1302_write_byte(AIP1302_MONTH_REG_ADDR, 1);   // 1月
+  50   2              aip1302_write_byte(AIP1302_DATE_REG_ADDR, 1);    // 1日
+  51   2              aip1302_write_byte(AIP1302_WEEKDAY_REG_ADDR, 1); // 星期1
+  52   2              aip1302_write_byte(AIP1302_MIN_REG_ADDR, 0);     // 0分
+C51 COMPILER V9.60.7.0   AIP1302                                                           07/02/2025 15:11:51 PAGE 2   
+
+  53   2              aip1302_write_byte(AIP1302_HOUR_REG_ADDR, 0);    // 最高位清零,对应24小时制
+  54   2              aip1302_write_byte(AIP1302_SEC_REG_ADDR, 0);     // 函数内部也会把最高位清零，秒寄�
              -��器最高位清零后，时钟ic开始振荡，跑时间
-  48   2          }
-  49   1      
-  50   1          // 从aip1302中读出所有有关时间的数据,存放到全局变量中
-  51   1          aip1302_read_all();
-C51 COMPILER V9.60.7.0   AIP1302                                                           06/19/2025 16:46:59 PAGE 2   
+  55   2          }
+  56   1      #endif
+  57   1      
+  58   1          // 从aip1302中读出所有有关时间的数据,存放到全局变量中
+  59   1          // aip1302_read_all();
+  60   1      
+  61   1      #if 0
+                  /* 测试程序 */
+                  printf("year %u \n", fun_info.aip1302_saveinfo.year);
+                  printf("month %bu \n", fun_info.aip1302_saveinfo.month);
+                  printf("day %bu \n", fun_info.aip1302_saveinfo.day);
+                  printf("hour %bu \n", fun_info.aip1302_saveinfo.time_hour);
+                  printf("min %bu \n", fun_info.aip1302_saveinfo.time_min);
+                  printf("sec %bu \n", fun_info.aip1302_saveinfo.time_sec);
+              
+                  fun_info.aip1302_saveinfo.year = (u16)2025;
+                  fun_info.aip1302_saveinfo.month = 7;
+                  fun_info.aip1302_saveinfo.day = 2;
+                  fun_info.aip1302_saveinfo.time_hour = 13;
+                  fun_info.aip1302_saveinfo.time_min = 30;
+                  fun_info.aip1302_saveinfo.time_sec = 30;
+                  aip1302_update_time(fun_info.aip1302_saveinfo);
+                  // aip1302_write_byte(AIP1302_YEAR_REG_ADDR, 25); // 时钟IC内部只存0~99年
+              
+                  // aip1302_write_byte(AIP1302_RAM_START_ADDR, 0xA5);
+                  // {
+                  //     u8 ret = aip1302_read_byte(AIP1302_RAM_START_ADDR + 1);
+                  //     printf("ret %bu\n", ret);
+                  // }
+              #endif
+  85   1      }
+  86          
+  87          // 将8位变量中的数据反转(例：0b 0111 0101  -> 0b 1010 1110)
+  88          static u8 reverse_u8(u8 arg)
+  89          {
+  90   1          u8 tmp;
+  91   1          u8 i = 0; // 循环计数值
+  92   1      
+  93   1          // 直接从aip1302读出的数据是LSB低位在前的，这里先做反转
+  94   1          for (i = 0; i < 8; i++)
+  95   1          {
+  96   2              tmp <<= 1;
+  97   2              if (arg & 0x01)
+  98   2              {
+  99   3                  tmp |= 0x01;
+ 100   3              }
+ 101   2              else
+ 102   2              {
+ 103   3              }
+ 104   2              arg >>= 1;
+ 105   2          }
+ 106   1      
+ 107   1          return tmp;
+ 108   1      }
+ 109          
+ 110          // 对读出的数据做格式转换
+ 111          static u8 __aip1302_convert_read_byte(const u8 cmd, const u8 byte)
+ 112          {
+ 113   1          u8 tmp = 0;
+C51 COMPILER V9.60.7.0   AIP1302                                                           07/02/2025 15:11:51 PAGE 3   
 
-  52   1      }
-  53          
-  54          // 将8位变量中的数据反转(例：0b 0111 0101  -> 0b 1010 1110)
-  55          static u8 reverse_u8(u8 arg)
-  56          {
-  57   1          u8 tmp;
-  58   1          u8 i = 0; // 循环计数值
-  59   1      
-  60   1          // 直接从aip1302读出的数据是LSB低位在前的，这里先做反转
-  61   1          for (i = 0; i < 8; i++)
-  62   1          {
-  63   2              tmp <<= 1;
-  64   2              if (arg & 0x01)
-  65   2              {
-  66   3                  tmp |= 0x01;
-  67   3              }
-  68   2              else
-  69   2              {
-  70   3              }
-  71   2              arg >>= 1;
-  72   2          }
-  73   1      
-  74   1          return tmp;
-  75   1      }
-  76          
-  77          // 对读出的数据做格式转换
-  78          static u8 __aip1302_convert_read_byte(const u8 cmd, const u8 byte)
-  79          {
-  80   1          u8 tmp = 0;
-  81   1          u8 i = 0; // 循环计数值
-  82   1      
-  83   1          // 直接从aip1302读出的数据是LSB低位在前的，这里先做反转
-  84   1          tmp = reverse_u8(byte);
-  85   1          // printf("val %bx \n", tmp); // 测试反转后的数据
-  86   1      
-  87   1          // 根据命令，判断是从哪个寄存器读出的数据，在根据手册对应的格式做转换
-  88   1          if (cmd == (AIP1302_SEC_REG_ADDR + 1) ||   /* 秒寄存器 */
-  89   1              cmd == (AIP1302_MIN_REG_ADDR + 1) ||   /* 分钟寄存器 */
-  90   1              cmd == (AIP1302_HOUR_REG_ADDR + 1) ||  /* 小时寄存器 */
-  91   1              cmd == (AIP1302_DATE_REG_ADDR + 1) ||  /* 日期寄存器 */
-  92   1              cmd == (AIP1302_MONTH_REG_ADDR + 1) || /* 月份寄存器 */
-  93   1              cmd == (AIP1302_YEAR_REG_ADDR + 1))    /* 年寄存器 */
-  94   1          {
-  95   2              u8 tens_place = 0; // 十位
-  96   2              u8 one_place = 0;  // 个位
-  97   2      
-  98   2              if ((AIP1302_SEC_REG_ADDR + 1) == cmd ||
-  99   2                  (AIP1302_MIN_REG_ADDR + 1) == cmd)
- 100   2              {
- 101   3                  // 秒寄存器、分寄存器中中，清除bit7,bit6~bit0才是有效数据
- 102   3                  // 如果在时钟芯片上电复位后，没有开启晶振，这里会读取到 tmp==255
- 103   3                  tmp &= ~0x80;
- 104   3              }
- 105   2              else if ((AIP1302_HOUR_REG_ADDR + 1) == cmd || (AIP1302_DATE_REG_ADDR + 1) == cmd)
- 106   2              {
- 107   3                  // 小时、日寄存器，清除bit7和bit6,未使用
- 108   3                  tmp &= ~0xC0;
- 109   3              }
- 110   2              else if ((AIP1302_MONTH_REG_ADDR + 1) == cmd)
- 111   2              {
- 112   3                  // 月寄存器，bit7~5未使用
- 113   3                  tmp &= ~0xE0;
-C51 COMPILER V9.60.7.0   AIP1302                                                           06/19/2025 16:46:59 PAGE 3   
-
- 114   3              }
- 115   2      
- 116   2              tens_place = tmp >> 4;
- 117   2              one_place = tmp & (~0xF0);
- 118   2              tmp = tens_place * 10 + one_place;
- 119   2          }
- 120   1      
- 121   1          return tmp;
- 122   1      }
- 123          
- 124          // 从aip1302中读取出原始的数据
- 125          u8 __aip1302_read_byte(const u8 cmd)
- 126          {
- 127   1          u8 recv_data = 0; // 存放读取到的数据
- 128   1          u8 i = 0;         // 循环计数值
- 129   1      
- 130   1          // DATA脚--配置为输出模式
- 131   1          P2_MD1 &= ~GPIO_P24_MODE_SEL(0x3); // 清空配置
- 132   1          P2_MD1 |= GPIO_P24_MODE_SEL(0x1);  // 输出模式
- 133   1          FOUT_S24 = GPIO_FOUT_AF_FUNC;
- 134   1      
- 135   1          AIP1302_DATA_PIN = 0;
- 136   1          AIP1302_SCLK_PIN = 0;
- 137   1          AIP1302_CE_PIN = 1;
- 138   1          AIP1302_DELAY(); // 等待电平信号稳定
- 139   1      
- 140   1          for (i = 0; i < 8; i++)
- 141   1          {
- 142   2              AIP1302_SCLK_PIN = 0;
- 143   2              AIP1302_DELAY(); // 等待电平信号稳定
- 144   2              if ((cmd >> i) & 0x01)
- 145   2              {
- 146   3                  AIP1302_DATA_PIN = 1;
+ 114   1          u8 i = 0; // 循环计数值
+ 115   1      
+ 116   1          // 直接从aip1302读出的数据是LSB低位在前的，这里先做反转
+ 117   1          tmp = reverse_u8(byte);
+ 118   1          // printf("val %bx \n", tmp); // 测试反转后的数据
+ 119   1      
+ 120   1          // 根据命令，判断是从哪个寄存器读出的数据，在根据手册对应的格式做转换
+ 121   1          if (cmd == (AIP1302_SEC_REG_ADDR + 1) ||   /* 秒寄存器 */
+ 122   1              cmd == (AIP1302_MIN_REG_ADDR + 1) ||   /* 分钟寄存器 */
+ 123   1              cmd == (AIP1302_HOUR_REG_ADDR + 1) ||  /* 小时寄存器 */
+ 124   1              cmd == (AIP1302_DATE_REG_ADDR + 1) ||  /* 日期寄存器 */
+ 125   1              cmd == (AIP1302_MONTH_REG_ADDR + 1) || /* 月份寄存器 */
+ 126   1              cmd == (AIP1302_YEAR_REG_ADDR + 1))    /* 年寄存器 */
+ 127   1          {
+ 128   2              u8 tens_place = 0; // 十位
+ 129   2              u8 one_place = 0;  // 个位
+ 130   2      
+ 131   2              if ((AIP1302_SEC_REG_ADDR + 1) == cmd ||
+ 132   2                  (AIP1302_MIN_REG_ADDR + 1) == cmd)
+ 133   2              {
+ 134   3                  // 秒寄存器、分寄存器中中，清除bit7,bit6~bit0才是有效数据
+ 135   3                  // 如果在时钟芯片上电复位后，没有开启晶振，这里会读取到 tmp==255
+ 136   3                  tmp &= ~0x80;
+ 137   3              }
+ 138   2              else if ((AIP1302_HOUR_REG_ADDR + 1) == cmd || (AIP1302_DATE_REG_ADDR + 1) == cmd)
+ 139   2              {
+ 140   3                  // 小时、日寄存器，清除bit7和bit6,未使用
+ 141   3                  tmp &= ~0xC0;
+ 142   3              }
+ 143   2              else if ((AIP1302_MONTH_REG_ADDR + 1) == cmd)
+ 144   2              {
+ 145   3                  // 月寄存器，bit7~5未使用
+ 146   3                  tmp &= ~0xE0;
  147   3              }
- 148   2              else
- 149   2              {
- 150   3                  AIP1302_DATA_PIN = 0;
- 151   3              }
- 152   2              AIP1302_DELAY(); // 等待电平信号稳定
- 153   2      
- 154   2              AIP1302_SCLK_PIN = 1;
- 155   2              AIP1302_DELAY(); // 等待电平信号稳定
- 156   2          }
- 157   1      
- 158   1          // 将DATA脚切换为输入模式
- 159   1          P2_MD1 &= ~GPIO_P24_MODE_SEL(0x3); // 输入模式
- 160   1          P2_PU |= GPIO_P24_PULL_UP(0x1);    // 上拉(数据空闲时，是高电平)
- 161   1      
- 162   1          for (i = 0; i < 8; i++)
- 163   1          {
- 164   2              recv_data <<= 1;
- 165   2              AIP1302_SCLK_PIN = 0;
- 166   2              AIP1302_DELAY(); // 等待电平信号稳定
- 167   2              if (AIP1302_DATA_PIN)
- 168   2              {
- 169   3                  recv_data |= 0x01;
- 170   3              }
- 171   2              else
- 172   2              {
- 173   3              }
- 174   2              AIP1302_SCLK_PIN = 1;
- 175   2              AIP1302_DELAY(); // 等待电平信号稳定
-C51 COMPILER V9.60.7.0   AIP1302                                                           06/19/2025 16:46:59 PAGE 4   
+ 148   2      
+ 149   2              tens_place = tmp >> 4;
+ 150   2              one_place = tmp & (~0xF0);
+ 151   2              tmp = tens_place * 10 + one_place;
+ 152   2          }
+ 153   1      
+ 154   1          return tmp;
+ 155   1      }
+ 156          
+ 157          // 从aip1302中读取出原始的数据
+ 158          u8 __aip1302_read_byte(const u8 cmd)
+ 159          {
+ 160   1          u8 recv_data = 0; // 存放读取到的数据
+ 161   1          u8 i = 0;         // 循环计数值
+ 162   1      
+ 163   1          // DATA脚--配置为输出模式
+ 164   1          P2_MD1 &= ~GPIO_P24_MODE_SEL(0x3); // 清空配置
+ 165   1          P2_MD1 |= GPIO_P24_MODE_SEL(0x1);  // 输出模式
+ 166   1          FOUT_S24 = GPIO_FOUT_AF_FUNC;
+ 167   1      
+ 168   1          AIP1302_DATA_PIN = 0;
+ 169   1          AIP1302_SCLK_PIN = 0;
+ 170   1          AIP1302_CE_PIN = 1;
+ 171   1          AIP1302_DELAY(); // 等待电平信号稳定
+ 172   1      
+ 173   1          for (i = 0; i < 8; i++)
+ 174   1          {
+ 175   2              AIP1302_SCLK_PIN = 0;
+C51 COMPILER V9.60.7.0   AIP1302                                                           07/02/2025 15:11:51 PAGE 4   
 
- 176   2          }
- 177   1      
- 178   1          AIP1302_SCLK_PIN = 0;
- 179   1          AIP1302_CE_PIN = 0;
- 180   1          AIP1302_DATA_PIN = 0;
- 181   1      
- 182   1          return recv_data;
- 183   1      }
- 184          
- 185          /**
- 186           * @brief aip1302写一个字节，函数内部的数据传输是LSB，低位先行
- 187           *          函数内部会根据命令，对读出的数据做好转换
- 188           *
- 189           * @param cmd 读命令
- 190           * @return u8 从aip1302内部读取出来的、转换好的数据
- 191           */
- 192          u8 aip1302_read_byte(const u8 cmd)
- 193          {
- 194   1          u8 recv_data = 0; // 存放读取到的数据
- 195   1          recv_data = __aip1302_read_byte(cmd);
- 196   1          recv_data = __aip1302_convert_read_byte(cmd, recv_data);
- 197   1          return recv_data;
- 198   1      }
- 199          
- 200          /**
- 201           * @brief aip1302写一个字节，函数内部的数据传输是LSB，低位先行
- 202           *
- 203           * @param cmd 写命令
- 204           * @param byte 待写入的一个字节的数据
- 205           */
- 206          static void __aip1302_write_byte(u8 cmd, u8 byte)
- 207          {
- 208   1          u8 i = 0; // 循环计数值
- 209   1      
- 210   1          // DATA脚--配置为输出模式
- 211   1          P2_MD1 &= ~GPIO_P24_MODE_SEL(0x3); // 清空配置
- 212   1          P2_MD1 |= GPIO_P24_MODE_SEL(0x1);  // 输出模式
- 213   1          FOUT_S24 = GPIO_FOUT_AF_FUNC;
+ 176   2              AIP1302_DELAY(); // 等待电平信号稳定
+ 177   2              if ((cmd >> i) & 0x01)
+ 178   2              {
+ 179   3                  AIP1302_DATA_PIN = 1;
+ 180   3              }
+ 181   2              else
+ 182   2              {
+ 183   3                  AIP1302_DATA_PIN = 0;
+ 184   3              }
+ 185   2              AIP1302_DELAY(); // 等待电平信号稳定
+ 186   2      
+ 187   2              AIP1302_SCLK_PIN = 1;
+ 188   2              AIP1302_DELAY(); // 等待电平信号稳定
+ 189   2          }
+ 190   1      
+ 191   1          // 将DATA脚切换为输入模式
+ 192   1          P2_MD1 &= ~GPIO_P24_MODE_SEL(0x3); // 输入模式
+ 193   1          P2_PU |= GPIO_P24_PULL_UP(0x1);    // 上拉(数据空闲时，是高电平)
+ 194   1      
+ 195   1          for (i = 0; i < 8; i++)
+ 196   1          {
+ 197   2              recv_data <<= 1;
+ 198   2              AIP1302_SCLK_PIN = 0;
+ 199   2              AIP1302_DELAY(); // 等待电平信号稳定
+ 200   2              if (AIP1302_DATA_PIN)
+ 201   2              {
+ 202   3                  recv_data |= 0x01;
+ 203   3              }
+ 204   2              else
+ 205   2              {
+ 206   3              }
+ 207   2              AIP1302_SCLK_PIN = 1;
+ 208   2              AIP1302_DELAY(); // 等待电平信号稳定
+ 209   2          }
+ 210   1      
+ 211   1          AIP1302_SCLK_PIN = 0;
+ 212   1          AIP1302_CE_PIN = 0;
+ 213   1          AIP1302_DATA_PIN = 0;
  214   1      
- 215   1          AIP1302_DATA_PIN = 0;
- 216   1          AIP1302_SCLK_PIN = 0;
- 217   1          AIP1302_CE_PIN = 1;
- 218   1          AIP1302_DELAY(); // 等待电平信号稳定
- 219   1      
- 220   1          for (i = 0; i < 8; i++)
- 221   1          {
- 222   2              AIP1302_SCLK_PIN = 0;
- 223   2              AIP1302_DELAY(); // 等待电平信号稳定
- 224   2              if ((cmd >> i) & 0x01)
- 225   2              {
- 226   3                  AIP1302_DATA_PIN = 1;
- 227   3              }
- 228   2              else
- 229   2              {
- 230   3                  AIP1302_DATA_PIN = 0;
- 231   3              }
- 232   2              AIP1302_DELAY(); // 等待电平信号稳定
- 233   2              AIP1302_SCLK_PIN = 1;
- 234   2              AIP1302_DELAY(); // 等待电平信号稳定
- 235   2          }
- 236   1      
- 237   1          for (i = 0; i < 8; i++)
-C51 COMPILER V9.60.7.0   AIP1302                                                           06/19/2025 16:46:59 PAGE 5   
+ 215   1          return recv_data;
+ 216   1      }
+ 217          
+ 218          /**
+ 219           * @brief aip1302写一个字节，函数内部的数据传输是LSB，低位先行
+ 220           *          函数内部会根据命令，对读出的数据做好转换
+ 221           *
+ 222           * @param cmd 读命令
+ 223           * @return u8 从aip1302内部读取出来的、转换好的数据
+ 224           */
+ 225          u8 aip1302_read_byte(const u8 cmd)
+ 226          {
+ 227   1          u8 recv_data = 0; // 存放读取到的数据
+ 228   1          recv_data = __aip1302_read_byte(cmd);
+ 229   1          recv_data = __aip1302_convert_read_byte(cmd, recv_data);
+ 230   1          return recv_data;
+ 231   1      }
+ 232          
+ 233          /**
+ 234           * @brief aip1302写一个字节，函数内部的数据传输是LSB，低位先行
+ 235           *
+ 236           * @param cmd 写命令
+ 237           * @param byte 待写入的一个字节的数据
+C51 COMPILER V9.60.7.0   AIP1302                                                           07/02/2025 15:11:51 PAGE 5   
 
- 238   1          {
- 239   2              AIP1302_SCLK_PIN = 0;
- 240   2              AIP1302_DELAY(); // 等待电平信号稳定
- 241   2              if ((byte >> i) & 0x01)
- 242   2              {
- 243   3                  AIP1302_DATA_PIN = 1;
- 244   3              }
- 245   2              else
- 246   2              {
- 247   3                  AIP1302_DATA_PIN = 0;
- 248   3              }
- 249   2              AIP1302_DELAY(); // 等待电平信号稳定
- 250   2              AIP1302_SCLK_PIN = 1;
- 251   2              AIP1302_DELAY(); // 等待电平信号稳定
- 252   2          }
- 253   1      
- 254   1          AIP1302_SCLK_PIN = 0;
- 255   1          AIP1302_DELAY(); // 等待电平信号稳定
- 256   1          AIP1302_CE_PIN = 0;
- 257   1          AIP1302_DATA_PIN = 0;
- 258   1      }
- 259          
- 260          /**
- 261           * @brief 判断aip1302的时钟晶振是否在运行
- 262           *
- 263           * @return u8 0--时钟晶振停止，1--时钟晶振运行
- 264           */
- 265          // static u8 aip1302_is_running(void)
- 266          u8 aip1302_is_running(void)
- 267          {
- 268   1          u8 recv_data = __aip1302_read_byte(AIP1302_SEC_REG_ADDR); // 读取到的是反转后的数据
- 269   1          // 秒寄存器的最高位Bit7是时钟停止标志位，1--时钟晶振停止，进入低功耗，0-
-             --晶振运转
- 270   1          if (recv_data & 0x01)
+ 238           */
+ 239          static void __aip1302_write_byte(u8 cmd, u8 byte)
+ 240          {
+ 241   1          u8 i = 0; // 循环计数值
+ 242   1      
+ 243   1          // DATA脚--配置为输出模式
+ 244   1          P2_MD1 &= ~GPIO_P24_MODE_SEL(0x3); // 清空配置
+ 245   1          P2_MD1 |= GPIO_P24_MODE_SEL(0x1);  // 输出模式
+ 246   1          FOUT_S24 = GPIO_FOUT_AF_FUNC;
+ 247   1      
+ 248   1          AIP1302_DATA_PIN = 0;
+ 249   1          AIP1302_SCLK_PIN = 0;
+ 250   1          AIP1302_CE_PIN = 1;
+ 251   1          AIP1302_DELAY(); // 等待电平信号稳定
+ 252   1      
+ 253   1          for (i = 0; i < 8; i++)
+ 254   1          {
+ 255   2              AIP1302_SCLK_PIN = 0;
+ 256   2              AIP1302_DELAY(); // 等待电平信号稳定
+ 257   2              if ((cmd >> i) & 0x01)
+ 258   2              {
+ 259   3                  AIP1302_DATA_PIN = 1;
+ 260   3              }
+ 261   2              else
+ 262   2              {
+ 263   3                  AIP1302_DATA_PIN = 0;
+ 264   3              }
+ 265   2              AIP1302_DELAY(); // 等待电平信号稳定
+ 266   2              AIP1302_SCLK_PIN = 1;
+ 267   2              AIP1302_DELAY(); // 等待电平信号稳定
+ 268   2          }
+ 269   1      
+ 270   1          for (i = 0; i < 8; i++)
  271   1          {
- 272   2              // 如果时钟ic的时钟晶振停止
- 273   2              return 0;
- 274   2          }
- 275   1          else
- 276   1          {
- 277   2              // 如果时钟ic的时钟晶振在运行
- 278   2              return 1;
- 279   2          }
- 280   1      }
- 281          
- 282          /**
- 283           * @brief 向aip1302写入数据
- 284           *          1. 内部会进行格式转换,以适配寄存器的格式
- 285           *          会根据命令,屏蔽传入的数据的一些数据位
- 286           *          2. 函数内部在写入前会解开芯片的写保护，写入完成后会打开芯片的写�
-             -��护
- 287           *
- 288           * @param cmd 命令，待写入的寄存器的地址
- 289           * @param byte 要写入的1字节数据，函数内部会对数据做好相应的处理，以符合对应
-             -的寄存器的格式
- 290           *
- 291           * @return  void
- 292           */
- 293          void aip1302_write_byte(const u8 cmd, u8 byte)
- 294          {
- 295   1          u8 tmp = byte;
- 296   1          // 根据命令cmd，将对应的数据做好转换(转换成寄存器中存放的格式)，再写入
-C51 COMPILER V9.60.7.0   AIP1302                                                           06/19/2025 16:46:59 PAGE 6   
+ 272   2              AIP1302_SCLK_PIN = 0;
+ 273   2              AIP1302_DELAY(); // 等待电平信号稳定
+ 274   2              if ((byte >> i) & 0x01)
+ 275   2              {
+ 276   3                  AIP1302_DATA_PIN = 1;
+ 277   3              }
+ 278   2              else
+ 279   2              {
+ 280   3                  AIP1302_DATA_PIN = 0;
+ 281   3              }
+ 282   2              AIP1302_DELAY(); // 等待电平信号稳定
+ 283   2              AIP1302_SCLK_PIN = 1;
+ 284   2              AIP1302_DELAY(); // 等待电平信号稳定
+ 285   2          }
+ 286   1      
+ 287   1          AIP1302_SCLK_PIN = 0;
+ 288   1          AIP1302_DELAY(); // 等待电平信号稳定
+ 289   1          AIP1302_CE_PIN = 0;
+ 290   1          AIP1302_DATA_PIN = 0;
+ 291   1      }
+ 292          
+ 293          /**
+ 294           * @brief 判断aip1302的时钟晶振是否在运行
+ 295           *
+ 296           * @return u8 0--时钟晶振停止，1--时钟晶振运行
+ 297           * @return u8 0--第一次上电，1--非第一次上电
+ 298           */
+ 299          // static u8 aip1302_is_running(void)
+C51 COMPILER V9.60.7.0   AIP1302                                                           07/02/2025 15:11:51 PAGE 6   
 
- 297   1      
- 298   1          if (cmd == AIP1302_SEC_REG_ADDR ||
- 299   1              cmd == AIP1302_MIN_REG_ADDR ||
- 300   1              cmd == AIP1302_HOUR_REG_ADDR ||
- 301   1              cmd == AIP1302_DATE_REG_ADDR ||
- 302   1              cmd == AIP1302_MONTH_REG_ADDR ||
- 303   1              cmd == AIP1302_YEAR_REG_ADDR)
- 304   1          {
- 305   2              u8 tens_place = 0; // 十位
- 306   2              u8 one_place = 0;  // 个位
- 307   2              if (tmp >= 10)
- 308   2              {
- 309   3                  tens_place = tmp / 10;
- 310   3              }
- 311   2              one_place = tmp % 10;
- 312   2      
- 313   2              // 秒、分钟、小时、日、月、年寄存器都是高4位数据存放以10为单位的数�
+ 300          u8 aip1302_is_running(void)
+ 301          {
+ 302   1      #if 0
+                  u8 recv_data = __aip1302_read_byte(AIP1302_SEC_REG_ADDR + 1); // 读取到的是反转后的数据
+                  // 秒寄存器的最高位Bit7是时钟停止标志位，1--时钟晶振停止，进入低功耗，0-
+             --晶振运转
+                  if (recv_data & 0x01)
+                  {
+                      // 如果时钟ic的时钟晶振停止
+                      return 0;
+                  }
+                  else
+                  {
+                      // 如果时钟ic的时钟晶振在运行
+                      return 1;
+                  }
+              
+              #endif
+ 317   1      
+ 318   1          // 判断时间是否正确：
+ 319   1          aip1302_read_all(); //
+ 320   1          if (fun_info.aip1302_saveinfo.year > 2099 || fun_info.aip1302_saveinfo.year < 2000 ||
+ 321   1              fun_info.aip1302_saveinfo.month > 12 || fun_info.aip1302_saveinfo.month < 1 ||
+ 322   1              fun_info.aip1302_saveinfo.day > 31 || fun_info.aip1302_saveinfo.day < 1 ||
+ 323   1              fun_info.aip1302_saveinfo.time_hour > 24 ||
+ 324   1              fun_info.aip1302_saveinfo.time_min > 60 ||
+ 325   1              fun_info.aip1302_saveinfo.time_sec > 60)
+ 326   1          {
+ 327   2              return 0; // 第一次上电
+ 328   2          }
+ 329   1          else
+ 330   1          {
+ 331   2              return 1; // 非第一次上电
+ 332   2          }
+ 333   1      }
+ 334          
+ 335          /**
+ 336           * @brief 向aip1302写入数据
+ 337           *          1. 内部会进行格式转换,以适配寄存器的格式
+ 338           *          会根据命令,屏蔽传入的数据的一些数据位
+ 339           *          2. 函数内部在写入前会解开芯片的写保护，写入完成后会打开芯片的写�
+             -��护
+ 340           *
+ 341           * @param cmd 命令，待写入的寄存器的地址
+ 342           * @param byte 要写入的1字节数据，函数内部会对数据做好相应的处理，以符合对应
+             -的寄存器的格式
+ 343           *
+ 344           * @return  void
+ 345           */
+ 346          void aip1302_write_byte(const u8 cmd, u8 byte)
+ 347          {
+ 348   1          u8 tmp = byte;
+ 349   1          // 根据命令cmd，将对应的数据做好转换(转换成寄存器中存放的格式)，再写入
+ 350   1      
+ 351   1          if (cmd == AIP1302_SEC_REG_ADDR ||
+ 352   1              cmd == AIP1302_MIN_REG_ADDR ||
+ 353   1              cmd == AIP1302_HOUR_REG_ADDR ||
+ 354   1              cmd == AIP1302_DATE_REG_ADDR ||
+ 355   1              cmd == AIP1302_MONTH_REG_ADDR ||
+ 356   1              cmd == AIP1302_YEAR_REG_ADDR)
+ 357   1          {
+ 358   2              u8 tens_place = 0; // 十位
+C51 COMPILER V9.60.7.0   AIP1302                                                           07/02/2025 15:11:51 PAGE 7   
+
+ 359   2              u8 one_place = 0;  // 个位
+ 360   2              if (tmp >= 10)
+ 361   2              {
+ 362   3                  tens_place = tmp / 10;
+ 363   3              }
+ 364   2              one_place = tmp % 10;
+ 365   2      
+ 366   2              // 秒、分钟、小时、日、月、年寄存器都是高4位数据存放以10为单位的数�
              -�，低4位存放以1为单位的数据
- 314   2              tmp = tens_place << 4 | one_place;
- 315   2              // 秒寄存器中，清除bit7,bit7==0,时钟IC的晶振会继续振荡
- 316   2              // 在分钟寄存器的bit7未使用，默认就是0
- 317   2              // 年寄存器的bit7存放有效数据，不清零
- 318   2              if (AIP1302_SEC_REG_ADDR == cmd || AIP1302_MIN_REG_ADDR == cmd)
- 319   2              {
- 320   3                  tmp &= ~0x80;
- 321   3              }
- 322   2              else if (AIP1302_HOUR_REG_ADDR == cmd || AIP1302_DATE_REG_ADDR == cmd)
- 323   2              {
- 324   3                  // 小时寄存器，清除bit7和bit6，bit7清零，表示使用24h制，bit6未使用
- 325   3                  // 日寄存器，bit7和bit6未使用
- 326   3                  tmp &= ~0xC0;
- 327   3              }
- 328   2              else if (AIP1302_MONTH_REG_ADDR == cmd)
- 329   2              {
- 330   3                  // 月寄存器，bit7~5未使用
- 331   3                  tmp &= ~0xE0;
- 332   3              }
- 333   2          }
- 334   1      
- 335   1          // 解除写保护
- 336   1          __aip1302_write_byte(AIP1302_WRITE_PROTECT_REG_ADDR, 0x00);
- 337   1          __aip1302_write_byte(cmd, tmp); // 写入数据
- 338   1          // 开启写保护
- 339   1          __aip1302_write_byte(AIP1302_WRITE_PROTECT_REG_ADDR, 0x80);
- 340   1      }
- 341          
- 342          #if 0 //
+ 367   2              tmp = tens_place << 4 | one_place;
+ 368   2              // 秒寄存器中，清除bit7,bit7==0,时钟IC的晶振会继续振荡
+ 369   2              // 在分钟寄存器的bit7未使用，默认就是0
+ 370   2              // 年寄存器的bit7存放有效数据，不清零
+ 371   2              if (AIP1302_SEC_REG_ADDR == cmd || AIP1302_MIN_REG_ADDR == cmd)
+ 372   2              {
+ 373   3                  tmp &= ~0x80;
+ 374   3              }
+ 375   2              else if (AIP1302_HOUR_REG_ADDR == cmd || AIP1302_DATE_REG_ADDR == cmd)
+ 376   2              {
+ 377   3                  // 小时寄存器，清除bit7和bit6，bit7清零，表示使用24h制，bit6未使用
+ 378   3                  // 日寄存器，bit7和bit6未使用
+ 379   3                  tmp &= ~0xC0;
+ 380   3              }
+ 381   2              else if (AIP1302_MONTH_REG_ADDR == cmd)
+ 382   2              {
+ 383   3                  // 月寄存器，bit7~5未使用
+ 384   3                  tmp &= ~0xE0;
+ 385   3              }
+ 386   2          }
+ 387   1      
+ 388   1          // 解除写保护
+ 389   1          __aip1302_write_byte(AIP1302_WRITE_PROTECT_REG_ADDR, 0x00);
+ 390   1          __aip1302_write_byte(cmd, tmp); // 写入数据
+ 391   1          // 开启写保护
+ 392   1          __aip1302_write_byte(AIP1302_WRITE_PROTECT_REG_ADDR, 0x80);
+ 393   1      }
+ 394          
+ 395          #if 0 //
               void aip1302_test(void)
               {
                   // u8 recv_data = 0xFF;
@@ -382,8 +437,6 @@ line level    source
                       cnt = 0;
                       ret = aip1302_read_byte(AIP1302_YEAR_REG_ADDR + 1);
                       // printf("year %bu ", ret);
-C51 COMPILER V9.60.7.0   AIP1302                                                           06/19/2025 16:46:59 PAGE 7   
-
                       printf("year %bu \n", ret);
               
                       ret = aip1302_read_byte(AIP1302_MONTH_REG_ADDR + 1);
@@ -393,6 +446,8 @@ line level    source
                       ret = aip1302_read_byte(AIP1302_DATE_REG_ADDR + 1);
                       // printf("day %bu ", ret);
                       printf("day %bu \n", ret);
+C51 COMPILER V9.60.7.0   AIP1302                                                           07/02/2025 15:11:51 PAGE 8   
+
               
                       // ret = aip1302_read_byte(AIP1302_WEEKDAY_REG_ADDR + 1);
                       // printf("weekday %bu ", ret);
@@ -424,65 +479,65 @@ line level    source
                   }
               }
               #endif
- 398          
- 399          #if 1
- 400          // 向aip1302更新所有关于时间的数据
- 401          void aip1302_update_all_data(aip1302_saveinfo_t aip1302_saveinfo)
- 402          {
- 403   1          aip1302_write_byte(AIP1302_SEC_REG_ADDR, aip1302_saveinfo.time_sec);
- 404   1          aip1302_write_byte(AIP1302_MIN_REG_ADDR, aip1302_saveinfo.time_min);
- 405   1          aip1302_write_byte(AIP1302_HOUR_REG_ADDR, aip1302_saveinfo.time_hour);
- 406   1          aip1302_write_byte(AIP1302_DATE_REG_ADDR, aip1302_saveinfo.day);
- 407   1          aip1302_write_byte(AIP1302_MONTH_REG_ADDR, aip1302_saveinfo.month);
- 408   1          aip1302_write_byte(AIP1302_YEAR_REG_ADDR, aip1302_saveinfo.year - 2000); // 时钟IC内部只存0~99�
+ 451          
+ 452          #if 1
+ 453          // 向aip1302更新所有关于时间的数据
+ 454          void aip1302_update_all_data(aip1302_saveinfo_t aip1302_saveinfo)
+ 455          {
+ 456   1          aip1302_write_byte(AIP1302_SEC_REG_ADDR, aip1302_saveinfo.time_sec);
+ 457   1          aip1302_write_byte(AIP1302_MIN_REG_ADDR, aip1302_saveinfo.time_min);
+ 458   1          aip1302_write_byte(AIP1302_HOUR_REG_ADDR, aip1302_saveinfo.time_hour);
+ 459   1          aip1302_write_byte(AIP1302_DATE_REG_ADDR, aip1302_saveinfo.day);
+ 460   1          aip1302_write_byte(AIP1302_MONTH_REG_ADDR, aip1302_saveinfo.month);
+ 461   1          aip1302_write_byte(AIP1302_YEAR_REG_ADDR, aip1302_saveinfo.year - 2000); // 时钟IC内部只存0~99�
              -�
- 409   1          // aip1302_write_byte(AIP1302_WEEKDAY_REG_ADDR, );
- 410   1      }
- 411          #endif // void aip1302_update_all_data(aip1302_saveinfo_t aip1302_saveinfo)
- 412          
- 413          // 向aip1302更新 年、月、日、时、分、秒
- 414          void aip1302_update_time(aip1302_saveinfo_t aip1302_saveinfo)
- 415          {
- 416   1          aip1302_write_byte(AIP1302_YEAR_REG_ADDR, aip1302_saveinfo.year - 2000);
- 417   1          aip1302_write_byte(AIP1302_MONTH_REG_ADDR, aip1302_saveinfo.month);
- 418   1          aip1302_write_byte(AIP1302_DATE_REG_ADDR, aip1302_saveinfo.day);
-C51 COMPILER V9.60.7.0   AIP1302                                                           06/19/2025 16:46:59 PAGE 8   
-
- 419   1      
- 420   1          aip1302_write_byte(AIP1302_HOUR_REG_ADDR, aip1302_saveinfo.time_hour);
- 421   1          aip1302_write_byte(AIP1302_MIN_REG_ADDR, aip1302_saveinfo.time_min);
- 422   1          aip1302_write_byte(AIP1302_SEC_REG_ADDR, aip1302_saveinfo.time_sec);
- 423   1      }
- 424          
- 425          #if 0 
+ 462   1          // aip1302_write_byte(AIP1302_WEEKDAY_REG_ADDR, );
+ 463   1      }
+ 464          #endif // void aip1302_update_all_data(aip1302_saveinfo_t aip1302_saveinfo)
+ 465          
+ 466          // 向aip1302更新 年、月、日、时、分、秒
+ 467          void aip1302_update_time(aip1302_saveinfo_t aip1302_saveinfo)
+ 468          {
+ 469   1          aip1302_write_byte(AIP1302_YEAR_REG_ADDR, (u16)aip1302_saveinfo.year - 2000);
+ 470   1          aip1302_write_byte(AIP1302_MONTH_REG_ADDR, aip1302_saveinfo.month);
+ 471   1          aip1302_write_byte(AIP1302_DATE_REG_ADDR, aip1302_saveinfo.day);
+ 472   1      
+ 473   1          aip1302_write_byte(AIP1302_HOUR_REG_ADDR, aip1302_saveinfo.time_hour);
+ 474   1          aip1302_write_byte(AIP1302_MIN_REG_ADDR, aip1302_saveinfo.time_min);
+ 475   1          aip1302_write_byte(AIP1302_SEC_REG_ADDR, aip1302_saveinfo.time_sec);
+ 476   1      }
+ 477          
+ 478          #if 0 
               // 向aip1302更新日期,年月日
               void aip1302_update_date(aip1302_saveinfo_t aip1302_saveinfo)
+C51 COMPILER V9.60.7.0   AIP1302                                                           07/02/2025 15:11:51 PAGE 9   
+
               {
                   aip1302_write_byte(AIP1302_DATE_REG_ADDR, aip1302_saveinfo.day);
                   aip1302_write_byte(AIP1302_MONTH_REG_ADDR, aip1302_saveinfo.month);
                   aip1302_write_byte(AIP1302_YEAR_REG_ADDR, aip1302_saveinfo.year - 2000);
               }
               #endif
- 434          
- 435          // 向aip1302更新星期
- 436          // void aip1302_update_weekday(aip1302_saveinfo_t aip1302_saveinfo)
- 437          // {
- 438          //     aip1302_write_byte(AIP1302_WEEKDAY_REG_ADDR, aip1302_saveinfo.weekday);
- 439          // }
- 440          
- 441          // 从aip1302中读出所有有关时间的数据,存放到全局变量中
- 442          void aip1302_read_all(void)
- 443          {
- 444   1          fun_info.aip1302_saveinfo.time_sec = aip1302_read_byte(AIP1302_SEC_REG_ADDR + 1);
- 445   1          fun_info.aip1302_saveinfo.time_min = aip1302_read_byte(AIP1302_MIN_REG_ADDR + 1);
- 446   1          fun_info.aip1302_saveinfo.time_hour = aip1302_read_byte(AIP1302_HOUR_REG_ADDR + 1);
- 447   1          fun_info.aip1302_saveinfo.day = aip1302_read_byte(AIP1302_DATE_REG_ADDR + 1);
- 448   1          fun_info.aip1302_saveinfo.month = aip1302_read_byte(AIP1302_MONTH_REG_ADDR + 1);
- 449   1          fun_info.aip1302_saveinfo.year = 2000 + aip1302_read_byte(AIP1302_YEAR_REG_ADDR + 1);
- 450   1          // fun_info.aip1302_saveinfo.weekday = aip1302_read_byte(AIP1302_WEEKDAY_REG_ADDR + 1);
- 451   1      }
- 452          
- 453          #if 0 // 测试程序
+ 487          
+ 488          // 向aip1302更新星期
+ 489          // void aip1302_update_weekday(aip1302_saveinfo_t aip1302_saveinfo)
+ 490          // {
+ 491          //     aip1302_write_byte(AIP1302_WEEKDAY_REG_ADDR, aip1302_saveinfo.weekday);
+ 492          // }
+ 493          
+ 494          // 从aip1302中读出所有有关时间的数据,存放到全局变量中
+ 495          void aip1302_read_all(void)
+ 496          {
+ 497   1          fun_info.aip1302_saveinfo.time_sec = aip1302_read_byte(AIP1302_SEC_REG_ADDR + 1);
+ 498   1          fun_info.aip1302_saveinfo.time_min = aip1302_read_byte(AIP1302_MIN_REG_ADDR + 1);
+ 499   1          fun_info.aip1302_saveinfo.time_hour = aip1302_read_byte(AIP1302_HOUR_REG_ADDR + 1);
+ 500   1          fun_info.aip1302_saveinfo.day = aip1302_read_byte(AIP1302_DATE_REG_ADDR + 1);
+ 501   1          fun_info.aip1302_saveinfo.month = aip1302_read_byte(AIP1302_MONTH_REG_ADDR + 1);
+ 502   1          fun_info.aip1302_saveinfo.year = (u16)2000 + (u16)aip1302_read_byte(AIP1302_YEAR_REG_ADDR + 1);
+ 503   1          // fun_info.aip1302_saveinfo.weekday = aip1302_read_byte(AIP1302_WEEKDAY_REG_ADDR + 1);
+ 504   1      }
+ 505          
+ 506          #if 0 // 测试程序
               
               // 测试aip1302的写保护功能--测试通过
               {
@@ -510,8 +565,6 @@ line level    source
               // 测试aip1302是否开启了写保护--测试通过
               {
                   u8 ret = aip1302_read_byte(AIP1302_WRITE_PROTECT_REG_ADDR + 1);
-C51 COMPILER V9.60.7.0   AIP1302                                                           06/19/2025 16:46:59 PAGE 9   
-
                   if (ret & 0x01)
                   {
                       // 如果芯片开启了写保护，解除写保护
@@ -521,6 +574,8 @@ line level    source
                   {
                       // 如果没有开启写保护
                       printf("no write protect\n");
+C51 COMPILER V9.60.7.0   AIP1302                                                           07/02/2025 15:11:51 PAGE 10  
+
                   }
               }
               
@@ -528,7 +583,7 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    974    ----
+   CODE SIZE        =   1041    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----      28
    PDATA SIZE       =   ----    ----

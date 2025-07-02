@@ -24,12 +24,13 @@ void adc_config(void)
     // ADC_ACON1 |= ADC_VREF_SEL(0x06) | ADC_TEN_SEL(0x3); // 选择内部VCCA作为参考电压（需要关闭ADC内部和外部的参考选择信号），关闭测试信号
 
     ADC_ACON1 &= ~((0x01 << 6) | (0x01 << 5) | (0x07 << 0)); // 关闭ADC中内部参考能使信号，关闭ADC外部参考选择信号，清空ADC内部参考电压的选择配置
-    ADC_ACON1 |= (0x03 << 3) | (0x06 << 0);                  // 关闭测试信号，选择内部VCCA作为参考电压
+    ADC_ACON1 |= (0x03 << 3) | (0x06 << 0);                  // 关闭测试信号，选择内部VCCA作为参考电压（使用VCCA作为参考电压，需要关闭内部使能参考和外部使能参考）
     ADC_ACON0 = ADC_CMP_EN(0x1) |                            // 打开ADC中的CMP使能信号
                 ADC_BIAS_EN(0x1) |                           // 打开ADC偏置电流能使信号
                 ADC_BIAS_SEL(0x1);                           // 偏置电流选择：1x
-    ADC_TRGS0 |= (0x07 << 4);                                // 通道 0DLY 的 ADC 时钟个数选择，配置为 4n+1，4 * 29 + 1
-    ADC_CHS0 |= (0x01 << 6); // 使能 通道 0DLY 功能
+
+    ADC_TRGS0 |= (0x07 << 4); // 通道 0DLY 的 ADC 时钟个数选择，配置为 4n+1，4 * 29 + 1
+    ADC_CHS0 |= (0x01 << 6);  // 使能 通道 0DLY 功能
 }
 
 // 切换adc扫描的引脚
@@ -37,32 +38,36 @@ void adc_config(void)
 void adc_sel_pin(u8 adc_pin)
 {
     ADC_CHS0 &= ~((0x01 << 4) | (0x01 << 3) | (0x01 << 2) | (0x01 << 1) | (0x01 << 0)); // 清空选择的adc0通路
-    
+
     switch (adc_pin)
     {
     case ADC_PIN_BATTERY:                                     // 检测电池电量
         ADC_ACON1 &= ~((0x01 << 5) | (0x07 << 0));            // 关闭ADC外部参考选择信号，清空ADC内部参考电压的选择配置
         ADC_ACON1 |= (0x01 << 6) | (0x03 << 3) | (0x02 << 0); // 使能ADC内部参考信号，关闭测试信号内部参考电压选择2.4V
-        ADC_CHS0 |= ADC_ANALOG_CHAN(0x04);                     // P04通路
+        ADC_CHS0 |= ADC_ANALOG_CHAN(0x04);                    // P04通路
         break;
 
     // case ADC_PIN_TOUCH:                    // 检测触摸IC传过来的电压
     case ADC_PIN_KEY:                                            // 检测ad按键
         ADC_ACON1 &= ~((0x01 << 6) | (0x01 << 5) | (0x07 << 0)); // 关闭ADC中内部参考能使信号，关闭ADC外部参考选择信号，清空ADC内部参考电压的选择配置
-        ADC_ACON1 |= (0x03 << 3) | (0x06 << 0);                  // 关闭测试信号，选择内部VCCA作为参考电压
-        ADC_CHS0 |= ADC_ANALOG_CHAN(0x05);                        // P05通路
+        ADC_ACON1 |= (0x03 << 3) | (0x06 << 0);                  // 关闭测试信号，选择内部VCCA作为参考电压（使用VCCA作为参考电压，需要关闭内部使能参考和外部使能参考）
+        ADC_CHS0 |= ADC_ANALOG_CHAN(0x05);                       // P05通路
 
         break;
 
-    case ADC_PIN_FUEL:                                           // 检测油量
-        ADC_ACON1 &= ~((0x01 << 6) | (0x01 << 5) | (0x07 << 0)); // 关闭ADC中内部参考能使信号，关闭ADC外部参考选择信号，清空ADC内部参考电压的选择配置
-        ADC_ACON1 |= (0x03 << 3) | (0x06 << 0);                  // 关闭测试信号，选择内部VCCA作为参考电压
-        ADC_CHS0 |= ADC_ANALOG_CHAN(0x01);                        // P01通路
+    case ADC_PIN_FUEL: // 检测油量
+
+        //    ADC_ACON1 &= ~((0x01 << 6) | (0x01 << 5) | (0x07 << 0)); // 关闭ADC中内部参考能使信号，关闭ADC外部参考选择信号，清空ADC内部参考电压的选择配置
+        //    ADC_ACON1 |= (0x03 << 3) | (0x06 << 0);                  // 关闭测试信号，选择内部VCCA作为参考电压（使用VCCA作为参考电压，需要关闭内部使能参考和外部使能参考）
+
+        ADC_ACON1 &= ~((0x01 << 5) | (0x07 << 0));            // 关闭ADC外部参考选择信号，清空ADC内部参考电压的选择配置
+        ADC_ACON1 |= (0x01 << 6) | (0x03 << 3) | (0x01 << 0); // 使能ADC内部参考信号，关闭测试信号，内部参考电压选择2.0V
+        ADC_CHS0 |= ADC_ANALOG_CHAN(0x01);                    // P01通路
         break;
 
     case ADC_PIN_TEMP_OF_WATER: // 检测水温的引脚
         // ADC_ACON1 &= ~((0x01 << 6) | (0x01 << 5) | (0x07 << 0)); // 关闭ADC中内部参考能使信号，关闭ADC外部参考选择信号，清空ADC内部参考电压的选择配置
-        // ADC_ACON1 |= (0x03 << 3) | (0x06 << 0);                  // 关闭测试信号，选择内部VCCA作为参考电压
+        // ADC_ACON1 |= (0x03 << 3) | (0x06 << 0);                  // 关闭测试信号，选择内部VCCA作为参考电压（使用VCCA作为参考电压，需要关闭内部使能参考和外部使能参考）
         // ADC_CHS0 = ADC_ANALOG_CHAN(0x00);                        // P00通路
         break;
     }

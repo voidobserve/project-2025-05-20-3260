@@ -204,9 +204,12 @@ void samples_init(u16 adc_val)
 // 将油量检测对应的ad值转换成百分比值
 u8 convert_fuel_adc_to_percent(u16 fuel_adc_val)
 {
+#if 0
     u8 ret = 0;
 
-    if (fuel_adc_val >= 4095 - 500) // 如果超出了 最大油量的ad值和最小油量的ad值之间的范围 ，说明没有接油量检测
+    // 如果超出了 最大油量的ad值和最小油量的ad值之间的范围 ，说明没有接油量检测
+    if (fuel_adc_val >= (4095 - 500) ||
+        fuel_adc_val <= (0 + 500))
     {
         ret = 0xFF; // 根据串口收发协议，0xFF对应没有接油量检测
     }
@@ -231,6 +234,92 @@ u8 convert_fuel_adc_to_percent(u16 fuel_adc_val)
     }
 
     return ret;
+#endif
+
+#if 1
+    u8 ret = 0;
+
+    // 如果超出了 最大油量的ad值和最小油量的ad值之间的范围 ，说明没有接油量检测
+    if (fuel_adc_val >= (4095 - 500) ||
+        fuel_adc_val <= (0 + 500))
+    {
+        ret = 0xFF; // 根据串口收发协议，0xFF对应没有接油量检测
+    }
+    else
+    {
+        if (fuel_adc_val > FUEL_LEVEL_0_ADC_VAL) // 如果检测到的ad值比最小油量对应的ad值还要大
+        {
+            ret = 0; // 0% 油量
+        }
+        else if (fuel_adc_val <= FUEL_LEVEL_6_ADC_VAL) // 如果检测到的油量比100%还要大一些
+        {
+            ret = 100;
+        }
+        else if (fuel_adc_val <= FUEL_LEVEL_0_ADC_VAL && fuel_adc_val > FUEL_LEVEL_1_ADC_VAL) /* 0格油量到1格油量，0% ~ 18% */
+        {
+            /*
+                用采集到的ad值减去当前挡位最小的ad值，再除以（当前挡位最大的ad值-当前挡位最小的ad值），得到
+                采集到的ad值对应当前挡位的占比，再乘以当前挡位对应的百分比
+            */
+            ret = ((u32)fuel_adc_val - FUEL_LEVEL_1_ADC_VAL) * 18 / ((u32)FUEL_LEVEL_0_ADC_VAL - FUEL_LEVEL_1_ADC_VAL);
+            ret = 18 - ret;
+        }
+        else if (fuel_adc_val <= FUEL_LEVEL_1_ADC_VAL && fuel_adc_val > FUEL_LEVEL_2_ADC_VAL) /* 1格油量到2格油量，18% ~ 34% */
+        {
+            ret = ((u32)fuel_adc_val - FUEL_LEVEL_2_ADC_VAL) * 34 / ((u32)FUEL_LEVEL_1_ADC_VAL - FUEL_LEVEL_2_ADC_VAL);
+            ret = 34 - ret;
+            if (ret < 18)
+            {
+                ret = 18;
+            }
+        }
+        else if (fuel_adc_val <= FUEL_LEVEL_2_ADC_VAL && fuel_adc_val > FUEL_LEVEL_3_ADC_VAL) /* 2格油量到3格油量，34% ~ 51% */
+        {
+            ret = ((u32)fuel_adc_val - FUEL_LEVEL_3_ADC_VAL) * 51 / ((u32)FUEL_LEVEL_2_ADC_VAL - FUEL_LEVEL_3_ADC_VAL);
+            ret = 51 - ret;
+            if (ret < 34)
+            {
+                ret = 34;
+            }
+        }
+        else if (fuel_adc_val <= FUEL_LEVEL_3_ADC_VAL && fuel_adc_val > FUEL_LEVEL_4_ADC_VAL) /* 3格油量到4格油量，51% ~ 68% */
+        {
+            ret = ((u32)fuel_adc_val - FUEL_LEVEL_4_ADC_VAL) * 68 / ((u32)FUEL_LEVEL_3_ADC_VAL - FUEL_LEVEL_4_ADC_VAL);
+            ret = 68 - ret;
+            if (ret < 51)
+            {
+                ret = 51;
+            }
+        }
+        else if (fuel_adc_val <= FUEL_LEVEL_4_ADC_VAL && fuel_adc_val > FUEL_LEVEL_5_ADC_VAL) /* 4格油量到5格油量，68% ~ 84% */
+        {
+            ret = ((u32)fuel_adc_val - FUEL_LEVEL_5_ADC_VAL) * 84 / ((u32)FUEL_LEVEL_4_ADC_VAL - FUEL_LEVEL_5_ADC_VAL);
+            ret = 84 - ret;
+            if (ret < 68)
+            {
+                ret = 68;
+            }
+        }
+        else if (fuel_adc_val <= FUEL_LEVEL_5_ADC_VAL && fuel_adc_val > FUEL_LEVEL_6_ADC_VAL) /* 5格油量到6格油量，84% ~ 100.0% */
+        {
+            ret = ((u32)fuel_adc_val - FUEL_LEVEL_6_ADC_VAL) * 100 / ((u32)FUEL_LEVEL_5_ADC_VAL - FUEL_LEVEL_6_ADC_VAL);
+            ret = 100 - ret;
+            if (ret < 84)
+            {
+                ret = 84;
+            }
+        }
+    }
+
+    // 0，显示0格，游标闪烁
+    // 18以下，不含18，显示1格
+    // ret = 18; // 18及以上，显示2格
+    // ret = 34; // 34及以上，显示3格
+    // ret = 51; // 51及以上，显示4格
+    // ret = 68; // 68及以上，显示5格
+    // ret = 84; // 84及以上，显示6格
+    return ret;
+#endif
 }
 
 enum

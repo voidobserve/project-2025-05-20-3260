@@ -31,6 +31,7 @@
 #define SPEED_SCAN_OVER_TIME (600)
 // 时速的更新时间，单位：ms
 #define SPEED_SCAN_UPDATE_TIME (500)
+// #define SPEED_SCAN_UPDATE_TIME (300) // 时间太短，时速会经常跳动（提供1Hz信号，会在0km/h、3km/h这两个值来回切换）
 
 // 检测时速所需的配置
 // ======================================================

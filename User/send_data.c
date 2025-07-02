@@ -33,12 +33,10 @@ void send_data(u8 instruct, u32 send_data)
 
         check_num += 0x05 + (u8)instruct + (u8)send_data;
     }
-    else if (SEND_ENGINE_SPEED == instruct ||     /* 发送发动机的转速 */
-             SEND_SPEED == instruct ||            /* 发送时速 */
-             SEND_SUBTOTAL_MILEAGE == instruct || /* 发送小计里程 */
-             SEND_SUBTOTAL_MILEAGE_2 == instruct || /* 发送小计里程2 */
-             SEND_VOLTAGE_OF_BATTERY == instruct  /* 发送电池电压 */
-             )                                    // 如果指令的总长度为6个字节
+    else if (SEND_ENGINE_SPEED == instruct ||    /* 发送发动机的转速 */
+             SEND_SPEED == instruct ||           /* 发送时速 */
+             SEND_VOLTAGE_OF_BATTERY == instruct /* 发送电池电压 */
+             )                                   // 如果指令的总长度为6个字节
     {
         uart0_sendbyte(0x06);           // 发送指令的总长度
         uart0_sendbyte(instruct);       // 发送指令
@@ -47,9 +45,11 @@ void send_data(u8 instruct, u32 send_data)
 
         check_num += 0x06 + (u8)instruct + (u8)(send_data >> 8) + (u8)(send_data);
     }
-    else if (SEND_TOTAL_MILEAGE == instruct || /* 发送大计里程 */
-             SEND_TOUCH_KEY_STATUS == instruct /* 发送触摸按键的状态 */
-             ) // 如果指令的总长度为7个字节
+    else if (SEND_TOTAL_MILEAGE == instruct ||      /* 发送大计里程 */
+             SEND_SUBTOTAL_MILEAGE == instruct ||   /* 发送小计里程 */
+             SEND_SUBTOTAL_MILEAGE_2 == instruct || /* 发送小计里程2 */
+             SEND_TOUCH_KEY_STATUS == instruct      /* 发送触摸按键的状态 */
+             )                                      // 如果指令的总长度为7个字节
     {
 
         uart0_sendbyte(0x07);     // 发送指令的总长度

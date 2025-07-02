@@ -24,19 +24,26 @@ void aip1302_config(void)
     AIP1302_CE_PIN = 0;   // 空闲时为低电平
     AIP1302_SCLK_PIN = 0; // 时钟脚空间时为低电平
 
+#if 1
     // 判断时钟芯片aip1302的晶振是否正在运行，
     // 如果在运行，不做任何处理
     // 如果不在运行，将时钟芯片内部的数据配置为 2000.01.01--00:00:00,最后打开晶振
-    ret = aip1302_is_running();
+    ret = aip1302_is_running(); // 函数内部调用了 aip1302_read_all();
     if (ret)
     {
         // 如果时钟芯片aip1302的晶振正在运行
         // printf("aip1302 is running\n");
+
+        // 如果不是第一次上电
+        // printf("1302 is not first power on\n");
     }
     else
     {
         // 如果时钟芯片aip1302的晶振不在运行
         // printf("aip1302 is sleep\n");
+
+        // 如果不是第一次上电
+        // printf("1302 is first power on\n");
         // aip1302上电复位后，默认不跑时钟，这里要配置它开始跑时钟
         aip1302_write_byte(AIP1302_YEAR_REG_ADDR, 0);    // 0年
         aip1302_write_byte(AIP1302_MONTH_REG_ADDR, 1);   // 1月
@@ -46,9 +53,35 @@ void aip1302_config(void)
         aip1302_write_byte(AIP1302_HOUR_REG_ADDR, 0);    // 最高位清零,对应24小时制
         aip1302_write_byte(AIP1302_SEC_REG_ADDR, 0);     // 函数内部也会把最高位清零，秒寄存器最高位清零后，时钟ic开始振荡，跑时间
     }
+#endif
 
     // 从aip1302中读出所有有关时间的数据,存放到全局变量中
-    aip1302_read_all();
+    // aip1302_read_all();
+
+#if 0
+    /* 测试程序 */
+    printf("year %u \n", fun_info.aip1302_saveinfo.year);
+    printf("month %bu \n", fun_info.aip1302_saveinfo.month);
+    printf("day %bu \n", fun_info.aip1302_saveinfo.day);
+    printf("hour %bu \n", fun_info.aip1302_saveinfo.time_hour);
+    printf("min %bu \n", fun_info.aip1302_saveinfo.time_min);
+    printf("sec %bu \n", fun_info.aip1302_saveinfo.time_sec);
+
+    fun_info.aip1302_saveinfo.year = (u16)2025;
+    fun_info.aip1302_saveinfo.month = 7;
+    fun_info.aip1302_saveinfo.day = 2;
+    fun_info.aip1302_saveinfo.time_hour = 13;
+    fun_info.aip1302_saveinfo.time_min = 30;
+    fun_info.aip1302_saveinfo.time_sec = 30;
+    aip1302_update_time(fun_info.aip1302_saveinfo);
+    // aip1302_write_byte(AIP1302_YEAR_REG_ADDR, 25); // 时钟IC内部只存0~99年
+
+    // aip1302_write_byte(AIP1302_RAM_START_ADDR, 0xA5);
+    // {
+    //     u8 ret = aip1302_read_byte(AIP1302_RAM_START_ADDR + 1);
+    //     printf("ret %bu\n", ret);
+    // }
+#endif
 }
 
 // 将8位变量中的数据反转(例：0b 0111 0101  -> 0b 1010 1110)
@@ -261,11 +294,13 @@ static void __aip1302_write_byte(u8 cmd, u8 byte)
  * @brief 判断aip1302的时钟晶振是否在运行
  *
  * @return u8 0--时钟晶振停止，1--时钟晶振运行
+ * @return u8 0--第一次上电，1--非第一次上电
  */
 // static u8 aip1302_is_running(void)
 u8 aip1302_is_running(void)
 {
-    u8 recv_data = __aip1302_read_byte(AIP1302_SEC_REG_ADDR); // 读取到的是反转后的数据
+#if 0
+    u8 recv_data = __aip1302_read_byte(AIP1302_SEC_REG_ADDR + 1); // 读取到的是反转后的数据
     // 秒寄存器的最高位Bit7是时钟停止标志位，1--时钟晶振停止，进入低功耗，0--晶振运转
     if (recv_data & 0x01)
     {
@@ -276,6 +311,24 @@ u8 aip1302_is_running(void)
     {
         // 如果时钟ic的时钟晶振在运行
         return 1;
+    }
+
+#endif
+
+    // 判断时间是否正确：
+    aip1302_read_all(); //
+    if (fun_info.aip1302_saveinfo.year > 2099 || fun_info.aip1302_saveinfo.year < 2000 ||
+        fun_info.aip1302_saveinfo.month > 12 || fun_info.aip1302_saveinfo.month < 1 ||
+        fun_info.aip1302_saveinfo.day > 31 || fun_info.aip1302_saveinfo.day < 1 ||
+        fun_info.aip1302_saveinfo.time_hour > 24 ||
+        fun_info.aip1302_saveinfo.time_min > 60 ||
+        fun_info.aip1302_saveinfo.time_sec > 60)
+    {
+        return 0; // 第一次上电
+    }
+    else
+    {
+        return 1; // 非第一次上电
     }
 }
 
@@ -413,7 +466,7 @@ void aip1302_update_all_data(aip1302_saveinfo_t aip1302_saveinfo)
 // 向aip1302更新 年、月、日、时、分、秒
 void aip1302_update_time(aip1302_saveinfo_t aip1302_saveinfo)
 {
-    aip1302_write_byte(AIP1302_YEAR_REG_ADDR, aip1302_saveinfo.year - 2000);
+    aip1302_write_byte(AIP1302_YEAR_REG_ADDR, (u16)aip1302_saveinfo.year - 2000);
     aip1302_write_byte(AIP1302_MONTH_REG_ADDR, aip1302_saveinfo.month);
     aip1302_write_byte(AIP1302_DATE_REG_ADDR, aip1302_saveinfo.day);
 
@@ -446,7 +499,7 @@ void aip1302_read_all(void)
     fun_info.aip1302_saveinfo.time_hour = aip1302_read_byte(AIP1302_HOUR_REG_ADDR + 1);
     fun_info.aip1302_saveinfo.day = aip1302_read_byte(AIP1302_DATE_REG_ADDR + 1);
     fun_info.aip1302_saveinfo.month = aip1302_read_byte(AIP1302_MONTH_REG_ADDR + 1);
-    fun_info.aip1302_saveinfo.year = 2000 + aip1302_read_byte(AIP1302_YEAR_REG_ADDR + 1);
+    fun_info.aip1302_saveinfo.year = (u16)2000 + (u16)aip1302_read_byte(AIP1302_YEAR_REG_ADDR + 1);
     // fun_info.aip1302_saveinfo.weekday = aip1302_read_byte(AIP1302_WEEKDAY_REG_ADDR + 1);
 }
 

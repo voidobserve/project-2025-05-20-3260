@@ -8,11 +8,11 @@
 
 // 重写putchar()函数
 extern void uart1_sendbyte(u8 senddata); // 函数声明
-char putchar(char c)
-{
-    uart1_sendbyte(c);
-    return c;
-}
+// char putchar(char c)
+// {
+//     uart1_sendbyte(c);
+//     return c;
+// }
 
 void uart1_config(void)
 {

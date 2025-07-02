@@ -1,5 +1,7 @@
 #include "ad_key.h"
 
+#if AD_KEY_ENABLE
+
 // 自定义ad按键的键值:
 // enum
 // {
@@ -346,3 +348,5 @@ void ad_key_handle(void)
 #endif
     }
 }
+
+#endif//  AD_KEY_ENABLE

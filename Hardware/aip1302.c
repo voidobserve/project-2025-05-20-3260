@@ -42,7 +42,7 @@ void aip1302_config(void)
         // 如果时钟芯片aip1302的晶振不在运行
         // printf("aip1302 is sleep\n");
 
-        // 如果不是第一次上电
+        // 如果是第一次上电
         // printf("1302 is first power on\n");
         // aip1302上电复位后，默认不跑时钟，这里要配置它开始跑时钟
         aip1302_write_byte(AIP1302_YEAR_REG_ADDR, 0);    // 0年
@@ -52,6 +52,14 @@ void aip1302_config(void)
         aip1302_write_byte(AIP1302_MIN_REG_ADDR, 0);     // 0分
         aip1302_write_byte(AIP1302_HOUR_REG_ADDR, 0);    // 最高位清零,对应24小时制
         aip1302_write_byte(AIP1302_SEC_REG_ADDR, 0);     // 函数内部也会把最高位清零，秒寄存器最高位清零后，时钟ic开始振荡，跑时间
+
+        // fun_info.aip1302_saveinfo.year = (u16)2025;
+        // fun_info.aip1302_saveinfo.month = 7;
+        // fun_info.aip1302_saveinfo.day = 4;
+        // fun_info.aip1302_saveinfo.time_hour = 9;
+        // fun_info.aip1302_saveinfo.time_min = 20;
+        // fun_info.aip1302_saveinfo.time_sec = 00;
+        // aip1302_update_time(fun_info.aip1302_saveinfo);
     }
 #endif
 
@@ -67,13 +75,13 @@ void aip1302_config(void)
     printf("min %bu \n", fun_info.aip1302_saveinfo.time_min);
     printf("sec %bu \n", fun_info.aip1302_saveinfo.time_sec);
 
-    fun_info.aip1302_saveinfo.year = (u16)2025;
-    fun_info.aip1302_saveinfo.month = 7;
-    fun_info.aip1302_saveinfo.day = 2;
-    fun_info.aip1302_saveinfo.time_hour = 13;
-    fun_info.aip1302_saveinfo.time_min = 30;
-    fun_info.aip1302_saveinfo.time_sec = 30;
-    aip1302_update_time(fun_info.aip1302_saveinfo);
+    // fun_info.aip1302_saveinfo.year = (u16)2025;
+    // fun_info.aip1302_saveinfo.month = 7;
+    // fun_info.aip1302_saveinfo.day = 2;
+    // fun_info.aip1302_saveinfo.time_hour = 13;
+    // fun_info.aip1302_saveinfo.time_min = 30;
+    // fun_info.aip1302_saveinfo.time_sec = 30;
+    // aip1302_update_time(fun_info.aip1302_saveinfo);
     // aip1302_write_byte(AIP1302_YEAR_REG_ADDR, 25); // 时钟IC内部只存0~99年
 
     // aip1302_write_byte(AIP1302_RAM_START_ADDR, 0xA5);

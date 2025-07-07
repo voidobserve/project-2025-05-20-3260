@@ -408,15 +408,32 @@ void main(void)
 
     // printf("sys reset\n");
 
+    // 测试程序：
     // fun_info.save_info.total_mileage = (u32)999970 * 1000;
     // fun_info.save_info.subtotal_mileage = (u32)999970 * 100;
+    // fun_info.save_info.subtotal_mileage = (u32)10051 * 100;
     // fun_info.save_info.subtotal_mileage_2 = (u32)999970 * 100;
-
 
     /* 系统主循环 */
     while (1)
     {
         // printf("main circle\n");
+
+#if USE_MY_DEBUG
+
+        // if (flag_is_printf_time)
+        // {
+        //     flag_is_printf_time = 0;
+        //     aip1302_read_all();
+        //     printf("year %u \n", fun_info.aip1302_saveinfo.year);
+        //     printf("month %bu \n", fun_info.aip1302_saveinfo.month);
+        //     printf("day %bu \n", fun_info.aip1302_saveinfo.day);
+        //     printf("hour %bu \n", fun_info.aip1302_saveinfo.time_hour);
+        //     printf("min %bu \n", fun_info.aip1302_saveinfo.time_min);
+        //     printf("sec %bu \n", fun_info.aip1302_saveinfo.time_sec);
+        // }
+
+#endif
 
 #if 1
         WDT_KEY = WDT_KEY_VAL(0xAA); // 喂狗并清除 wdt_pending

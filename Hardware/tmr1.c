@@ -9,6 +9,12 @@
 // volatile bit tmr1_flag = 0; // TMR1中断服务函数中会置位的标志位
 volatile u32 tmr1_cnt = 0; // 定时器TMR1的计数值（每次在中断服务函数中会加一）
 
+#if USE_MY_DEBUG
+
+// volatile bit flag_is_printf_time = 0;
+
+#endif
+
 /**
  * @brief 配置定时器TMR1，配置完成后，定时器默认关闭
  */
@@ -248,6 +254,20 @@ void TIMR1_IRQHandler(void) interrupt TMR1_IRQn
                 touch_key_para.cur_scan_times++;
             }
 #endif // TOUCH_KEY_ENABLE
+
+#if USE_MY_DEBUG
+
+            // {
+            //     static u16 cnt;
+            //     cnt++;
+            //     if (cnt >= 2000)
+            //     {
+            //         cnt = 0;
+            //         flag_is_printf_time = 1;
+            //     }
+            // }
+
+#endif
         }
     }
 

@@ -67,7 +67,8 @@ volatile struct key_driver_para touch_key_para = {
 
     0,
     0,
-    200 / TOUCH_KEY_SCAN_CIRCLE_TIMES,
+    // 200 / TOUCH_KEY_SCAN_CIRCLE_TIMES,
+    0,
     // NO_KEY,
     0,
     KEY_TYPE_TOUCH,

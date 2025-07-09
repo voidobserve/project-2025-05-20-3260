@@ -127,7 +127,8 @@ volatile struct key_driver_para ad_key_para = {
 
     0,
     0,
-    200 / AD_KEY_SCAN_CIRCLE_TIMES,
+    // 200 / AD_KEY_SCAN_CIRCLE_TIMES,
+    0,
     // NO_KEY,
     0,
     KEY_TYPE_AD,
